@@ -24,7 +24,7 @@ export default [
     },
     languageOptions: {
       parserOptions: {
-        project: ['tsconfig.json', 'tsconfig.app.json', 'tsconfig.spec.json'],
+        project: ['tsconfig.eslint.json'],
         createDefaultProgram: true,
       },
     },
