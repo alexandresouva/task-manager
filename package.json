@@ -5,9 +5,19 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "lint": "nx lint --max-warnings 0",
+    "prepare": "husky"
   },
   "private": true,
+  "lint-staged": {
+    "*.{js,ts,html}": [
+      "eslint"
+    ],
+    "*.{scss,json,md}": [
+      "prettier --write"
+    ]
+  },
   "dependencies": {
     "@angular/common": "~20.1.0",
     "@angular/compiler": "~20.1.0",
@@ -26,6 +36,8 @@
     "@angular/cli": "~20.1.0",
     "@angular/compiler-cli": "~20.1.0",
     "@angular/language-service": "~20.1.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.8.0",
     "@nx/angular": "21.4.1",
     "@nx/cypress": "21.4.1",
@@ -36,8 +48,9 @@
     "@nx/web": "21.4.1",
     "@nx/workspace": "21.4.1",
     "@schematics/angular": "~20.1.0",
+    "@swc-node/core": "^1.14.1",
     "@swc-node/register": "~1.9.1",
-    "@swc/core": "~1.5.7",
+    "@swc/core": "^1.13.5",
     "@swc/helpers": "~0.5.11",
     "@types/jest": "^30.0.0",
     "@types/node": "20.19.9",
@@ -47,12 +60,15 @@
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-cypress": "^3.5.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
     "jest": "^30.0.2",
     "jest-environment-jsdom": "^30.0.2",
     "jest-preset-angular": "~15.0.0",
     "jest-util": "^30.0.2",
+    "lint-staged": "^16.1.6",
     "nx": "21.4.1",
-    "prettier": "^2.6.2",
+    "prettier": "^3.6.2",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
