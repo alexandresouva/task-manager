@@ -6,7 +6,7 @@ export default [
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   {
-    ignores: ['**/dist', 'eslint.config.mjs'],
+    ignores: ['**/dist'],
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
@@ -15,7 +15,7 @@ export default [
     },
     languageOptions: {
       parserOptions: {
-        project: ['tsconfig.app.json'],
+        project: ['tsconfig.app.json', 'tsconfig.spec.json'],
         createDefaultProgram: true,
       },
     },
