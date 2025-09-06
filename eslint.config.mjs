@@ -9,27 +9,18 @@ export default [
     ignores: ['**/dist', 'eslint.config.mjs'],
   },
   {
-    files: [
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.cts',
-      '**/*.mts',
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.cjs',
-      '**/*.mjs',
-    ],
+    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
     plugins: {
       prettier: prettierPlugin,
     },
     languageOptions: {
       parserOptions: {
-        project: ['tsconfig.eslint.json'],
+        project: ['tsconfig.app.json'],
         createDefaultProgram: true,
       },
     },
     rules: {
-      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+      'prettier/prettier': 'error',
       'no-console': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/prefer-readonly': 'error',
@@ -57,6 +48,21 @@ export default [
           format: ['UPPER_CASE'],
         },
       ],
+    },
+  },
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+    plugins: {
+      prettier: prettierPlugin,
+    },
+    languageOptions: {
+      parserOptions: {
+        project: null,
+      },
+    },
+    rules: {
+      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+      'no-console': 'warn',
     },
   },
   ...nx.configs['flat/angular'],
