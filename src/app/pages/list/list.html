@@ -20,11 +20,10 @@
         @for (task of pendingTasks(); track task.id) {
         <li
           class="flex items-center justify-between p-3 bg-base-200 rounded-lg shadow-sm"
-          data-testid="pending-task"
         >
           <div class="flex items-center gap-2">
             <input type="checkbox" class="checkbox checkbox-sm" />
-            <span>{{ task.description}}</span>
+            <span data-testid="pending-task">{{ task.description}}</span>
           </div>
         </li>
         }
@@ -43,13 +42,15 @@
         @for (task of completedTasks(); track $index) {
         <li
           class="flex items-center justify-between p-3 bg-base-200 rounded-lg shadow-sm"
-          data-testid="completed-task"
         >
           <div class="flex items-center gap-2">
             <input type="checkbox" class="checkbox checkbox-sm" checked />
-            <span class="line-through text-gray-400">
-              {{ task.description}}</span
+            <span
+              class="line-through text-gray-400"
+              data-testid="completed-task"
             >
+              {{ task.description}}
+            </span>
           </div>
           <button type="button" class="btn btn-error btn-xs">Delete</button>
         </li>

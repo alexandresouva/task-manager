@@ -1,5 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
-import { Task } from './models/tasks.model';
+import { Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TaskService } from '@app/shared/services/tasks/task-service';
 
 @Component({
   selector: 'app-list',
@@ -8,12 +9,11 @@ import { Task } from './models/tasks.model';
   styleUrl: './list.scss',
 })
 export class List {
-  protected readonly tasks = signal<Task[]>([
-    { id: 1, description: 'Learn Angular', completed: false },
-    { id: 2, description: 'Build a Todo App', completed: false },
-    { id: 3, description: 'Setup Tailwind', completed: true },
-    { id: 4, description: 'Install DaisyUI', completed: true },
-  ]);
+  private readonly taskService = inject(TaskService);
+
+  protected readonly tasks = toSignal(this.taskService.getAll(), {
+    initialValue: [],
+  });
 
   protected completedTasks = computed(() =>
     this.tasks().filter((task) => task.completed),
