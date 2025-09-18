@@ -16,6 +16,7 @@
       <h3 class="text-xl font-semibold mb-3" data-testid="pending-tasks-title">
         Todo
       </h3>
+      @if(pendingTasks().length > 0) {
       <ul class="space-y-2">
         @for (task of pendingTasks(); track task.id) {
         <li
@@ -28,6 +29,13 @@
         </li>
         }
       </ul>
+      } @else {
+      <div class="p-3 bg-base-200 rounded-lg shadow-sm">
+        <span class="text-gray-400" data-testid="empty-pending-tasks">
+          Nice! No tasks pending.
+        </span>
+      </div>
+      }
     </div>
 
     <!-- TASKS DONE -->
@@ -38,6 +46,7 @@
       >
         Done
       </h3>
+      @if (completedTasks().length > 0) {
       <ul class="space-y-2">
         @for (task of completedTasks(); track $index) {
         <li
@@ -56,6 +65,13 @@
         </li>
         }
       </ul>
+      } @else {
+      <div class="p-3 bg-base-200 rounded-lg shadow-sm">
+        <span class="text-gray-400" data-testid="empty-completed-tasks">
+          No tasks completed yet!
+        </span>
+      </div>
+      }
     </div>
   </div>
 </div>
