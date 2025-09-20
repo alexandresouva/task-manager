@@ -7,7 +7,8 @@
     "build": "nx build",
     "test": "nx test --code-coverage --skip-nx-cache",
     "lint": "nx lint --max-warnings 0",
-    "prepare": "husky"
+    "prepare": "husky",
+    "json-server": "json-server --watch json-server/db.json"
   },
   "private": true,
   "lint-staged": {
@@ -68,6 +69,7 @@
     "jest-environment-jsdom": "^30.0.2",
     "jest-preset-angular": "~15.0.0",
     "jest-util": "^30.0.2",
+    "json-server": "^1.0.0-beta.3",
     "lint-staged": "^16.1.6",
     "nx": "21.4.1",
     "postcss": "^8.4.5",
