@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 
 import { TaskService } from '@shared/services/tasks/task-service';
@@ -7,15 +6,19 @@ import { Task } from '@shared/models/tasks.model';
 import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { List } from './list';
+import { TestHelper } from '@testing/helpers/test-helper';
 
 describe('List', () => {
   let component: List;
   let fixture: ComponentFixture<List>;
+  let testHelper: TestHelper<List>;
+  let taskServiceMock: Partial<jest.Mocked<TaskService>>;
 
-  const taskServiceMock = createTaskServiceMock();
   const getAllTasksSubject = new Subject<Task[]>();
 
   beforeEach(async () => {
+    taskServiceMock = createTaskServiceMock();
+
     TestBed.configureTestingModule({
       imports: [List],
       providers: [{ provide: TaskService, useValue: taskServiceMock }],
@@ -25,6 +28,7 @@ describe('List', () => {
     taskServiceMock.getAll.mockReturnValue(getAllTasksSubject.asObservable());
 
     fixture = TestBed.createComponent(List);
+    testHelper = new TestHelper(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -35,13 +39,11 @@ describe('List', () => {
 
   describe('completedTasks', () => {
     it('should render completed tasks title', () => {
-      const titleDebug = fixture.debugElement.query(
-        By.css('[data-testid="completed-tasks-title"]'),
-      );
-      const title: string | undefined = titleDebug.nativeElement.textContent;
+      const title = testHelper
+        .getTextContentByTestId('completed-tasks-title')
+        .trim();
 
-      expect(titleDebug).toBeTruthy();
-      expect(title.trim()).toBe('Done');
+      expect(title).toBe('Done');
     });
 
     it('should not have completed tasks and show appropriate message if task service returns empty', () => {
@@ -49,17 +51,14 @@ describe('List', () => {
       fixture.detectChanges();
 
       const completedTasks = component['completedTasks']();
-      const tasksDebug = fixture.debugElement.queryAll(
-        By.css('[data-testid="completed-task"]'),
-      );
-      const emptyTasksDebug = fixture.debugElement.query(
-        By.css('[data-testid="empty-completed-tasks"]'),
-      );
-      const emptyTasksContent = emptyTasksDebug.nativeElement.textContent;
+      const tasksDebug = testHelper.queryAllByTestId('completed-task');
+      const emptyTasksContent = testHelper
+        .getTextContentByTestId('empty-completed-tasks')
+        .trim();
 
       expect(completedTasks.length).toBe(0);
       expect(tasksDebug.length).toBe(0);
-      expect(emptyTasksContent.trim()).toBe('No tasks completed yet!');
+      expect(emptyTasksContent).toBe('No tasks completed yet!');
     });
 
     it('should return only completed tasks and render them if task service returns tasks', () => {
@@ -67,12 +66,8 @@ describe('List', () => {
       fixture.detectChanges();
 
       const completedTasks = component['completedTasks']();
-      const tasksDebug = fixture.debugElement.queryAll(
-        By.css('[data-testid="completed-task"]'),
-      );
-      const emptyTasksDebug = fixture.debugElement.query(
-        By.css('[data-testid="empty-completed-tasks"]'),
-      );
+      const tasksDebug = testHelper.queryAllByTestId('completed-task');
+      const emptyTasksDebug = testHelper.queryByTestId('empty-completed-tasks');
 
       expect(emptyTasksDebug).toBeNull();
       expect(completedTasks.length).toBe(2);
@@ -84,12 +79,8 @@ describe('List', () => {
 
   describe('pendingTasks', () => {
     it('should render pending tasks title', () => {
-      const titleDebug = fixture.debugElement.query(
-        By.css('[data-testid="pending-tasks-title"]'),
-      );
-      const title: string = titleDebug.nativeElement.textContent;
+      const title = testHelper.getTextContentByTestId('pending-tasks-title');
 
-      expect(titleDebug).toBeTruthy();
       expect(title.trim()).toBe('Todo');
     });
 
@@ -98,17 +89,14 @@ describe('List', () => {
       fixture.detectChanges();
 
       const pendingTasks = component['pendingTasks']();
-      const tasksDebug = fixture.debugElement.queryAll(
-        By.css('[data-testid="pending-task"]'),
-      );
-      const emptyTasksDebug = fixture.debugElement.query(
-        By.css('[data-testid="empty-pending-tasks"]'),
-      );
-      const emptyTasksContent = emptyTasksDebug.nativeElement.textContent;
+      const tasksDebug = testHelper.queryAllByTestId('pending-task');
+      const emptyTasksContent = testHelper
+        .getTextContentByTestId('empty-pending-tasks')
+        .trim();
 
       expect(pendingTasks.length).toBe(0);
       expect(tasksDebug.length).toBe(0);
-      expect(emptyTasksContent.trim()).toBe('Nice! No tasks pending.');
+      expect(emptyTasksContent).toBe('Nice! No tasks pending.');
     });
 
     it('should return only pending tasks and render them if task service returns tasks', () => {
@@ -116,12 +104,8 @@ describe('List', () => {
       fixture.detectChanges();
 
       const pendingTasks = component['pendingTasks']();
-      const tasksDebug = fixture.debugElement.queryAll(
-        By.css('[data-testid="pending-task"]'),
-      );
-      const emptyTasksDebug = fixture.debugElement.query(
-        By.css('[data-testid="empty-pending-tasks"]'),
-      );
+      const tasksDebug = testHelper.queryAllByTestId('pending-task');
+      const emptyTasksDebug = testHelper.queryByTestId('empty-pending-tasks');
 
       const expectedPendingTasks = tasksMock.filter((t) => !t.completed);
 
