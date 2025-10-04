@@ -18,4 +18,8 @@ export class TestHelper<T> {
   getTextContentByTestId(testId: string): string | null {
     return this.queryByTestId(testId).nativeElement.textContent;
   }
+
+  getComponentInstanceByTestId<T>(testId: string): T | null {
+    return this.queryByTestId(testId).componentInstance;
+  }
 }
