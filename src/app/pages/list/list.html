@@ -11,67 +11,18 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- PENDING TASKS -->
-    <div>
-      <h3 class="text-xl font-semibold mb-3" data-testid="pending-tasks-title">
-        Todo
-      </h3>
-      @if(pendingTasks().length > 0) {
-      <ul class="space-y-2">
-        @for (task of pendingTasks(); track task.id) {
-        <li
-          class="flex items-center justify-between p-3 bg-base-200 rounded-lg shadow-sm"
-        >
-          <div class="flex items-center gap-2">
-            <input type="checkbox" class="checkbox checkbox-sm" />
-            <span data-testid="pending-task">{{ task.description}}</span>
-          </div>
-        </li>
-        }
-      </ul>
-      } @else {
-      <div class="p-3 bg-base-200 rounded-lg shadow-sm">
-        <span class="text-gray-400" data-testid="empty-pending-tasks">
-          Nice! No tasks pending.
-        </span>
-      </div>
-      }
-    </div>
+    <app-task-list
+      title="Pending"
+      emptyListMessage="Nice! No tasks pending."
+      [tasks]="pendingTasks()"
+      data-testid="pending-tasks"
+    />
 
-    <!-- TASKS DONE -->
-    <div>
-      <h3
-        class="text-xl font-semibold mb-3"
-        data-testid="completed-tasks-title"
-      >
-        Done
-      </h3>
-      @if (completedTasks().length > 0) {
-      <ul class="space-y-2">
-        @for (task of completedTasks(); track $index) {
-        <li
-          class="flex items-center justify-between p-3 bg-base-200 rounded-lg shadow-sm"
-        >
-          <div class="flex items-center gap-2">
-            <input type="checkbox" class="checkbox checkbox-sm" checked />
-            <span
-              class="line-through text-gray-400"
-              data-testid="completed-task"
-            >
-              {{ task.description}}
-            </span>
-          </div>
-          <button type="button" class="btn btn-error btn-xs">Delete</button>
-        </li>
-        }
-      </ul>
-      } @else {
-      <div class="p-3 bg-base-200 rounded-lg shadow-sm">
-        <span class="text-gray-400" data-testid="empty-completed-tasks">
-          No tasks completed yet!
-        </span>
-      </div>
-      }
-    </div>
+    <app-task-list
+      title="Done"
+      emptyListMessage="No tasks completed yet!"
+      [tasks]="completedTasks()"
+      data-testid="completed-tasks"
+    />
   </div>
 </div>
