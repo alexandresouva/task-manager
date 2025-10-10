@@ -1,42 +1,46 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { TaskList } from './task-list';
 import { TestHelper } from '@app/testing/helpers/test-helper';
 import { tasksMock } from '@app/testing/data/tasks.mock';
 
-describe('TaskList', () => {
-  let component: TaskList;
-  let fixture: ComponentFixture<TaskList>;
-  let testHelper: TestHelper<TaskList>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TaskList],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TaskList);
-    component = fixture.componentInstance;
-    testHelper = new TestHelper(fixture);
-
-    fixture.componentRef.setInput('title', 'Initial Title');
-    fixture.componentRef.setInput('tasks', []);
-    fixture.detectChanges();
+async function setup() {
+  TestBed.configureTestingModule({
+    imports: [TaskList],
   });
+  await TestBed.compileComponents();
 
-  it('should create', () => {
+  const fixture = TestBed.createComponent(TaskList);
+  const component = fixture.componentInstance;
+  const testHelper = new TestHelper(fixture);
+
+  fixture.componentRef.setInput('title', 'Initial Title');
+  fixture.componentRef.setInput('tasks', []);
+  fixture.detectChanges();
+
+  return { component, fixture, testHelper };
+}
+
+describe('TaskList', () => {
+  it('should create', async () => {
+    const { component } = await setup();
     expect(component).toBeTruthy();
   });
 
-  it('should render tasks list title', () => {
+  it('should render tasks list title', async () => {
+    const { fixture, testHelper } = await setup();
     const fakeTitle = 'Fake Title';
+
     fixture.componentRef.setInput('title', fakeTitle);
     fixture.detectChanges();
 
-    const title = testHelper.getTextContentByTestId('tasks-list-title').trim();
+    const title = testHelper.getTextContentByTestId('tasks-list-title');
     expect(title).toBe(fakeTitle);
   });
 
-  it('should show tasks when tasks input has values', () => {
+  it('should show tasks when tasks input has values', async () => {
+    const { component, fixture, testHelper } = await setup();
     const fakeTasks = [...tasksMock];
+
     fixture.componentRef.setInput('tasks', fakeTasks);
     fixture.detectChanges();
 
@@ -49,13 +53,12 @@ describe('TaskList', () => {
     expect(tasksDebug.length).toBe(fakeTasks.length);
   });
 
-  it('should show empty tasks message if tasks input is empty', () => {
+  it('should show empty tasks message if tasks input is empty', async () => {
+    const { component, fixture, testHelper } = await setup();
     fixture.componentRef.setInput('tasks', []);
     fixture.detectChanges();
 
-    const emptyTasksContent = testHelper
-      .getTextContentByTestId('empty-tasks')
-      .trim();
+    const emptyTasksContent = testHelper.getTextContentByTestId('empty-tasks');
     const tasks = component['tasks']();
     const tasksDebug = testHelper.queryAllByTestId('task-description');
 
@@ -64,16 +67,29 @@ describe('TaskList', () => {
     expect(tasksDebug.length).toBe(0);
   });
 
-  it('should show custom empty tasks message if tasks input is empty and custom message is provided', () => {
+  it('should show custom empty tasks message if tasks input is empty and custom message is provided', async () => {
+    const { fixture, testHelper } = await setup();
     const fakeCustomMessage = 'Fake custom empty message';
 
     fixture.componentRef.setInput('tasks', []);
     fixture.componentRef.setInput('emptyListMessage', fakeCustomMessage);
     fixture.detectChanges();
 
-    const emptyTasksContent = testHelper
-      .getTextContentByTestId('empty-tasks')
-      .trim();
+    const emptyTasksContent = testHelper.getTextContentByTestId('empty-tasks');
     expect(emptyTasksContent).toBe('Nice! No tasks pending.');
+  });
+
+  it('should emit taskToggled when emitTaskToggled is called', async () => {
+    const { component, fixture, testHelper } = await setup();
+    const emitSpy = jest.spyOn(component.taskToggled, 'emit');
+    const fakeTask = tasksMock[0];
+
+    fixture.componentRef.setInput('tasks', [fakeTask]);
+    fixture.detectChanges();
+
+    const checkbox = testHelper.queryByTestId('task-checkbox');
+    checkbox.triggerEventHandler('change', null);
+
+    expect(emitSpy).toHaveBeenCalledWith(fakeTask);
   });
 });
