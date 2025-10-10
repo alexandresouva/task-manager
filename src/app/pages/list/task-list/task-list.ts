@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Task } from '@app/shared/models/tasks.model';
 
 @Component({
@@ -11,4 +11,10 @@ export class TaskList {
   readonly title = input.required<string>();
   readonly tasks = input.required<Task[]>();
   readonly emptyListMessage = input<string>('No tasks found.');
+
+  readonly taskToggled = output<Task>();
+
+  protected emitTaskToggled(task: Task): void {
+    this.taskToggled.emit(task);
+  }
 }

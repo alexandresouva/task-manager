@@ -9,7 +9,12 @@
     class="flex items-center justify-between p-3 bg-base-200 rounded-lg shadow-sm"
   >
     <div class="flex items-center gap-2">
-      <input type="checkbox" class="checkbox checkbox-sm" />
+      <input
+        type="checkbox"
+        class="checkbox checkbox-sm"
+        [checked]="task.completed"
+        (change)="emitTaskToggled(task)"
+      />
       <span data-testid="task-description">{{ task.description}}</span>
     </div>
   </li>
