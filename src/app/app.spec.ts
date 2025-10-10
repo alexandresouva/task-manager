@@ -1,34 +1,37 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { By } from '@angular/platform-browser';
 
-describe('App', () => {
-  let component: App;
-  let fixture: ComponentFixture<App>;
-
-  beforeEach(async () => {
-    TestBed.configureTestingModule({
-      imports: [App],
-    });
-
-    await TestBed.compileComponents();
-
-    fixture = TestBed.createComponent(App);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+async function setup() {
+  TestBed.configureTestingModule({
+    imports: [App],
   });
+  await TestBed.compileComponents();
 
-  it('should create the component', () => {
+  const fixture = TestBed.createComponent(App);
+  const component = fixture.componentInstance;
+  fixture.detectChanges();
+
+  return { component, fixture };
+}
+
+describe('App', () => {
+  it('should create the component', async () => {
+    const { component } = await setup();
     expect(component).toBeTruthy();
   });
 
-  it('should have app-header in the template', () => {
+  it('should have app-header in the template', async () => {
+    const { fixture } = await setup();
     const appHeaderEl = fixture.debugElement.query(By.css('app-header'));
+
     expect(appHeaderEl).toBeTruthy();
   });
 
-  it('should have router-outlet in the template', () => {
+  it('should have router-outlet in the template', async () => {
+    const { fixture } = await setup();
     const routerOutletEl = fixture.debugElement.query(By.css('router-outlet'));
+
     expect(routerOutletEl).toBeTruthy();
   });
 });

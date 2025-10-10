@@ -1,47 +1,43 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Subject } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 
-import { TaskService } from '@shared/services/tasks/task-service';
 import { Task } from '@shared/models/tasks.model';
+import { TaskService } from '@app/shared/services/task-service';
 import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
 import { tasksMock } from '@testing/data/tasks.mock';
+import { TestHelper } from '@testing/helpers/test-helper';
 import { List } from './list';
-import { TestHelper } from '@app/testing/helpers/test-helper';
 import { TaskList } from './task-list/task-list';
 
-describe('List', () => {
-  let component: List;
-  let fixture: ComponentFixture<List>;
-  let taskServiceMock: Partial<jest.Mocked<TaskService>>;
-  let testHelper: TestHelper<List>;
+async function setup(tasks: Task[] = []) {
+  const taskServiceMock = createTaskServiceMock();
 
-  const getAllTasksSubject = new Subject<Task[]>();
-
-  beforeEach(async () => {
-    taskServiceMock = createTaskServiceMock();
-
-    TestBed.configureTestingModule({
-      imports: [List],
-      providers: [{ provide: TaskService, useValue: taskServiceMock }],
-    });
-    await TestBed.compileComponents();
-
-    taskServiceMock.getAll.mockReturnValue(getAllTasksSubject.asObservable());
-
-    fixture = TestBed.createComponent(List);
-    testHelper = new TestHelper(fixture);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  TestBed.configureTestingModule({
+    imports: [List],
+    providers: [{ provide: TaskService, useValue: taskServiceMock }],
   });
+  await TestBed.compileComponents();
 
-  it('should create', () => {
+  taskServiceMock.getAll.mockReturnValue(of(tasks));
+
+  const fixture = TestBed.createComponent(List);
+  const component = fixture.componentInstance;
+  const testHelper = new TestHelper(fixture);
+  fixture.detectChanges();
+
+  return { component, fixture, testHelper, taskServiceMock };
+}
+
+describe('List', () => {
+  it('should create', async () => {
+    const { component } = await setup();
     expect(component).toBeTruthy();
   });
 
-  it('should filter completed tasks and pass them to the task list', () => {
+  it('should filter completed tasks and pass them to the task list', async () => {
+    const { component, fixture, testHelper } = await setup(tasksMock);
     const expectedCompletedTasks = tasksMock.filter((task) => task.completed);
 
-    getAllTasksSubject.next(tasksMock);
     fixture.detectChanges();
     const completedTaskList =
       testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
@@ -50,10 +46,10 @@ describe('List', () => {
     expect(completedTaskList.tasks()).toEqual(expectedCompletedTasks);
   });
 
-  it('should filter pending tasks and pass them to the task list', () => {
+  it('should filter pending tasks and pass them to the task list', async () => {
+    const { component, fixture, testHelper } = await setup(tasksMock);
     const expectedPendingTasks = tasksMock.filter((task) => !task.completed);
 
-    getAllTasksSubject.next(tasksMock);
     fixture.detectChanges();
     const pendingTaskList =
       testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
