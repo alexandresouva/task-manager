@@ -95,4 +95,11 @@ export default [
       '@angular-eslint/template/no-positive-tabindex': 'error',
     },
   },
+  {
+    files: ['**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+    },
+  },
 ];
