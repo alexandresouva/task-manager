@@ -25,6 +25,7 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/no-inferrable-types': 'error',
+      '@typescript-eslint/no-deprecated': 'error',
       '@typescript-eslint/naming-convention': [
         'warn',
         {
