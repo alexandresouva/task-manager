@@ -1,18 +1,57 @@
 import nx from '@nx/eslint-plugin';
+import importPlugin from 'eslint-plugin-import';
 import prettierPlugin from 'eslint-plugin-prettier';
 
 export default [
   ...nx.configs['flat/base'],
-  ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
+  ...nx.configs['flat/typescript'],
+  ...nx.configs['flat/angular'],
+  ...nx.configs['flat/angular-template'],
   {
     ignores: ['**/dist'],
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
+    files: [
+      '**/*.js',
+      '**/*.cjs',
+      '**/*.mjs',
+      '**/*.ts',
+      '**/*.cts',
+      '**/*.mts',
+    ],
     plugins: {
       prettier: prettierPlugin,
+      import: importPlugin,
     },
+    rules: {
+      'prettier/prettier': 'error',
+      'no-console': 'error',
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['parent', 'sibling', 'index'],
+          ],
+          pathGroups: [
+            {
+              pattern: '@angular/**',
+              group: 'external',
+              position: 'before',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
+          alphabetize: { order: 'asc', caseInsensitive: true },
+          'newlines-between': 'always',
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
     languageOptions: {
       parserOptions: {
         project: ['tsconfig.app.json', 'tsconfig.spec.json'],
@@ -20,12 +59,10 @@ export default [
       },
     },
     rules: {
-      'prettier/prettier': 'error',
-      'no-console': 'error',
-      '@typescript-eslint/explicit-function-return-type': 'error',
+      // Typescript
       '@typescript-eslint/prefer-readonly': 'error',
-      '@typescript-eslint/no-inferrable-types': 'error',
-      '@typescript-eslint/no-deprecated': 'error',
+      '@typescript-eslint/only-throw-error': 'error',
+      '@typescript-eslint/no-deprecated': 'warn',
       '@typescript-eslint/naming-convention': [
         'warn',
         {
@@ -49,28 +86,13 @@ export default [
           format: ['UPPER_CASE'],
         },
       ],
-    },
-  },
-  {
-    files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    languageOptions: {
-      parserOptions: {
-        project: null,
-      },
-    },
-    rules: {
-      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
-      'no-console': 'warn',
-    },
-  },
-  ...nx.configs['flat/angular'],
-  ...nx.configs['flat/angular-template'],
-  {
-    files: ['**/*.ts'],
-    rules: {
+      // Angular
+      '@angular-eslint/prefer-signals': 'error',
+      '@angular-eslint/prefer-standalone': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@angular-eslint/no-uncalled-signals': 'error',
+      '@angular-eslint/no-developer-preview': 'warn',
+      '@angular-eslint/sort-lifecycle-methods': 'warn',
       '@angular-eslint/directive-selector': [
         'error',
         {
@@ -94,6 +116,21 @@ export default [
     rules: {
       '@angular-eslint/template/button-has-type': 'error',
       '@angular-eslint/template/no-positive-tabindex': 'error',
+      '@angular-eslint/template/prefer-control-flow': 'error',
+      '@angular-eslint/template/no-duplicate-attributes': 'error',
+      '@angular-eslint/template/no-empty-control-flow': 'error',
+      '@angular-eslint/template/no-inline-styles': 'error',
+      '@angular-eslint/template/prefer-ngsrc': 'error',
+      '@angular-eslint/template/prefer-static-string-properties': 'error',
+      '@angular-eslint/template/valid-aria': 'error',
+      '@angular-eslint/template/prefer-self-closing-tags': 'warn',
+      '@angular-eslint/template/prefer-template-literal': 'warn',
+      '@angular-eslint/template/attributes-order': [
+        'warn',
+        {
+          alphabetical: true,
+        },
+      ],
     },
   },
   {
