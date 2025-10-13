@@ -1,14 +1,15 @@
-import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-
-import { TaskService } from './task-service';
-import { Task } from '@app/shared/models/tasks.model';
 import { provideHttpClient } from '@angular/common/http';
 import {
   provideHttpClientTesting,
   HttpTestingController,
 } from '@angular/common/http/testing';
+import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+
+import { Task } from '@app/shared/models/tasks.model';
 import { tasksMock } from '@app/testing/data/tasks.mock';
 import { environment } from 'src/environments/environment';
+
+import { TaskService } from './task-service';
 
 describe('TaskService', () => {
   let service: TaskService;

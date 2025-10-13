@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+
 import { Task } from '@app/shared/models/tasks.model';
 
 @Component({

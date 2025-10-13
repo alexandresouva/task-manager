@@ -1,6 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+
 import { TaskService } from '@app/shared/services/task-service';
+
 import { TaskList } from './task-list/task-list';
 
 @Component({
@@ -16,11 +18,11 @@ export class List {
     initialValue: [],
   });
 
-  protected completedTasks = computed(() =>
+  protected readonly completedTasks = computed(() =>
     this.tasks().filter((task) => task.completed),
   );
 
-  protected pendingTasks = computed(() =>
+  protected readonly pendingTasks = computed(() =>
     this.tasks().filter((task) => !task.completed),
   );
 }

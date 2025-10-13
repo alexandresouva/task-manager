@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
 
-import { Task } from '@shared/models/tasks.model';
 import { TaskService } from '@app/shared/services/task-service';
-import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
+import { Task } from '@shared/models/tasks.model';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
+import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
+import { of } from 'rxjs';
+
 import { List } from './list';
 import { TaskList } from './task-list/task-list';
 

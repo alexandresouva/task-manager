@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { TaskList } from './task-list';
-import { TestHelper } from '@app/testing/helpers/test-helper';
+
 import { tasksMock } from '@app/testing/data/tasks.mock';
+import { TestHelper } from '@app/testing/helpers/test-helper';
+
+import { TaskList } from './task-list';
 
 async function setup() {
   TestBed.configureTestingModule({

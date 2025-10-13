@@ -8,6 +8,7 @@
     "build": "nx build",
     "test": "nx test --code-coverage --skip-nx-cache",
     "lint": "nx lint --max-warnings 0",
+    "lint:fix": "nx lint --fix",
     "prepare": "husky",
     "json-server": "json-server --watch json-server/db.json"
   },

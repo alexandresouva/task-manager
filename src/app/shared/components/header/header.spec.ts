@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { Header } from './header';
 import { By } from '@angular/platform-browser';
+
+import { Header } from './header';
 
 async function setup() {
   // Configure the testing module

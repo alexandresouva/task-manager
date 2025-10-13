@@ -3,26 +3,26 @@
 
   <div class="flex gap-2 mb-8">
     <input
-      type="text"
-      placeholder="Add a new task..."
       class="input input-bordered w-full"
+      placeholder="Add a new task..."
+      type="text"
     />
-    <button type="button" class="btn btn-primary">Add</button>
+    <button class="btn btn-primary" type="button">Add</button>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <app-task-list
-      title="Pending"
-      emptyListMessage="Nice! No tasks pending."
-      [tasks]="pendingTasks()"
       data-testid="pending-tasks"
+      emptyListMessage="Nice! No tasks pending."
+      title="Pending"
+      [tasks]="pendingTasks()"
     />
 
     <app-task-list
-      title="Done"
-      emptyListMessage="No tasks completed yet!"
-      [tasks]="completedTasks()"
       data-testid="completed-tasks"
+      emptyListMessage="No tasks completed yet!"
+      title="Done"
+      [tasks]="completedTasks()"
     />
   </div>
 </div>

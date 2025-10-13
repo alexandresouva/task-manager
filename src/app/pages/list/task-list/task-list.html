@@ -10,11 +10,11 @@
   >
     <div class="flex items-center gap-2">
       <input
-        type="checkbox"
         class="checkbox checkbox-sm"
+        data-testid="task-checkbox"
+        type="checkbox"
         [checked]="task.completed"
         (change)="emitTaskToggled(task)"
-        data-testid="task-checkbox"
       />
       <span data-testid="task-description">{{ task.description}}</span>
     </div>

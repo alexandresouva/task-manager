@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
 import { By } from '@angular/platform-browser';
+
+import { App } from './app';
 
 async function setup() {
   TestBed.configureTestingModule({
