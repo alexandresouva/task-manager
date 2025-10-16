@@ -14,4 +14,11 @@ export class TaskService {
   getAll(): Observable<Task[]> {
     return this.httpClient.get<Task[]>(`${environment.endpoints.tasks}`);
   }
+
+  update(taskId: number, task: Task): Observable<Task> {
+    return this.httpClient.put<Task>(
+      `${environment.endpoints.tasks}/${taskId}`,
+      task,
+    );
+  }
 }

@@ -16,6 +16,7 @@
       emptyListMessage="Nice! No tasks pending."
       title="Pending"
       [tasks]="pendingTasks()"
+      (taskToggled)="updateTask($event)"
     />
 
     <app-task-list
@@ -23,6 +24,7 @@
       emptyListMessage="No tasks completed yet!"
       title="Done"
       [tasks]="completedTasks()"
+      (taskToggled)="updateTask($event)"
     />
   </div>
 </div>
