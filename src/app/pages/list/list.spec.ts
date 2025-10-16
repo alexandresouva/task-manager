@@ -35,29 +35,79 @@ describe('List', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should filter completed tasks and pass them to the task list', async () => {
-    const { component, fixture, testHelper } = await setup(tasksMock);
-    const expectedCompletedTasks = tasksMock.filter((task) => task.completed);
+  describe('tasks', () => {
+    it('should filter completed tasks and pass them to the task list', async () => {
+      const { component, fixture, testHelper } = await setup(tasksMock);
+      const expectedCompletedTasks = tasksMock.filter((task) => task.completed);
 
-    fixture.detectChanges();
-    const completedTaskList =
-      testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+      fixture.detectChanges();
+      const completedTaskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
 
-    expect(component['completedTasks']()).toEqual(expectedCompletedTasks);
-    expect(completedTaskList.tasks()).toEqual(expectedCompletedTasks);
+      expect(component['completedTasks']()).toEqual(expectedCompletedTasks);
+      expect(completedTaskList.tasks()).toEqual(expectedCompletedTasks);
+    });
+
+    it('should filter pending tasks and pass them to the task list', async () => {
+      const { component, fixture, testHelper } = await setup(tasksMock);
+      const expectedPendingTasks = tasksMock.filter((task) => !task.completed);
+
+      fixture.detectChanges();
+      const pendingTaskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+
+      expect(component['pendingTasks']()).toEqual(
+        tasksMock.filter((task) => !task.completed),
+      );
+      expect(pendingTaskList.tasks()).toEqual(expectedPendingTasks);
+    });
   });
 
-  it('should filter pending tasks and pass them to the task list', async () => {
-    const { component, fixture, testHelper } = await setup(tasksMock);
-    const expectedPendingTasks = tasksMock.filter((task) => !task.completed);
+  describe('toggle task', () => {
+    it('should update task status when a pending task is toggled', async () => {
+      const { component, fixture, testHelper, taskServiceMock } =
+        await setup(tasksMock);
 
-    fixture.detectChanges();
-    const pendingTaskList =
-      testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+      const pendingTaskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+      const fakeEmittedTask: Task = pendingTaskList.tasks()[0];
+      const expectedUpdatedTask = { ...fakeEmittedTask, completed: true };
 
-    expect(component['pendingTasks']()).toEqual(
-      tasksMock.filter((task) => !task.completed),
-    );
-    expect(pendingTaskList.tasks()).toEqual(expectedPendingTasks);
+      taskServiceMock.update.mockReturnValue(of(expectedUpdatedTask));
+      pendingTaskList['emitTaskToggled'](fakeEmittedTask);
+      fixture.detectChanges();
+
+      expect(taskServiceMock.update).toHaveBeenCalledWith(
+        fakeEmittedTask.id,
+        expectedUpdatedTask,
+      );
+
+      const pendingTasksAfterToggle = component['pendingTasks']();
+      expect(pendingTasksAfterToggle).not.toContain(fakeEmittedTask);
+      expect(component['completedTasks']()).toContain(expectedUpdatedTask);
+    });
+
+    it('should update task status when a completed task is toggled', async () => {
+      const { component, fixture, testHelper, taskServiceMock } =
+        await setup(tasksMock);
+
+      const completedTaskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+      const fakeEmittedTask: Task = completedTaskList.tasks()[0];
+      const expectedUpdatedTask = { ...fakeEmittedTask, completed: false };
+
+      taskServiceMock.update.mockReturnValue(of(expectedUpdatedTask));
+      completedTaskList['emitTaskToggled'](fakeEmittedTask);
+      fixture.detectChanges();
+
+      expect(taskServiceMock.update).toHaveBeenCalledWith(
+        fakeEmittedTask.id,
+        expectedUpdatedTask,
+      );
+
+      const completedTasksAfterToggle = component['completedTasks']();
+      expect(completedTasksAfterToggle).not.toContain(fakeEmittedTask);
+      expect(component['pendingTasks']()).toContain(expectedUpdatedTask);
+    });
   });
 });
