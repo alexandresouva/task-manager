@@ -39,51 +39,9 @@ describe('TaskList', () => {
     expect(title).toBe(fakeTitle);
   });
 
-  it('should show tasks when tasks input has values', async () => {
+  it('should emit toggled event when emitTaskToggled is called', async () => {
     const { component, fixture, testHelper } = await setup();
-    const fakeTasks = [...tasksMock];
-
-    fixture.componentRef.setInput('tasks', fakeTasks);
-    fixture.detectChanges();
-
-    const emptyTasksDebug = testHelper.queryByTestId('empty-tasks');
-    const tasks = component['tasks']();
-    const tasksDebug = testHelper.queryAllByTestId('task-description');
-
-    expect(emptyTasksDebug).toBeNull();
-    expect(tasks.length).toBe(fakeTasks.length);
-    expect(tasksDebug.length).toBe(fakeTasks.length);
-  });
-
-  it('should show empty tasks message if tasks input is empty', async () => {
-    const { component, fixture, testHelper } = await setup();
-    fixture.componentRef.setInput('tasks', []);
-    fixture.detectChanges();
-
-    const emptyTasksContent = testHelper.getTextContentByTestId('empty-tasks');
-    const tasks = component['tasks']();
-    const tasksDebug = testHelper.queryAllByTestId('task-description');
-
-    expect(emptyTasksContent).toBe('Nice! No tasks pending.');
-    expect(tasks.length).toBe(0);
-    expect(tasksDebug.length).toBe(0);
-  });
-
-  it('should show custom empty tasks message if tasks input is empty and custom message is provided', async () => {
-    const { fixture, testHelper } = await setup();
-    const fakeCustomMessage = 'Fake custom empty message';
-
-    fixture.componentRef.setInput('tasks', []);
-    fixture.componentRef.setInput('emptyListMessage', fakeCustomMessage);
-    fixture.detectChanges();
-
-    const emptyTasksContent = testHelper.getTextContentByTestId('empty-tasks');
-    expect(emptyTasksContent).toBe('Nice! No tasks pending.');
-  });
-
-  it('should emit taskToggled when emitTaskToggled is called', async () => {
-    const { component, fixture, testHelper } = await setup();
-    const emitSpy = jest.spyOn(component.taskToggled, 'emit');
+    const emitSpy = jest.spyOn(component.toggled, 'emit');
     const fakeTask = tasksMock[0];
 
     fixture.componentRef.setInput('tasks', [fakeTask]);
@@ -93,5 +51,51 @@ describe('TaskList', () => {
     checkbox.triggerEventHandler('change', null);
 
     expect(emitSpy).toHaveBeenCalledWith(fakeTask);
+  });
+
+  describe('when tasks input changes', () => {
+    it('should show tasks if some tasks are provided', async () => {
+      const { component, fixture, testHelper } = await setup();
+      const fakeTasks = [...tasksMock];
+
+      fixture.componentRef.setInput('tasks', fakeTasks);
+      fixture.detectChanges();
+
+      const emptyTasksDebug = testHelper.queryByTestId('empty-tasks');
+      const tasks = component['tasks']();
+      const tasksDebug = testHelper.queryAllByTestId('task-description');
+
+      expect(emptyTasksDebug).toBeNull();
+      expect(tasks.length).toBe(fakeTasks.length);
+      expect(tasksDebug.length).toBe(fakeTasks.length);
+    });
+
+    it('should show empty tasks message if no tasks are provided', async () => {
+      const { component, fixture, testHelper } = await setup();
+      fixture.componentRef.setInput('tasks', []);
+      fixture.detectChanges();
+
+      const emptyTasksContent =
+        testHelper.getTextContentByTestId('empty-tasks');
+      const tasks = component['tasks']();
+      const tasksDebug = testHelper.queryAllByTestId('task-description');
+
+      expect(emptyTasksContent).toBe('Nice! No tasks pending.');
+      expect(tasks.length).toBe(0);
+      expect(tasksDebug.length).toBe(0);
+    });
+
+    it('should show custom empty tasks message if tasks is empty and custom message is provided', async () => {
+      const { fixture, testHelper } = await setup();
+      const fakeCustomMessage = 'Fake custom empty message';
+
+      fixture.componentRef.setInput('tasks', []);
+      fixture.componentRef.setInput('emptyListMessage', fakeCustomMessage);
+      fixture.detectChanges();
+
+      const emptyTasksContent =
+        testHelper.getTextContentByTestId('empty-tasks');
+      expect(emptyTasksContent).toBe('Nice! No tasks pending.');
+    });
   });
 });

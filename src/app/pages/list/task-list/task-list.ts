@@ -13,9 +13,9 @@ export class TaskList {
   readonly tasks = input.required<Task[]>();
   readonly emptyListMessage = input<string>('No tasks found.');
 
-  readonly taskToggled = output<Task>();
+  readonly toggled = output<Task>();
 
   protected emitTaskToggled(task: Task): void {
-    this.taskToggled.emit(task);
+    this.toggled.emit(task);
   }
 }

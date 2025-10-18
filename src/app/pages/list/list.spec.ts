@@ -35,7 +35,7 @@ describe('List', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('tasks', () => {
+  describe('after load tasks', () => {
     it('should filter completed tasks and pass them to the task list', async () => {
       const { component, fixture, testHelper } = await setup(tasksMock);
       const expectedCompletedTasks = tasksMock.filter((task) => task.completed);
@@ -63,8 +63,8 @@ describe('List', () => {
     });
   });
 
-  describe('toggle task', () => {
-    it('should update task status when a pending task is toggled', async () => {
+  describe('when toggle a task status', () => {
+    it('should mark a pending task as completed', async () => {
       const { component, fixture, testHelper, taskServiceMock } =
         await setup(tasksMock);
 
@@ -87,7 +87,7 @@ describe('List', () => {
       expect(component['completedTasks']()).toContain(expectedUpdatedTask);
     });
 
-    it('should update task status when a completed task is toggled', async () => {
+    it('should mark a completed task as pending', async () => {
       const { component, fixture, testHelper, taskServiceMock } =
         await setup(tasksMock);
 
