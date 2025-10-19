@@ -94,7 +94,7 @@ describe('TaskList', () => {
       const tasks = component['tasks']();
       const tasksDebug = testHelper.queryAllByTestId('task-description');
 
-      expect(emptyTasksContent).toBe('Nice! No tasks pending.');
+      expect(emptyTasksContent).toBe('No tasks found.');
       expect(tasks.length).toBe(0);
       expect(tasksDebug.length).toBe(0);
     });
@@ -109,7 +109,7 @@ describe('TaskList', () => {
 
       const emptyTasksContent =
         testHelper.getTextContentByTestId('empty-tasks');
-      expect(emptyTasksContent).toBe('Nice! No tasks pending.');
+      expect(emptyTasksContent).toBe(fakeCustomMessage);
     });
   });
 });
