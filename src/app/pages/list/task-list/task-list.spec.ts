@@ -15,7 +15,7 @@ async function setup() {
   const component = fixture.componentInstance;
   const testHelper = new TestHelper(fixture);
 
-  fixture.componentRef.setInput('title', 'Initial Title');
+  fixture.componentRef.setInput('listTitle', 'Initial Title');
   fixture.componentRef.setInput('tasks', []);
   fixture.detectChanges();
 
@@ -32,7 +32,7 @@ describe('TaskList', () => {
     const { fixture, testHelper } = await setup();
     const fakeTitle = 'Fake Title';
 
-    fixture.componentRef.setInput('title', fakeTitle);
+    fixture.componentRef.setInput('listTitle', fakeTitle);
     fixture.detectChanges();
 
     const title = testHelper.getTextContentByTestId('tasks-list-title');

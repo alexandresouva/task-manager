@@ -14,7 +14,7 @@
     <app-task-list
       data-testid="pending-tasks"
       emptyListMessage="Nice! No tasks pending."
-      title="Pending"
+      listTitle="Pending"
       [tasks]="pendingTasks()"
       (toggled)="updateTask($event)"
     />
@@ -22,7 +22,7 @@
     <app-task-list
       data-testid="completed-tasks"
       emptyListMessage="No tasks completed yet!"
-      title="Done"
+      listTitle="Done"
       [tasks]="completedTasks()"
       (toggled)="updateTask($event)"
     />

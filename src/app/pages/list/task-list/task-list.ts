@@ -9,7 +9,7 @@ import { Task } from '@app/shared/models/tasks.model';
   styleUrl: './task-list.scss',
 })
 export class TaskList {
-  readonly title = input.required<string>();
+  readonly listTitle = input.required<string>();
   readonly tasks = input.required<Task[]>();
   readonly emptyListMessage = input<string>('No tasks found.');
 

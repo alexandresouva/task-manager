@@ -1,8 +1,8 @@
 <h3 class="text-xl font-semibold mb-3" data-testid="tasks-list-title">
-  {{ title() }}
+  {{ listTitle() }}
 </h3>
 
-@if(tasks().length > 0) {
+@if (tasks().length > 0) {
 <ul class="space-y-2">
   @for (task of tasks(); track task.id) {
   <li
@@ -16,7 +16,7 @@
         [checked]="task.completed"
         (change)="emitTaskToggled(task)"
       />
-      <span data-testid="task-description">{{ task.description}}</span>
+      <span data-testid="task-description">{{ task.description }}</span>
     </div>
   </li>
   }
