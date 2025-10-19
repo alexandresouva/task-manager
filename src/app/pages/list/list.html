@@ -16,6 +16,7 @@
       emptyListMessage="Nice! No tasks pending."
       listTitle="Pending"
       [tasks]="pendingTasks()"
+      (deleted)="deleteTask($event)"
       (toggled)="updateTask($event)"
     />
 
@@ -24,6 +25,7 @@
       emptyListMessage="No tasks completed yet!"
       listTitle="Done"
       [tasks]="completedTasks()"
+      (deleted)="deleteTask($event)"
       (toggled)="updateTask($event)"
     />
   </div>

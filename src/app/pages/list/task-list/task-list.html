@@ -18,6 +18,15 @@
       />
       <span data-testid="task-description">{{ task.description }}</span>
     </div>
+
+    <button
+      class="btn btn-error btn-xs"
+      data-testid="delete-task-button"
+      type="button"
+      (click)="emitTaskDeleted(task)"
+    >
+      Delete
+    </button>
   </li>
   }
 </ul>

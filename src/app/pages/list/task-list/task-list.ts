@@ -14,8 +14,13 @@ export class TaskList {
   readonly emptyListMessage = input<string>('No tasks found.');
 
   readonly toggled = output<Task>();
+  readonly deleted = output<Task>();
 
   protected emitTaskToggled(task: Task): void {
     this.toggled.emit(task);
+  }
+
+  protected emitTaskDeleted(task: Task): void {
+    this.deleted.emit(task);
   }
 }

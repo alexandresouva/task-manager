@@ -21,4 +21,10 @@ export class TaskService {
       task,
     );
   }
+
+  delete(taskId: number): Observable<void> {
+    return this.httpClient.delete<void>(
+      `${environment.endpoints.tasks}/${taskId}`,
+    );
+  }
 }

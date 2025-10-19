@@ -39,4 +39,11 @@ export class List implements OnInit {
       this.tasks.set(tasks);
     });
   }
+
+  protected deleteTask(task: Task): void {
+    this.taskService.delete(task.id).subscribe(() => {
+      const tasks = this.tasks().filter((t) => t.id !== task.id);
+      this.tasks.set(tasks);
+    });
+  }
 }
