@@ -81,4 +81,17 @@ describe('TaskService', () => {
     );
     req.flush(updatedTask);
   });
+
+  it('should delete a task', fakeAsync(() => {
+    const taskIdToDelete = 3;
+
+    service.delete(taskIdToDelete).subscribe(() => {
+      expect(req.request.method).toBe('DELETE');
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.endpoints.tasks}/${taskIdToDelete}`,
+    );
+    req.flush(null);
+  }));
 });

@@ -39,7 +39,7 @@ describe('TaskList', () => {
     expect(title).toBe(fakeTitle);
   });
 
-  it('should emit toggled event when emitTaskToggled is called', async () => {
+  it('should emit toggled event when some task is toggled', async () => {
     const { component, fixture, testHelper } = await setup();
     const emitSpy = jest.spyOn(component.toggled, 'emit');
     const fakeTask = tasksMock[0];
@@ -51,6 +51,20 @@ describe('TaskList', () => {
     checkbox.triggerEventHandler('change', null);
 
     expect(emitSpy).toHaveBeenCalledWith(fakeTask);
+  });
+
+  it('should emit delete event when some task is deleted', async () => {
+    const { component, fixture, testHelper } = await setup();
+    const deleteSpy = jest.spyOn(component.deleted, 'emit');
+    const fakeTask = tasksMock[0];
+
+    fixture.componentRef.setInput('tasks', [fakeTask]);
+    fixture.detectChanges();
+
+    const checkbox = testHelper.queryByTestId('delete-task-button');
+    checkbox.triggerEventHandler('click', null);
+
+    expect(deleteSpy).toHaveBeenCalledWith(fakeTask);
   });
 
   describe('when tasks input changes', () => {

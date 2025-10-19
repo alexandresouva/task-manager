@@ -110,4 +110,46 @@ describe('List', () => {
       expect(component['pendingTasks']()).toContain(expectedUpdatedTask);
     });
   });
+
+  describe('when delete a task', () => {
+    it('should remove a pending task and update pending tasks list', async () => {
+      const { component, fixture, testHelper, taskServiceMock } =
+        await setup(tasksMock);
+
+      const pendingTaskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+      const fakeEmittedTask: Task = pendingTaskList.tasks()[0];
+
+      taskServiceMock.delete.mockReturnValue(of(null));
+      pendingTaskList['emitTaskDeleted'](fakeEmittedTask);
+      fixture.detectChanges();
+
+      expect(taskServiceMock.delete).toHaveBeenCalledWith(fakeEmittedTask.id);
+
+      const pendingTasksAfterDelete = component['pendingTasks']();
+      const completedTasksAfterDelete = component['completedTasks']();
+      expect(pendingTasksAfterDelete).not.toContain(fakeEmittedTask);
+      expect(completedTasksAfterDelete).not.toContain(fakeEmittedTask);
+    });
+
+    it('should remove a completed task and update completed tasks list', async () => {
+      const { component, fixture, testHelper, taskServiceMock } =
+        await setup(tasksMock);
+
+      const completedTaskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+      const fakeEmittedTask: Task = completedTaskList.tasks()[0];
+
+      taskServiceMock.delete.mockReturnValue(of(null));
+      completedTaskList['emitTaskDeleted'](fakeEmittedTask);
+      fixture.detectChanges();
+
+      expect(taskServiceMock.delete).toHaveBeenCalledWith(fakeEmittedTask.id);
+
+      const pendingTasksAfterDelete = component['pendingTasks']();
+      const completedTasksAfterDelete = component['completedTasks']();
+      expect(pendingTasksAfterDelete).not.toContain(fakeEmittedTask);
+      expect(completedTasksAfterDelete).not.toContain(fakeEmittedTask);
+    });
+  });
 });
