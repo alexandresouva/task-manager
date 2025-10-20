@@ -22,4 +22,9 @@ export class TestHelper<T> {
   getComponentInstanceByTestId<T>(testId: string): T | null {
     return this.queryByTestId(testId).componentInstance;
   }
+
+  triggerClickByTestId(testId: string): void {
+    const element = this.queryByTestId(testId);
+    element.triggerEventHandler('click', null);
+  }
 }

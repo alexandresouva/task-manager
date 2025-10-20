@@ -60,9 +60,7 @@ describe('TaskList', () => {
 
     fixture.componentRef.setInput('tasks', [fakeTask]);
     fixture.detectChanges();
-
-    const checkbox = testHelper.queryByTestId('delete-task-button');
-    checkbox.triggerEventHandler('click', null);
+    testHelper.triggerClickByTestId('delete-task-button');
 
     expect(deleteSpy).toHaveBeenCalledWith(fakeTask);
   });
