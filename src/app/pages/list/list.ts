@@ -33,17 +33,15 @@ export class List implements OnInit {
   protected updateTask(task: Task): void {
     const updatedTask = { ...task, completed: !task.completed };
     this.taskService.update(task.id, updatedTask).subscribe((updatedTask) => {
-      const tasks = this.tasks().map((t) =>
-        t.id === updatedTask.id ? updatedTask : t,
+      this.tasks.update((tasks) =>
+        tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
       );
-      this.tasks.set(tasks);
     });
   }
 
   protected deleteTask(task: Task): void {
     this.taskService.delete(task.id).subscribe(() => {
-      const tasks = this.tasks().filter((t) => t.id !== task.id);
-      this.tasks.set(tasks);
+      this.tasks.update((tasks) => tasks.filter((t) => t.id !== task.id));
     });
   }
 }
