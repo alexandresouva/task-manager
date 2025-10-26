@@ -1,0 +1,14 @@
+<form
+  class="flex gap-2 mb-8"
+  data-testid="create-task-form"
+  [formGroup]="form"
+  (ngSubmit)="emitTaskCreated()"
+>
+  <input
+    class="input input-bordered w-full"
+    placeholder="Add a new task..."
+    type="text"
+    [formControl]="form.controls.description"
+  />
+  <button class="btn btn-primary" type="submit">Add</button>
+</form>
