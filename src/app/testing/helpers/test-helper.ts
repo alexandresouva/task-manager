@@ -27,4 +27,9 @@ export class TestHelper<T> {
     const element = this.queryByTestId(testId);
     element.triggerEventHandler('click', null);
   }
+
+  triggerFormSubmitByTestId(testId: string, value: unknown): void {
+    const element = this.queryByTestId(testId);
+    element.triggerEventHandler('ngSubmit', value);
+  }
 }
