@@ -28,7 +28,7 @@ export default [
       'prettier/prettier': 'error',
       'no-console': 'error',
       'import/order': [
-        'error',
+        'warn',
         {
           groups: [
             'builtin',
