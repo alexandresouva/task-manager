@@ -1,4 +1,4 @@
-import { Task } from '@app/shared/models/task.model';
+import { Task } from '@shared/models/task.model';
 
 export const tasksMock: Task[] = [
   { id: 1, title: 'Task 1', completed: true },

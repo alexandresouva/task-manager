@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TaskService } from '@app/shared/services/task-service';
-import { Task } from '@shared/models/tasks.model';
+import { Task } from '@shared/models/task.model';
+import { TaskService } from '@shared/services/task-service';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
 import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
@@ -27,7 +27,12 @@ async function setup(tasks: Task[] = []) {
   const testHelper = new TestHelper(fixture);
   fixture.detectChanges();
 
-  return { component, fixture, testHelper, taskServiceMock };
+  return {
+    component,
+    fixture,
+    testHelper,
+    taskServiceMock,
+  };
 }
 
 describe('List', () => {
@@ -36,7 +41,7 @@ describe('List', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('after load tasks', () => {
+  describe('when load tasks', () => {
     it('should filter completed tasks and pass them to the task list', async () => {
       const { component, fixture, testHelper } = await setup(tasksMock);
       const expectedCompletedTasks = tasksMock.filter((task) => task.completed);
@@ -157,7 +162,7 @@ describe('List', () => {
   describe('when add a new task', () => {
     const fakeTask: Task = {
       id: 100,
-      description: 'New Task',
+      title: 'New Task',
       completed: false,
     };
 
@@ -170,13 +175,13 @@ describe('List', () => {
 
       const createTaskForm =
         testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
-      createTaskForm.form.controls.title.setValue(fakeTask.description);
+      createTaskForm.form.controls.title.setValue(fakeTask.title);
       createTaskForm['emitTaskCreated']();
       fixture.detectChanges();
 
       const pendingTasks = component['pendingTasks']();
 
-      expect(taskServiceMock.create).toHaveBeenCalledWith(fakeTask.description);
+      expect(taskServiceMock.create).toHaveBeenCalledWith(fakeTask.title);
       expect(pendingTasks).toContain(fakeTask);
     });
 
@@ -189,13 +194,13 @@ describe('List', () => {
 
       const createTaskForm =
         testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
-      createTaskForm.form.controls.title.setValue(fakeTask.description);
+      createTaskForm.form.controls.title.setValue(fakeTask.title);
       createTaskForm['emitTaskCreated']();
       fixture.detectChanges();
 
       const completedTasks = component['completedTasks']();
 
-      expect(taskServiceMock.create).toHaveBeenCalledWith(fakeTask.description);
+      expect(taskServiceMock.create).toHaveBeenCalledWith(fakeTask.title);
       expect(completedTasks).not.toContain(fakeTask);
     });
   });

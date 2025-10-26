@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TestHelper } from '@app/testing/helpers/test-helper';
+import { TestHelper } from '@testing/helpers/test-helper';
 
 import { CreateTask } from './create-task';
 
@@ -17,7 +17,7 @@ async function setup() {
   return { fixture, component, testHelper };
 }
 
-describe.only('CreateTask', () => {
+describe('CreateTask', () => {
   const fakeTaskTitle = 'Test Task';
 
   it('should create', async () => {
@@ -48,7 +48,7 @@ describe.only('CreateTask', () => {
       testHelper.triggerFormSubmitByTestId('create-task-form', fakeTaskTitle);
 
       expect(component.created.emit).toHaveBeenCalledWith(fakeTaskTitle);
-      expect(component.form.value).toEqual({ description: '' });
+      expect(component.form.value).toEqual({ title: '' });
     });
   });
 });

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { tasksMock } from '@app/testing/data/tasks.mock';
-import { TestHelper } from '@app/testing/helpers/test-helper';
+import { tasksMock } from '@testing/data/tasks.mock';
+import { TestHelper } from '@testing/helpers/test-helper';
 
 import { TaskList } from './task-list';
 

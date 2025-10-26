@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 
-import { Task } from '@app/shared/models/task.model';
+import { Task } from '@shared/models/task.model';
 
 @Component({
   selector: 'app-task-list',

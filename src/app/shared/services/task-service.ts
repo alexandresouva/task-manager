@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { NewTask, Task } from '@app/shared/models/task.model';
+import { NewTask, Task } from '@shared/models/task.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 

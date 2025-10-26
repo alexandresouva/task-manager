@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 
-import { Task } from '@app/shared/models/task.model';
-import { TaskService } from '@app/shared/services/task-service';
+import { Task } from '@shared/models/task.model';
+import { TaskService } from '@shared/services/task-service';
 
 import { CreateTask } from './create-task/create-task';
 import { TaskList } from './task-list/task-list';

@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
-import { tasksMock } from '@app/testing/data/tasks.mock';
+import { tasksMock } from '@testing/data/tasks.mock';
 import { environment } from 'src/environments/environment';
 
 import { TaskService } from './task-service';
