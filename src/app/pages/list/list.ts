@@ -3,11 +3,12 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Task } from '@app/shared/models/tasks.model';
 import { TaskService } from '@app/shared/services/task-service';
 
+import { CreateTask } from './create-task/create-task';
 import { TaskList } from './task-list/task-list';
 
 @Component({
   selector: 'app-list',
-  imports: [TaskList],
+  imports: [TaskList, CreateTask],
   templateUrl: './list.html',
   styleUrl: './list.scss',
 })
@@ -42,6 +43,12 @@ export class List implements OnInit {
   protected deleteTask(task: Task): void {
     this.taskService.delete(task.id).subscribe(() => {
       this.tasks.update((tasks) => tasks.filter((t) => t.id !== task.id));
+    });
+  }
+
+  protected createTask(taskName: string): void {
+    this.taskService.create(taskName).subscribe((newTask) => {
+      this.tasks.update((tasks) => [...tasks, newTask]);
     });
   }
 }

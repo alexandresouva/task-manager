@@ -27,4 +27,10 @@ export class TaskService {
       `${environment.endpoints.tasks}/${taskId}`,
     );
   }
+
+  create(taskName: string): Observable<Task> {
+    return this.httpClient.post<Task>(`${environment.endpoints.tasks}`, {
+      description: taskName,
+    });
+  }
 }

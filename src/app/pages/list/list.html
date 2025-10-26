@@ -1,14 +1,10 @@
 <div class="max-w-2xl mx-auto p-6">
   <h2 class="text-3xl font-bold mb-6 text-center">My Tasks</h2>
 
-  <div class="flex gap-2 mb-8">
-    <input
-      class="input input-bordered w-full"
-      placeholder="Add a new task..."
-      type="text"
-    />
-    <button class="btn btn-primary" type="button">Add</button>
-  </div>
+  <app-create-task
+    data-testid="create-task-form"
+    (created)="createTask($event)"
+  />
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <app-task-list
