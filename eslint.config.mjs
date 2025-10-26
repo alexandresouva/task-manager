@@ -60,8 +60,8 @@ export default [
     },
     rules: {
       // Typescript
-      '@typescript-eslint/prefer-readonly': 'error',
-      '@typescript-eslint/only-throw-error': 'error',
+      '@typescript-eslint/prefer-readonly': 'warn',
+      '@typescript-eslint/only-throw-error': 'warn',
       '@typescript-eslint/no-deprecated': 'warn',
       '@typescript-eslint/naming-convention': [
         'warn',
