@@ -7,6 +7,7 @@ import { TestHelper } from '@testing/helpers/test-helper';
 import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
 import { of } from 'rxjs';
 
+import { CreateTask } from './create-task/create-task';
 import { List } from './list';
 import { TaskList } from './task-list/task-list';
 
@@ -150,6 +151,52 @@ describe('List', () => {
       const completedTasksAfterDelete = component['completedTasks']();
       expect(pendingTasksAfterDelete).not.toContain(fakeEmittedTask);
       expect(completedTasksAfterDelete).not.toContain(fakeEmittedTask);
+    });
+  });
+
+  describe('when add a new task', () => {
+    const fakeTask: Task = {
+      id: 100,
+      description: 'New Task',
+      completed: false,
+    };
+
+    it('should add the new task to the pending tasks list', async () => {
+      const { component, fixture, testHelper, taskServiceMock } =
+        await setup(tasksMock);
+
+      taskServiceMock.getAll.mockReturnValue(of([]));
+      taskServiceMock.create.mockReturnValue(of(fakeTask));
+
+      const createTaskForm =
+        testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
+      createTaskForm.form.controls.description.setValue(fakeTask.description);
+      createTaskForm['emitTaskCreated']();
+      fixture.detectChanges();
+
+      const pendingTasks = component['pendingTasks']();
+
+      expect(taskServiceMock.create).toHaveBeenCalledWith(fakeTask.description);
+      expect(pendingTasks).toContain(fakeTask);
+    });
+
+    it('should not add a new task to completed tasks list', async () => {
+      const { component, fixture, testHelper, taskServiceMock } =
+        await setup(tasksMock);
+
+      taskServiceMock.getAll.mockReturnValue(of([]));
+      taskServiceMock.create.mockReturnValue(of(fakeTask));
+
+      const createTaskForm =
+        testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
+      createTaskForm.form.controls.description.setValue(fakeTask.description);
+      createTaskForm['emitTaskCreated']();
+      fixture.detectChanges();
+
+      const completedTasks = component['completedTasks']();
+
+      expect(taskServiceMock.create).toHaveBeenCalledWith(fakeTask.description);
+      expect(completedTasks).not.toContain(fakeTask);
     });
   });
 });

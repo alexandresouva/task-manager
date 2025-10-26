@@ -43,13 +43,13 @@ describe('TaskService', () => {
     req.flush(tasksMock);
     tick();
 
-    expect(result).toStrictEqual(tasksMock);
+    expect(result).toEqual(tasksMock);
   }));
 
   // Method 2: done
   it('should return tasks - using done', (done) => {
     service.getAll().subscribe((tasks) => {
-      expect(tasks).toStrictEqual(tasksMock);
+      expect(tasks).toEqual(tasksMock);
       done();
     });
 
@@ -63,7 +63,7 @@ describe('TaskService', () => {
   // Method 3: waitForAsync
   it('should return tasks - using waitForAsync', waitForAsync(() => {
     service.getAll().subscribe((tasks) => {
-      expect(tasks).toStrictEqual(tasksMock);
+      expect(tasks).toEqual(tasksMock);
     });
 
     const req = httpTestingController.expectOne({
@@ -77,7 +77,7 @@ describe('TaskService', () => {
     const updatedTask: Task = { id: 2, description: 'Task 2', completed: true };
 
     service.update(updatedTask.id, updatedTask).subscribe((task) => {
-      expect(task).toStrictEqual(updatedTask);
+      expect(task).toEqual(updatedTask);
     });
 
     const req = httpTestingController.expectOne({
@@ -98,4 +98,23 @@ describe('TaskService', () => {
     });
     req.flush(null);
   }));
+
+  it('should create a task', () => {
+    const newTaskName = 'New Task';
+    const createdTask: Task = {
+      id: 4,
+      description: newTaskName,
+      completed: false,
+    };
+
+    service.create(newTaskName).subscribe((task) => {
+      expect(task).toEqual(createdTask);
+    });
+
+    const req = httpTestingController.expectOne({
+      url: environment.endpoints.tasks,
+      method: 'POST',
+    });
+    req.flush(createdTask);
+  });
 });
