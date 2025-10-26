@@ -7,7 +7,6 @@ import { Header } from '@shared/components/header/header';
   imports: [RouterModule, Header],
   selector: 'app-root',
   templateUrl: './app.html',
-  styleUrl: './app.scss',
 })
 export class App {
   protected title = 'task-manager';

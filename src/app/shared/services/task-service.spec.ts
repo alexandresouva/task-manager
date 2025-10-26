@@ -5,11 +5,11 @@ import {
 } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
-import { Task } from '@app/shared/models/tasks.model';
 import { tasksMock } from '@app/testing/data/tasks.mock';
 import { environment } from 'src/environments/environment';
 
 import { TaskService } from './task-service';
+import { Task } from '../models/task.model';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -74,7 +74,7 @@ describe('TaskService', () => {
   }));
 
   it('should update a task', () => {
-    const updatedTask: Task = { id: 2, description: 'Task 2', completed: true };
+    const updatedTask: Task = { id: 2, title: 'Task 2', completed: true };
 
     service.update(updatedTask.id, updatedTask).subscribe((task) => {
       expect(task).toEqual(updatedTask);
@@ -99,22 +99,30 @@ describe('TaskService', () => {
     req.flush(null);
   }));
 
-  it('should create a task', () => {
+  it('should create a task', (done) => {
     const newTaskName = 'New Task';
     const createdTask: Task = {
       id: 4,
-      description: newTaskName,
+      title: newTaskName,
       completed: false,
     };
 
+    let result: Task | null = null;
     service.create(newTaskName).subscribe((task) => {
-      expect(task).toEqual(createdTask);
+      result = task;
+      done();
     });
 
     const req = httpTestingController.expectOne({
       url: environment.endpoints.tasks,
       method: 'POST',
     });
+    expect(req.request.body).toEqual({
+      title: newTaskName,
+      completed: false,
+    });
+
     req.flush(createdTask);
+    expect(result).toEqual(createdTask);
   });
 });

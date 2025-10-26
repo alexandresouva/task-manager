@@ -1,5 +1,7 @@
 export type Task = {
   id: number;
-  description: string;
+  title: string;
   completed: boolean;
 };
+
+export type NewTask = Omit<Task, 'id'>;

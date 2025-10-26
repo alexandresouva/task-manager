@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 
-import { Task } from '@app/shared/models/tasks.model';
+import { Task } from '@app/shared/models/task.model';
 import { TaskService } from '@app/shared/services/task-service';
 
 import { CreateTask } from './create-task/create-task';
@@ -10,7 +10,6 @@ import { TaskList } from './task-list/task-list';
   selector: 'app-list',
   imports: [TaskList, CreateTask],
   templateUrl: './list.html',
-  styleUrl: './list.scss',
 })
 export class List implements OnInit {
   private readonly taskService = inject(TaskService);

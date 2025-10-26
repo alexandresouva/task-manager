@@ -31,7 +31,7 @@ describe.only('CreateTask', () => {
       const emptyDescription = '';
       jest.spyOn(component.created, 'emit');
 
-      component.form.controls.description.setValue(emptyDescription);
+      component.form.controls.title.setValue(emptyDescription);
       testHelper.triggerFormSubmitByTestId(
         'create-task-form',
         emptyDescription,
@@ -44,7 +44,7 @@ describe.only('CreateTask', () => {
       const { component, testHelper } = await setup();
       jest.spyOn(component.created, 'emit');
 
-      component.form.setValue({ description: fakeTaskTitle });
+      component.form.setValue({ title: fakeTaskTitle });
       testHelper.triggerFormSubmitByTestId('create-task-form', fakeTaskTitle);
 
       expect(component.created.emit).toHaveBeenCalledWith(fakeTaskTitle);

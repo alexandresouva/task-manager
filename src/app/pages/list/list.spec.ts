@@ -170,7 +170,7 @@ describe('List', () => {
 
       const createTaskForm =
         testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
-      createTaskForm.form.controls.description.setValue(fakeTask.description);
+      createTaskForm.form.controls.title.setValue(fakeTask.description);
       createTaskForm['emitTaskCreated']();
       fixture.detectChanges();
 
@@ -189,7 +189,7 @@ describe('List', () => {
 
       const createTaskForm =
         testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
-      createTaskForm.form.controls.description.setValue(fakeTask.description);
+      createTaskForm.form.controls.title.setValue(fakeTask.description);
       createTaskForm['emitTaskCreated']();
       fixture.detectChanges();
 

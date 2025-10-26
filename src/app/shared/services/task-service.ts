@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { Task } from '@app/shared/models/tasks.model';
+import { NewTask, Task } from '@app/shared/models/task.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -28,9 +28,15 @@ export class TaskService {
     );
   }
 
-  create(taskName: string): Observable<Task> {
-    return this.httpClient.post<Task>(`${environment.endpoints.tasks}`, {
-      description: taskName,
-    });
+  create(taskTitle: string): Observable<Task> {
+    const newTask: NewTask = {
+      title: taskTitle,
+      completed: false,
+    };
+
+    return this.httpClient.post<Task>(
+      `${environment.endpoints.tasks}`,
+      newTask,
+    );
   }
 }

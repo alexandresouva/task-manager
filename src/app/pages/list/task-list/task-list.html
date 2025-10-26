@@ -16,7 +16,7 @@
         [checked]="task.completed"
         (change)="emitTaskToggled(task)"
       />
-      <span data-testid="task-description">{{ task.description }}</span>
+      <span data-testid="task-description">{{ task.title }}</span>
     </div>
 
     <button

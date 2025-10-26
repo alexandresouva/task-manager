@@ -1,12 +1,11 @@
 import { Component, input, output } from '@angular/core';
 
-import { Task } from '@app/shared/models/tasks.model';
+import { Task } from '@app/shared/models/task.model';
 
 @Component({
   selector: 'app-task-list',
   imports: [],
   templateUrl: './task-list.html',
-  styleUrl: './task-list.scss',
 })
 export class TaskList {
   readonly listTitle = input.required<string>();

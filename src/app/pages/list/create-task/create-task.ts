@@ -5,7 +5,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   selector: 'app-create-task',
   imports: [ReactiveFormsModule],
   templateUrl: './create-task.html',
-  styleUrl: './create-task.scss',
 })
 export class CreateTask {
   private readonly fb = inject(FormBuilder);
@@ -13,14 +12,14 @@ export class CreateTask {
   readonly created = output<string>();
 
   readonly form = this.fb.nonNullable.group({
-    description: ['', Validators.required],
+    title: ['', Validators.required],
   });
 
   protected emitTaskCreated(): void {
     if (this.form.invalid) return;
 
-    const { description } = this.form.value;
-    this.created.emit(description);
+    const { title } = this.form.value;
+    this.created.emit(title);
     this.form.reset();
   }
 }
