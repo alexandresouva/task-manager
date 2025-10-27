@@ -1,0 +1,22 @@
+@let baseToastClass = 'text-white p-3 rounded shadow flex items-center
+justify-between min-w-[200px]';
+
+<ul class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  @for (toast of toasts(); track $index) {
+  <li
+    data-testid="toast-list-item"
+    [class]="`${baseToastClass} ${toast.class}`"
+  >
+    <span data-testid="toast-list-title">{{ toast.title }}</span>
+    <button
+      aria-label="Close"
+      class="ml-4 btn btn-sm btn-ghost text-white"
+      data-testid="toast-list-close-button"
+      type="button"
+      (click)="removeToast(toast.id)"
+    >
+      ✕
+    </button>
+  </li>
+  }
+</ul>

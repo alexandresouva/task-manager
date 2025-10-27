@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 
 import { Task } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
+import { ToastService } from '@shared/services/toast-service';
 
 import { CreateTask } from './create-task/create-task';
 import { TaskList } from './task-list/task-list';
@@ -13,6 +14,7 @@ import { TaskList } from './task-list/task-list';
 })
 export class List implements OnInit {
   private readonly taskService = inject(TaskService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly tasks = signal<Task[]>([]);
   protected readonly completedTasks = computed(() =>
@@ -43,11 +45,21 @@ export class List implements OnInit {
     this.taskService.delete(task.id).subscribe(() => {
       this.tasks.update((tasks) => tasks.filter((t) => t.id !== task.id));
     });
+
+    this.toastService.show({
+      type: 'success',
+      title: 'Task has been deleted.',
+    });
   }
 
   protected createTask(taskName: string): void {
     this.taskService.create(taskName).subscribe((newTask) => {
       this.tasks.update((tasks) => [...tasks, newTask]);
+    });
+
+    this.toastService.show({
+      type: 'success',
+      title: 'Task has been added.',
     });
   }
 }

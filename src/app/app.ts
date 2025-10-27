@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { Header } from '@shared/components/header/header';
+import { ToastList } from '@shared/components/toast-list/toast-list';
 
 @Component({
-  imports: [RouterModule, Header],
+  imports: [RouterModule, Header, ToastList],
   selector: 'app-root',
   templateUrl: './app.html',
 })
