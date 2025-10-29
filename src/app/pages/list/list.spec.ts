@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { Task } from '@shared/models/task.model';
+import { ToastConfig } from '@shared/models/toast-config.model';
 import { TaskService } from '@shared/services/task-service';
+import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
 import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
+import { createToastServiceMock } from '@testing/mocks/toast-service.mock';
 import { of } from 'rxjs';
 
 import { CreateTask } from './create-task/create-task';
@@ -13,10 +16,14 @@ import { TaskList } from './task-list/task-list';
 
 async function setup(tasks: Task[] = []) {
   const taskServiceMock = createTaskServiceMock();
+  const toastServiceMock = createToastServiceMock();
 
   TestBed.configureTestingModule({
     imports: [List],
-    providers: [{ provide: TaskService, useValue: taskServiceMock }],
+    providers: [
+      { provide: TaskService, useValue: taskServiceMock },
+      { provide: ToastService, useValue: toastServiceMock },
+    ],
   });
   await TestBed.compileComponents();
 
@@ -32,6 +39,7 @@ async function setup(tasks: Task[] = []) {
     fixture,
     testHelper,
     taskServiceMock,
+    toastServiceMock,
   };
 }
 
@@ -157,6 +165,24 @@ describe('List', () => {
       expect(pendingTasksAfterDelete).not.toContain(fakeEmittedTask);
       expect(completedTasksAfterDelete).not.toContain(fakeEmittedTask);
     });
+
+    it('should show success toast', async () => {
+      const { fixture, testHelper, taskServiceMock, toastServiceMock } =
+        await setup(tasksMock);
+      const expectedToastConfig: ToastConfig = {
+        type: 'success',
+        title: 'Task has been deleted.',
+      };
+      const completedTaskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+      const taskToBeDeleted: Task = completedTaskList.tasks()[0];
+
+      taskServiceMock.delete.mockReturnValue(of(null));
+      completedTaskList['emitTaskDeleted'](taskToBeDeleted);
+      fixture.detectChanges();
+
+      expect(toastServiceMock.show).toHaveBeenCalledWith(expectedToastConfig);
+    });
   });
 
   describe('when add a new task', () => {
@@ -170,7 +196,6 @@ describe('List', () => {
       const { component, fixture, testHelper, taskServiceMock } =
         await setup(tasksMock);
 
-      taskServiceMock.getAll.mockReturnValue(of([]));
       taskServiceMock.create.mockReturnValue(of(fakeTask));
 
       const createTaskForm =
@@ -189,7 +214,6 @@ describe('List', () => {
       const { component, fixture, testHelper, taskServiceMock } =
         await setup(tasksMock);
 
-      taskServiceMock.getAll.mockReturnValue(of([]));
       taskServiceMock.create.mockReturnValue(of(fakeTask));
 
       const createTaskForm =
@@ -202,6 +226,25 @@ describe('List', () => {
 
       expect(taskServiceMock.create).toHaveBeenCalledWith(fakeTask.title);
       expect(completedTasks).not.toContain(fakeTask);
+    });
+
+    it('should show success toast', async () => {
+      const { fixture, testHelper, taskServiceMock, toastServiceMock } =
+        await setup(tasksMock);
+      const expectedToastConfig: ToastConfig = {
+        type: 'success',
+        title: 'Task has been added.',
+      };
+
+      taskServiceMock.create.mockReturnValue(of(fakeTask));
+
+      const createTaskForm =
+        testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
+      createTaskForm.form.controls.title.setValue(fakeTask.title);
+      createTaskForm['emitTaskCreated']();
+      fixture.detectChanges();
+
+      expect(toastServiceMock.show).toHaveBeenCalledWith(expectedToastConfig);
     });
   });
 });
