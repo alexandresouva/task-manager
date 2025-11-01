@@ -6,8 +6,7 @@ import { TaskService } from '@shared/services/task-service';
 import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
-import { createTaskServiceMock } from '@testing/mocks/tasks-service.mock';
-import { createToastServiceMock } from '@testing/mocks/toast-service.mock';
+import { MockProvider, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
 import { CreateTask } from './create-task/create-task';
@@ -15,14 +14,16 @@ import { List } from './list';
 import { TaskList } from './task-list/task-list';
 
 async function setup(tasks: Task[] = []) {
-  const taskServiceMock = createTaskServiceMock();
-  const toastServiceMock = createToastServiceMock();
+  const taskServiceMock = MockService(TaskService) as jest.Mocked<TaskService>;
+  const toastServiceMock = MockService(
+    ToastService,
+  ) as jest.Mocked<ToastService>;
 
   TestBed.configureTestingModule({
     imports: [List],
     providers: [
-      { provide: TaskService, useValue: taskServiceMock },
-      { provide: ToastService, useValue: toastServiceMock },
+      MockProvider(TaskService, taskServiceMock),
+      MockProvider(ToastService, toastServiceMock),
     ],
   });
   await TestBed.compileComponents();
@@ -34,13 +35,7 @@ async function setup(tasks: Task[] = []) {
   const testHelper = new TestHelper(fixture);
   fixture.detectChanges();
 
-  return {
-    component,
-    fixture,
-    testHelper,
-    taskServiceMock,
-    toastServiceMock,
-  };
+  return { component, fixture, testHelper, taskServiceMock, toastServiceMock };
 }
 
 describe('List', () => {
