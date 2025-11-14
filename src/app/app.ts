@@ -9,6 +9,4 @@ import { ToastList } from '@shared/components/toast-list/toast-list';
   selector: 'app-root',
   templateUrl: './app.html',
 })
-export class App {
-  protected title = 'task-manager';
-}
+export class App {}
