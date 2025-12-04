@@ -125,4 +125,22 @@ describe('TaskService', () => {
     req.flush(createdTask);
     expect(result).toEqual(createdTask);
   });
+
+  it('should get a task by id', (done) => {
+    const taskId = 1;
+    const expectedTask: Task = { id: 1, title: 'Task 1', completed: false };
+
+    let result: Task | null = null;
+    service.getById(taskId).subscribe((task) => {
+      result = task;
+      done();
+    });
+
+    const req = httpTestingController.expectOne({
+      url: `${environment.endpoints.tasks}/${taskId}`,
+      method: 'GET',
+    });
+    req.flush(expectedTask);
+    expect(result).toEqual(expectedTask);
+  });
 });

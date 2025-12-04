@@ -4,4 +4,4 @@ export type Task = {
   completed: boolean;
 };
 
-export type NewTask = Omit<Task, 'id'>;
+export type TaskForm = Omit<Task, 'id'>;

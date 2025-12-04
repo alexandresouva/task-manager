@@ -14,6 +14,7 @@ export class TaskList {
 
   readonly toggled = output<Task>();
   readonly deleted = output<Task>();
+  readonly edited = output<Task>();
 
   protected emitTaskToggled(task: Task): void {
     this.toggled.emit(task);
@@ -21,5 +22,9 @@ export class TaskList {
 
   protected emitTaskDeleted(task: Task): void {
     this.deleted.emit(task);
+  }
+
+  protected emitTaskEdited(task: Task): void {
+    this.edited.emit(task);
   }
 }

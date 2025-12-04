@@ -19,14 +19,24 @@
       <span data-testid="task-description">{{ task.title }}</span>
     </div>
 
-    <button
-      class="btn btn-error btn-xs"
-      data-testid="delete-task-button"
-      type="button"
-      (click)="emitTaskDeleted(task)"
-    >
-      Delete
-    </button>
+    <div class="flex gap-2">
+      <button
+        class="btn btn-primary btn-xs"
+        data-testid="edit-task-button"
+        type="button"
+        (click)="emitTaskEdited(task)"
+      >
+        Edit
+      </button>
+      <button
+        class="btn btn-error btn-xs"
+        data-testid="delete-task-button"
+        type="button"
+        (click)="emitTaskDeleted(task)"
+      >
+        Delete
+      </button>
+    </div>
   </li>
   }
 </ul>

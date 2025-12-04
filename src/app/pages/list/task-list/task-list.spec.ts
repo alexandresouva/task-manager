@@ -53,7 +53,7 @@ describe('TaskList', () => {
     expect(emitSpy).toHaveBeenCalledWith(fakeTask);
   });
 
-  it('should emit delete event when some task is deleted', async () => {
+  it('should emit delete event when delete button is clicked', async () => {
     const { component, fixture, testHelper } = await setup();
     const deleteSpy = jest.spyOn(component.deleted, 'emit');
     const fakeTask = tasksMock[0];
@@ -63,6 +63,18 @@ describe('TaskList', () => {
     testHelper.triggerClickByTestId('delete-task-button');
 
     expect(deleteSpy).toHaveBeenCalledWith(fakeTask);
+  });
+
+  it('should emit edit event when edit button is clicked', async () => {
+    const { component, fixture, testHelper } = await setup();
+    const editSpy = jest.spyOn(component.edited, 'emit');
+    const fakeTask = tasksMock[0];
+
+    fixture.componentRef.setInput('tasks', [fakeTask]);
+    fixture.detectChanges();
+    testHelper.triggerClickByTestId('edit-task-button');
+
+    expect(editSpy).toHaveBeenCalledWith(fakeTask);
   });
 
   describe('when tasks input changes', () => {

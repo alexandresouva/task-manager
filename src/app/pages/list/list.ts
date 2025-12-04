@@ -1,4 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Task } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
@@ -15,6 +16,7 @@ import { TaskList } from './task-list/task-list';
 export class List implements OnInit {
   private readonly taskService = inject(TaskService);
   private readonly toastService = inject(ToastService);
+  protected readonly router = inject(Router);
 
   protected readonly tasks = signal<Task[]>([]);
   protected readonly completedTasks = computed(() =>
@@ -61,5 +63,9 @@ export class List implements OnInit {
       type: 'success',
       title: 'Task has been added.',
     });
+  }
+
+  protected redirectToEditPage(task: Task): void {
+    this.router.navigateByUrl(`/tasks/${task.id}/edit`);
   }
 }

@@ -1,0 +1,41 @@
+<form
+  class="flex flex-col gap-4 max-w-md mx-auto p-4 bg-base-200 rounded-lg shadow"
+  data-testid="edit-task-form"
+  [formGroup]="taskForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="form-control">
+    <label class="label" for="edit-task-title">
+      <span class="label-text font-medium">Title</span>
+    </label>
+    <input
+      class="input input-bordered w-full"
+      data-testid="task-title-input"
+      id="edit-task-title"
+      placeholder="Enter task title"
+      type="text"
+      [formControl]="taskForm.controls.title"
+    />
+    @if (taskForm.get('title')?.invalid && taskForm.get('title')?.touched) {
+    <span class="text-error text-sm mt-1">Title is required</span>
+    }
+  </div>
+
+  <div class="form-control flex flex-row items-center gap-2">
+    <input
+      class="checkbox"
+      data-testid="task-completed-checkbox"
+      type="checkbox"
+      [formControl]="taskForm.controls.completed"
+    />
+    <span>Completed</span>
+  </div>
+
+  <button
+    class="btn btn-primary"
+    data-testid="submit-task-button"
+    type="submit"
+  >
+    Save
+  </button>
+</form>

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { NewTask, Task } from '@shared/models/task.model';
+import { TaskForm, Task } from '@shared/models/task.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -15,7 +15,13 @@ export class TaskService {
     return this.httpClient.get<Task[]>(`${environment.endpoints.tasks}`);
   }
 
-  update(taskId: number, task: Task): Observable<Task> {
+  getById(taskId: number): Observable<Task> {
+    return this.httpClient.get<Task>(
+      `${environment.endpoints.tasks}/${taskId}`,
+    );
+  }
+
+  update(taskId: number, task: TaskForm): Observable<Task> {
     return this.httpClient.put<Task>(
       `${environment.endpoints.tasks}/${taskId}`,
       task,
@@ -29,7 +35,7 @@ export class TaskService {
   }
 
   create(taskTitle: string): Observable<Task> {
-    const newTask: NewTask = {
+    const newTask: TaskForm = {
       title: taskTitle,
       completed: false,
     };

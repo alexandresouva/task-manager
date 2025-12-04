@@ -1,4 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { Task } from '@shared/models/task.model';
 import { ToastConfig } from '@shared/models/toast-config.model';
@@ -6,14 +8,14 @@ import { TaskService } from '@shared/services/task-service';
 import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
-import { MockProvider, MockService } from 'ng-mocks';
+import { MockComponent, MockProvider, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
 import { CreateTask } from './create-task/create-task';
 import { List } from './list';
 import { TaskList } from './task-list/task-list';
 
-async function setup(tasks: Task[] = []) {
+function setup(tasks: Task[] = []) {
   const taskServiceMock = MockService(TaskService) as jest.Mocked<TaskService>;
   const toastServiceMock = MockService(
     ToastService,
@@ -24,9 +26,11 @@ async function setup(tasks: Task[] = []) {
     providers: [
       MockProvider(TaskService, taskServiceMock),
       MockProvider(ToastService, toastServiceMock),
+      provideRouter([
+        { path: 'tasks/:id/edit', component: MockComponent(List) },
+      ]),
     ],
   });
-  await TestBed.compileComponents();
 
   taskServiceMock.getAll.mockReturnValue(of(tasks));
 
@@ -45,8 +49,8 @@ describe('List', () => {
   });
 
   describe('when load tasks', () => {
-    it('should filter completed tasks and pass them to the task list', async () => {
-      const { component, fixture, testHelper } = await setup(tasksMock);
+    it('should filter completed tasks and pass them to the task list', () => {
+      const { component, fixture, testHelper } = setup(tasksMock);
       const expectedCompletedTasks = tasksMock.filter((task) => task.completed);
 
       fixture.detectChanges();
@@ -57,8 +61,8 @@ describe('List', () => {
       expect(completedTaskList.tasks()).toEqual(expectedCompletedTasks);
     });
 
-    it('should filter pending tasks and pass them to the task list', async () => {
-      const { component, fixture, testHelper } = await setup(tasksMock);
+    it('should filter pending tasks and pass them to the task list', () => {
+      const { component, fixture, testHelper } = setup(tasksMock);
       const expectedPendingTasks = tasksMock.filter((task) => !task.completed);
 
       fixture.detectChanges();
@@ -73,9 +77,9 @@ describe('List', () => {
   });
 
   describe('when toggle a task status', () => {
-    it('should mark a pending task as completed', async () => {
+    it('should mark a pending task as completed', () => {
       const { component, fixture, testHelper, taskServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
 
       const pendingTaskList =
         testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
@@ -96,9 +100,9 @@ describe('List', () => {
       expect(component['completedTasks']()).toContain(expectedUpdatedTask);
     });
 
-    it('should mark a completed task as pending', async () => {
+    it('should mark a completed task as pending', () => {
       const { component, fixture, testHelper, taskServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
 
       const completedTaskList =
         testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
@@ -121,9 +125,9 @@ describe('List', () => {
   });
 
   describe('when delete a task', () => {
-    it('should remove a pending task and update pending tasks list', async () => {
+    it('should remove a pending task and update pending tasks list', () => {
       const { component, fixture, testHelper, taskServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
 
       const pendingTaskList =
         testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
@@ -141,9 +145,9 @@ describe('List', () => {
       expect(completedTasksAfterDelete).not.toContain(fakeEmittedTask);
     });
 
-    it('should remove a completed task and update completed tasks list', async () => {
+    it('should remove a completed task and update completed tasks list', () => {
       const { component, fixture, testHelper, taskServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
 
       const completedTaskList =
         testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
@@ -161,9 +165,9 @@ describe('List', () => {
       expect(completedTasksAfterDelete).not.toContain(fakeEmittedTask);
     });
 
-    it('should show success toast', async () => {
+    it('should show success toast', () => {
       const { fixture, testHelper, taskServiceMock, toastServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
       const expectedToastConfig: ToastConfig = {
         type: 'success',
         title: 'Task has been deleted.',
@@ -187,9 +191,9 @@ describe('List', () => {
       completed: false,
     };
 
-    it('should add the new task to the pending tasks list', async () => {
+    it('should add the new task to the pending tasks list', () => {
       const { component, fixture, testHelper, taskServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
 
       taskServiceMock.create.mockReturnValue(of(fakeTask));
 
@@ -223,9 +227,9 @@ describe('List', () => {
       expect(completedTasks).not.toContain(fakeTask);
     });
 
-    it('should show success toast', async () => {
+    it('should show success toast', () => {
       const { fixture, testHelper, taskServiceMock, toastServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
       const expectedToastConfig: ToastConfig = {
         type: 'success',
         title: 'Task has been added.',
@@ -242,4 +246,35 @@ describe('List', () => {
       expect(toastServiceMock.show).toHaveBeenCalledWith(expectedToastConfig);
     });
   });
+
+  describe('when edit', () => {
+    it('should redirect pending task to edit page', fakeAsync(() => {
+      const { testHelper } = setup(tasksMock);
+      const taskList =
+        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+      const fakeEmittedTask: Task = taskList.tasks()[0];
+
+      const location = TestBed.inject(Location);
+
+      taskList['emitTaskEdited'](fakeEmittedTask);
+
+      tick();
+
+      expect(location.path()).toBe(`/tasks/${fakeEmittedTask.id}/edit`);
+    }));
+  });
+
+  it('should redirect completed task to edit page', fakeAsync(() => {
+    const { testHelper } = setup(tasksMock);
+    const taskList =
+      testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+    const fakeEmittedTask: Task = taskList.tasks()[0];
+    const location = TestBed.inject(Location);
+
+    taskList['emitTaskEdited'](fakeEmittedTask);
+
+    tick();
+
+    expect(location.path()).toBe(`/tasks/${fakeEmittedTask.id}/edit`);
+  }));
 });
