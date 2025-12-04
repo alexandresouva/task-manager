@@ -23,13 +23,60 @@ export class TestHelper<T> {
     return this.queryByTestId(testId).componentInstance;
   }
 
+  getValueByTestId(testId: string): string | null {
+    return this.queryByTestId(testId).nativeElement.value;
+  }
+
+  getCheckedByTestId(testId: string): boolean | null {
+    return this.queryByTestId(testId).nativeElement.checked;
+  }
+
   triggerClickByTestId(testId: string): void {
     const element = this.queryByTestId(testId);
     element.triggerEventHandler('click', null);
   }
 
+  triggerInputByTestId(testId: string, value: unknown): void {
+    const element = this.queryByTestId(testId);
+    element.triggerEventHandler('input', { target: { value } });
+  }
+
+  triggerCheckboxChangeByTestId(testId: string, checked: boolean): void {
+    const element = this.queryByTestId(testId);
+    element.triggerEventHandler('change', { target: { checked } });
+  }
+
   triggerFormSubmitByTestId(testId: string, value: unknown): void {
     const element = this.queryByTestId(testId);
     element.triggerEventHandler('ngSubmit', value);
+  }
+
+  dispatchClickEventByTestId(testId: string): void {
+    const el = this.queryByTestId(testId).nativeElement;
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    el.dispatchEvent(event);
+  }
+
+  dispatchInputEventByTestId(testId: string, value: string): void {
+    const el = this.queryByTestId(testId).nativeElement;
+    el.value = value;
+
+    const event = new InputEvent('input', { bubbles: true, cancelable: true });
+    el.dispatchEvent(event);
+  }
+
+  dispatchCheckboxChangeByTestId(testId: string, checked: boolean): void {
+    const el = this.queryByTestId(testId).nativeElement;
+    el.checked = checked;
+
+    const event = new Event('change', { bubbles: true, cancelable: true });
+    el.dispatchEvent(event);
+  }
+
+  dispatchSubmitEvent(): void {
+    const form = this.fixture.debugElement.query(By.css('form')).nativeElement;
+    form.dispatchEvent(
+      new Event('submit', { bubbles: true, cancelable: true }),
+    );
   }
 }
