@@ -8,7 +8,19 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        barPulse: {
+          '0%, 80%, 100%': { transform: 'scaleY(0.4)' },
+          '40%': { transform: 'scaleY(1)' },
+        },
+      },
+      animation: {
+        bar1: 'barPulse 1s infinite',
+        bar2: 'barPulse 1s infinite 0.2s',
+        bar3: 'barPulse 1s infinite 0.4s',
+      },
+    },
   },
   plugins: [require('daisyui')],
 };
