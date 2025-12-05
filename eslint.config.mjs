@@ -87,7 +87,7 @@ export default [
         },
       ],
       // Angular
-      '@angular-eslint/prefer-signals': 'error',
+      '@angular-eslint/prefer-signals': 'warn',
       '@angular-eslint/prefer-standalone': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@angular-eslint/no-uncalled-signals': 'error',
