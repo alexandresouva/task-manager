@@ -22,7 +22,7 @@ async function setup() {
   const component = fixture.componentInstance;
 
   taskServiceMock.getById.mockReturnValue(of(tasksMock[0]));
-  fixture.componentRef.setInput('id', 12043);
+  fixture.componentRef.setInput('task', tasksMock[0]);
   fixture.detectChanges();
 
   return { fixture, component, testHelper, taskServiceMock };
@@ -34,18 +34,16 @@ describe('EditTask', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('when task id is provided', () => {
-    const fakeTask: Task = {
-      id: 1,
-      title: 'Test Task',
-      completed: false,
-    };
-
+  describe('when task changes', () => {
     it('should load data in the form if task id is valid', async () => {
-      const { fixture, testHelper, taskServiceMock } = await setup();
+      const { fixture, testHelper } = await setup();
+      const fakeTask: Task = {
+        id: 1,
+        title: 'Test Task',
+        completed: false,
+      };
 
-      taskServiceMock.getById.mockReturnValue(of(fakeTask));
-      fixture.componentRef.setInput('id', fakeTask.id);
+      fixture.componentRef.setInput('task', fakeTask);
       fixture.detectChanges();
 
       const inputTitle = testHelper.getValueByTestId('task-title-input');
@@ -58,18 +56,15 @@ describe('EditTask', () => {
     });
 
     it('should NOT load task data when taskId is invalid', async () => {
-      const { fixture, testHelper, taskServiceMock } = await setup();
-      jest.resetAllMocks();
+      const { fixture, testHelper } = await setup();
 
       const initialTitle = testHelper.getValueByTestId('task-title-input');
       const initialCompleted = testHelper.getCheckedByTestId(
         'task-completed-checkbox',
       );
-      taskServiceMock.getById.mockReturnValue(of(fakeTask));
-      fixture.componentRef.setInput('id', undefined);
-      fixture.detectChanges();
 
-      expect(taskServiceMock.getById).not.toHaveBeenCalled();
+      fixture.componentRef.setInput('task', undefined);
+      fixture.detectChanges();
 
       const finalTitle = testHelper.getValueByTestId('task-title-input');
       const finalCheckboxCompleted = testHelper.getCheckedByTestId(
@@ -78,50 +73,6 @@ describe('EditTask', () => {
 
       expect(initialTitle).toBe(finalTitle);
       expect(initialCompleted).toBe(finalCheckboxCompleted);
-    });
-  });
-
-  describe('when task id value is updated', () => {
-    const initialTask: Task = {
-      id: 1,
-      title: 'Initial Test Task',
-      completed: false,
-    };
-    const updatedTask: TaskForm = {
-      title: 'Updated Test Task',
-      completed: true,
-    };
-
-    it('should update form data when a task is found', async () => {
-      const { fixture, testHelper, taskServiceMock } = await setup();
-
-      taskServiceMock.getById.mockReturnValue(of(initialTask));
-      fixture.componentRef.setInput('id', initialTask.id);
-      fixture.detectChanges();
-
-      let inputTitle = testHelper.getValueByTestId('task-title-input');
-      let checkboxCompleted = testHelper.getCheckedByTestId(
-        'task-completed-checkbox',
-      );
-      expect(inputTitle).toEqual(initialTask.title);
-      expect(checkboxCompleted).toBe(initialTask.completed);
-
-      testHelper.dispatchInputEventByTestId(
-        'task-title-input',
-        updatedTask.title,
-      );
-      testHelper.dispatchCheckboxChangeByTestId(
-        'task-completed-checkbox',
-        updatedTask.completed,
-      );
-      fixture.detectChanges();
-
-      inputTitle = testHelper.getValueByTestId('task-title-input');
-      checkboxCompleted = testHelper.getCheckedByTestId(
-        'task-completed-checkbox',
-      );
-      expect(inputTitle).toEqual(updatedTask.title);
-      expect(checkboxCompleted).toBe(updatedTask.completed);
     });
   });
 
@@ -140,7 +91,6 @@ describe('EditTask', () => {
       };
 
       taskServiceMock.getById.mockReturnValue(of(originalTask));
-      fixture.componentRef.setInput('id', originalTask.id);
       fixture.detectChanges();
 
       taskServiceMock.update.mockReturnValue(of(null));
@@ -166,7 +116,6 @@ describe('EditTask', () => {
       };
 
       taskServiceMock.getById.mockReturnValue(of(originalTask));
-      fixture.componentRef.setInput('id', originalTask.id);
       fixture.detectChanges();
 
       testHelper.dispatchInputEventByTestId(
