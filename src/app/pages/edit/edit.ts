@@ -5,7 +5,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { TaskForm } from '@shared/models/task.model';
+import type { Task, TaskForm } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
 
 @Component({
@@ -17,7 +17,7 @@ export class Edit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly taskService = inject(TaskService);
 
-  readonly taskId = routeInput.required({ alias: 'id', transform: Number });
+  readonly task = routeInput.required<Task>();
 
   readonly taskForm = this.fb.group({
     title: this.fb.control<string>('', { validators: Validators.required }),
@@ -32,17 +32,15 @@ export class Edit {
     if (this.taskForm.invalid) return;
 
     const task: TaskForm = this.taskForm.getRawValue();
-    this.taskService.update(this.taskId(), task).subscribe();
+    this.taskService.update(this.task().id, task).subscribe();
   }
 
   private loadFormDataEffect(): void {
     effect(() => {
-      const taskId = this.taskId();
-      if (!taskId) return;
+      const task = this.task();
+      if (!task) return;
 
-      this.taskService
-        .getById(taskId)
-        .subscribe((task) => this.taskForm.patchValue(task));
+      this.taskForm.patchValue(task);
     });
   }
 }
