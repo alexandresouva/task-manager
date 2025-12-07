@@ -1,20 +1,26 @@
-import { TestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
+import { List } from '@pages/list/list';
 import { Task, TaskForm } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
-import { MockProvider, MockService } from 'ng-mocks';
+import { MockComponent, MockProvider, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
 import { Edit } from './edit';
 
-async function setup() {
+function setup() {
   const taskServiceMock = MockService(TaskService) as jest.Mocked<TaskService>;
-  await TestBed.configureTestingModule({
+  TestBed.configureTestingModule({
     imports: [Edit],
-    providers: [MockProvider(TaskService, taskServiceMock)],
-  }).compileComponents();
+    providers: [
+      MockProvider(TaskService, taskServiceMock),
+      provideRouter([{ path: 'tasks', component: MockComponent(List) }]),
+    ],
+  });
 
   const fixture = TestBed.createComponent(Edit);
 
@@ -35,8 +41,8 @@ describe('EditTask', () => {
   });
 
   describe('when task changes', () => {
-    it('should load data in the form if task id is valid', async () => {
-      const { fixture, testHelper } = await setup();
+    it('should load data in the form if task id is valid', () => {
+      const { fixture, testHelper } = setup();
       const fakeTask: Task = {
         id: 1,
         title: 'Test Task',
@@ -55,8 +61,8 @@ describe('EditTask', () => {
       expect(checkboxCompleted).toBe(fakeTask.completed);
     });
 
-    it('should NOT load task data when taskId is invalid', async () => {
-      const { fixture, testHelper } = await setup();
+    it('should NOT load task data when taskId is invalid', () => {
+      const { fixture, testHelper } = setup();
 
       const initialTitle = testHelper.getValueByTestId('task-title-input');
       const initialCompleted = testHelper.getCheckedByTestId(
@@ -83,8 +89,8 @@ describe('EditTask', () => {
       completed: true,
     };
 
-    it('should update task if form is valid', async () => {
-      const { fixture, testHelper, taskServiceMock } = await setup();
+    it('should update task if form is valid', () => {
+      const { fixture, testHelper, taskServiceMock } = setup();
       const updatedTask: TaskForm = {
         title: 'Edited Test Task',
         completed: true,
@@ -108,8 +114,8 @@ describe('EditTask', () => {
       );
     });
 
-    it('should not update task if form is invalid', async () => {
-      const { fixture, testHelper, taskServiceMock } = await setup();
+    it('should not update task if form is invalid', () => {
+      const { fixture, testHelper, taskServiceMock } = setup();
       const invalidTask: TaskForm = {
         title: '',
         completed: true,
@@ -127,5 +133,17 @@ describe('EditTask', () => {
 
       expect(taskServiceMock.update).not.toHaveBeenCalled();
     });
+  });
+
+  describe('when back button is clicked', () => {
+    it('should navigate back to task list', fakeAsync(() => {
+      const { testHelper } = setup();
+      const location = TestBed.inject(Location);
+
+      testHelper.dispatchClickEventByTestId('back-button');
+      tick();
+
+      expect(location.path()).toBe('/tasks');
+    }));
   });
 });

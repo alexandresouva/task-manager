@@ -1,8 +1,31 @@
+<button
+  class="btn btn-ghost"
+  data-testid="back-button"
+  type="button"
+  (click)="navigateToTaskList()"
+>
+  <svg
+    class="size-[1.2em]"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+  Back
+</button>
+
 <form
   class="flex flex-col gap-4 max-w-md mx-auto p-4 bg-base-200 rounded-lg shadow"
   data-testid="edit-task-form"
   [formGroup]="taskForm"
-  (ngSubmit)="onSubmit()"
+  (ngSubmit)="updateTask()"
 >
   <div class="form-control">
     <label class="label" for="edit-task-title">
