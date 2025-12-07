@@ -65,7 +65,7 @@ export class List implements OnInit {
     });
   }
 
-  protected redirectToEditPage(task: Task): void {
+  protected navigateToEditPage(task: Task): void {
     this.router.navigateByUrl(`/tasks/${task.id}/edit`);
   }
 }

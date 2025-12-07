@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { Edit } from '@pages/edit/edit';
 import { Task } from '@shared/models/task.model';
 import { ToastConfig } from '@shared/models/toast-config.model';
 import { TaskService } from '@shared/services/task-service';
@@ -27,7 +28,7 @@ function setup(tasks: Task[] = []) {
       MockProvider(TaskService, taskServiceMock),
       MockProvider(ToastService, toastServiceMock),
       provideRouter([
-        { path: 'tasks/:id/edit', component: MockComponent(List) },
+        { path: 'tasks/:id/edit', component: MockComponent(Edit) },
       ]),
     ],
   });
@@ -43,8 +44,8 @@ function setup(tasks: Task[] = []) {
 }
 
 describe('List', () => {
-  it('should create', async () => {
-    const { component } = await setup();
+  it('should create', () => {
+    const { component } = setup();
     expect(component).toBeTruthy();
   });
 
@@ -209,9 +210,9 @@ describe('List', () => {
       expect(pendingTasks).toContain(fakeTask);
     });
 
-    it('should not add a new task to completed tasks list', async () => {
+    it('should not add a new task to completed tasks list', () => {
       const { component, fixture, testHelper, taskServiceMock } =
-        await setup(tasksMock);
+        setup(tasksMock);
 
       taskServiceMock.create.mockReturnValue(of(fakeTask));
 

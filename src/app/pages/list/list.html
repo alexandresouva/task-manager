@@ -13,7 +13,7 @@
       listTitle="Pending"
       [tasks]="pendingTasks()"
       (deleted)="deleteTask($event)"
-      (edited)="redirectToEditPage($event)"
+      (edited)="navigateToEditPage($event)"
       (toggled)="updateTask($event)"
     />
 
@@ -23,7 +23,7 @@
       listTitle="Done"
       [tasks]="completedTasks()"
       (deleted)="deleteTask($event)"
-      (edited)="redirectToEditPage($event)"
+      (edited)="navigateToEditPage($event)"
       (toggled)="updateTask($event)"
     />
   </div>
