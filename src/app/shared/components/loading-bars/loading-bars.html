@@ -18,6 +18,8 @@
 
     @if (showMessage()) {
     <span data-testid="loading-message">{{ message() }}</span>
+    } @else {
+    <span class="sr-only">{{ message() }}</span>
     }
   </div>
 </div>
