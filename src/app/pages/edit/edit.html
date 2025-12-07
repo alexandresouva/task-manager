@@ -1,64 +1,68 @@
-<button
-  class="btn btn-ghost"
-  data-testid="back-button"
-  type="button"
-  (click)="navigateToTaskList()"
->
-  <svg
-    class="size-[1.2em]"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2.5"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-  Back
-</button>
-
-<form
-  class="flex flex-col gap-4 max-w-md mx-auto p-4 bg-base-200 rounded-lg shadow"
-  data-testid="edit-task-form"
-  [formGroup]="taskForm"
-  (ngSubmit)="updateTask()"
->
-  <div class="form-control">
-    <label class="label" for="edit-task-title">
-      <span class="label-text font-medium">Title</span>
-    </label>
-    <input
-      class="input input-bordered w-full"
-      data-testid="task-title-input"
-      id="edit-task-title"
-      placeholder="Enter task title"
-      type="text"
-      [formControl]="taskForm.controls.title"
-    />
-    @if (taskForm.get('title')?.invalid && taskForm.get('title')?.touched) {
-    <span class="text-error text-sm mt-1">Title is required</span>
-    }
-  </div>
-
-  <div class="form-control flex flex-row items-center gap-2">
-    <input
-      class="checkbox"
-      data-testid="task-completed-checkbox"
-      type="checkbox"
-      [formControl]="taskForm.controls.completed"
-    />
-    <span>Completed</span>
-  </div>
-
+<div class="max-w-4xl mx-auto p-6">
   <button
-    class="btn btn-primary"
-    data-testid="submit-task-button"
-    type="submit"
+    class="btn btn-ghost"
+    data-testid="back-button"
+    type="button"
+    (click)="navigateToTaskList()"
   >
-    Save
+    <svg
+      class="size-[1.2em]"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    Back
   </button>
-</form>
+
+  <h1 class="text-3xl font-bold mb-6 text-center">Edit Task</h1>
+
+  <form
+    class="flex flex-col gap-4 max-w-md mx-auto p-4 bg-base-200 rounded-lg shadow"
+    data-testid="edit-task-form"
+    [formGroup]="taskForm"
+    (ngSubmit)="updateTask()"
+  >
+    <div class="form-control">
+      <label class="label" for="edit-task-title">
+        <span class="label-text font-medium">Title</span>
+      </label>
+      <input
+        class="input input-bordered w-full"
+        data-testid="task-title-input"
+        id="edit-task-title"
+        placeholder="Enter task title"
+        type="text"
+        [formControl]="taskForm.controls.title"
+      />
+      @if (taskForm.get('title')?.invalid && taskForm.get('title')?.touched) {
+      <span class="text-error text-sm mt-1">Title is required</span>
+      }
+    </div>
+
+    <div class="form-control flex flex-row items-center gap-2">
+      <input
+        class="checkbox"
+        data-testid="task-completed-checkbox"
+        type="checkbox"
+        [formControl]="taskForm.controls.completed"
+      />
+      <span>Completed</span>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      data-testid="submit-task-button"
+      type="submit"
+    >
+      Save
+    </button>
+  </form>
+</div>
