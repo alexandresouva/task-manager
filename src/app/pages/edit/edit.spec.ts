@@ -5,6 +5,7 @@ import { provideRouter } from '@angular/router';
 import { List } from '@pages/list/list';
 import { Task, TaskForm } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
+import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
 import { MockComponent, MockProvider, MockService } from 'ng-mocks';
@@ -14,10 +15,15 @@ import { Edit } from './edit';
 
 function setup() {
   const taskServiceMock = MockService(TaskService) as jest.Mocked<TaskService>;
+  const toastServiceMock = MockService(
+    ToastService,
+  ) as jest.Mocked<ToastService>;
+
   TestBed.configureTestingModule({
     imports: [Edit],
     providers: [
       MockProvider(TaskService, taskServiceMock),
+      MockProvider(ToastService, toastServiceMock),
       provideRouter([{ path: 'tasks', component: MockComponent(List) }]),
     ],
   });
@@ -31,12 +37,12 @@ function setup() {
   fixture.componentRef.setInput('task', tasksMock[0]);
   fixture.detectChanges();
 
-  return { fixture, component, testHelper, taskServiceMock };
+  return { fixture, component, testHelper, taskServiceMock, toastServiceMock };
 }
 
 describe('EditTask', () => {
-  it('should create', async () => {
-    const { component } = await setup();
+  it('should create', () => {
+    const { component } = setup();
     expect(component).toBeTruthy();
   });
 
@@ -111,6 +117,29 @@ describe('EditTask', () => {
       expect(taskServiceMock.update).toHaveBeenCalledWith(
         originalTask.id,
         updatedTask,
+      );
+    });
+
+    it('should display success toast after updating task', () => {
+      const {
+        fixture,
+        component,
+        testHelper,
+        taskServiceMock,
+        toastServiceMock,
+      } = setup();
+      const updatedTask: TaskForm = {
+        title: 'Edited Test Task',
+        completed: true,
+      };
+
+      taskServiceMock.update.mockReturnValue(of(tasksMock[0]));
+      component['taskForm'].patchValue(updatedTask);
+      fixture.detectChanges();
+      testHelper.triggerFormSubmitByTestId('edit-task-form', null);
+
+      expect(toastServiceMock.show).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'success' }),
       );
     });
 

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 
 import type { Task, TaskForm } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
+import { ToastService } from '@shared/services/toast-service';
 
 @Component({
   selector: 'app-edit',
@@ -16,8 +17,9 @@ import { TaskService } from '@shared/services/task-service';
 })
 export class Edit {
   private readonly fb = inject(NonNullableFormBuilder);
-  private readonly taskService = inject(TaskService);
   private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
+  private readonly taskService = inject(TaskService);
 
   readonly task = routeInput.required<Task>();
 
@@ -34,7 +36,14 @@ export class Edit {
     if (this.taskForm.invalid) return;
 
     const task: TaskForm = this.taskForm.getRawValue();
-    this.taskService.update(this.task().id, task).subscribe();
+    this.taskService.update(this.task().id, task).subscribe(() => {
+      this.navigateToTaskList();
+
+      this.toastService.show({
+        type: 'success',
+        title: 'Task has been updated.',
+      });
+    });
   }
 
   protected navigateToTaskList(): void {
