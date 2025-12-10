@@ -46,22 +46,22 @@ export class List implements OnInit {
   protected deleteTask(task: Task): void {
     this.taskService.delete(task.id).subscribe(() => {
       this.tasks.update((tasks) => tasks.filter((t) => t.id !== task.id));
-    });
 
-    this.toastService.show({
-      type: 'success',
-      title: 'Task has been deleted.',
+      this.toastService.show({
+        type: 'success',
+        title: 'Task has been deleted.',
+      });
     });
   }
 
   protected createTask(taskName: string): void {
     this.taskService.create(taskName).subscribe((newTask) => {
       this.tasks.update((tasks) => [...tasks, newTask]);
-    });
 
-    this.toastService.show({
-      type: 'success',
-      title: 'Task has been added.',
+      this.toastService.show({
+        type: 'success',
+        title: 'Task has been added.',
+      });
     });
   }
 
