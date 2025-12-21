@@ -2,22 +2,22 @@
   "tasks": [
     {
       "id": 1,
-      "description": "Learn Angular",
+      "title": "Learn Angular",
       "completed": false
     },
     {
       "id": 2,
-      "description": "Build a Todo App",
+      "title": "Build a Todo App",
       "completed": false
     },
     {
       "id": 3,
-      "description": "Setup Tailwind",
+      "title": "Setup Tailwind",
       "completed": true
     },
     {
       "id": 4,
-      "description": "Install DaisyUI",
+      "title": "Install DaisyUI",
       "completed": true
     }
   ]
