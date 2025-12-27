@@ -10,7 +10,9 @@ import { CustomButtonAppearance } from '../custom-button.model';
 export class ButtonAppearanceDirective {
   private readonly el = inject(ElementRef);
 
-  readonly appearance = input<CustomButtonAppearance>('primary');
+  private readonly defaultAppearance: CustomButtonAppearance = 'primary';
+
+  readonly appearance = input<CustomButtonAppearance>(this.defaultAppearance);
 
   constructor() {
     effect(() => {
@@ -19,7 +21,9 @@ export class ButtonAppearanceDirective {
       this.reset();
 
       const appearanceClass =
-        BUTTON_APPEARANCE_CLASS[appearance] ?? BUTTON_APPEARANCE_CLASS.primary;
+        BUTTON_APPEARANCE_CLASS[appearance] ??
+        BUTTON_APPEARANCE_CLASS[this.defaultAppearance];
+
       this.el.nativeElement.classList.add(appearanceClass);
     });
   }

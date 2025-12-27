@@ -10,7 +10,8 @@ import { CustomButtonSize } from '../custom-button.model';
 export class ButtonSizeDirective {
   private readonly el: ElementRef<HTMLElement> = inject(ElementRef);
 
-  readonly size = input<CustomButtonSize>('md');
+  private readonly defaultSize: CustomButtonSize = 'md';
+  readonly size = input<CustomButtonSize>(this.defaultSize);
 
   constructor() {
     effect(() => {
@@ -18,7 +19,8 @@ export class ButtonSizeDirective {
 
       this.reset();
 
-      const sizeClass = BUTTON_SIZE_CLASS[size] ?? BUTTON_SIZE_CLASS.md;
+      const sizeClass =
+        BUTTON_SIZE_CLASS[size] ?? BUTTON_SIZE_CLASS[this.defaultSize];
       this.el.nativeElement.classList.add(sizeClass);
     });
   }
