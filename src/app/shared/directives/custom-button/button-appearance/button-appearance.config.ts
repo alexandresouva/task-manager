@@ -8,4 +8,5 @@ export const BUTTON_APPEARANCE_CLASS: Record<CustomButtonAppearance, string> = {
   accent: 'btn-accent',
   ghost: 'btn-ghost',
   link: 'btn-link',
+  error: 'btn-error',
 };

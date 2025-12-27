@@ -5,6 +5,7 @@ export type CustomButtonAppearance =
   | 'neutral'
   | 'accent'
   | 'ghost'
-  | 'link';
+  | 'link'
+  | 'error';
 
 export type CustomButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
