@@ -4,7 +4,8 @@ import { TestBed } from '@angular/core/testing';
 import { TestHelper } from '@testing/helpers/test-helper';
 
 import { ButtonAppearanceDirective } from './button-appearance';
-import { CustomButtonAppearance } from './button-appearance.model';
+import { CustomButtonAppearance } from '../custom-button.model';
+import { BUTTON_APPEARANCE_CLASS } from './button-appearance.config';
 
 function setup() {
   @Component({
@@ -17,7 +18,7 @@ function setup() {
 
       <button
         appButtonAppearance
-        data-testid="custom-type-button"
+        data-testid="custom-appearance-button"
         type="button"
         [appearance]="appearance()"
       >
@@ -53,23 +54,22 @@ describe('ButtonAppearance Directive', () => {
   });
 
   describe('when appearance is provided', () => {
-    it('should change host element class', () => {
-      const { testHelper, fixture } = setup();
+    Object.keys(BUTTON_APPEARANCE_CLASS)
+      .filter((appearance) => appearance !== 'primary')
+      .forEach((appearance) => {
+        it(`should apply ${appearance} appearance class`, () => {
+          const { testHelper, fixture } = setup();
+          const button = testHelper.queryByTestId(
+            'custom-appearance-button',
+          ).nativeElement;
+          const expectedClass = BUTTON_APPEARANCE_CLASS[appearance];
 
-      const buttonDebugElement = testHelper.queryByTestId('custom-type-button');
-      const button: HTMLButtonElement = buttonDebugElement.nativeElement;
+          fixture.componentRef.setInput('appearance', appearance);
+          fixture.detectChanges();
 
-      fixture.componentRef.setInput('appearance', 'secondary');
-      fixture.detectChanges();
-
-      expect(button.classList.contains('btn-primary')).toBe(false);
-      expect(button.classList.contains('btn-secondary')).toBe(true);
-
-      fixture.componentRef.setInput('appearance', 'tertiary');
-      fixture.detectChanges();
-
-      expect(button.classList.contains('btn-secondary')).toBe(false);
-      expect(button.classList.contains('btn-tertiary')).toBe(true);
-    });
+          expect(button.classList.contains('btn-primary')).toBe(false);
+          expect(button.classList.contains(expectedClass)).toBe(true);
+        });
+      });
   });
 });

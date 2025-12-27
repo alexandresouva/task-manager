@@ -3,9 +3,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { TestHelper } from '@testing/helpers/test-helper';
 
-import { CustomButtonAppearance } from './button-appearance/button-appearance.model';
-import { CustomButtonSize } from './button-size/button-size.model';
 import { CustomButton } from './custom-button';
+import {
+  CustomButtonAppearance,
+  CustomButtonSize,
+} from './custom-button.model';
 
 function setup() {
   @Component({

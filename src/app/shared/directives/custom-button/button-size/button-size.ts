@@ -1,6 +1,7 @@
 import { Directive, inject, ElementRef, input, effect } from '@angular/core';
 
-import { CUSTOM_BUTTON_SIZES, CustomButtonSize } from './button-size.model';
+import { BUTTON_SIZE_CLASS } from './button-size.config';
+import { CustomButtonSize } from '../custom-button.model';
 
 @Directive({
   selector: '[appButtonSize]',
@@ -13,19 +14,17 @@ export class ButtonSizeDirective {
 
   constructor() {
     effect(() => {
+      const size = this.size();
+
       this.reset();
-      this.el.nativeElement.classList.add(`btn-${this.size()}`);
+
+      const sizeClass = BUTTON_SIZE_CLASS[size] ?? BUTTON_SIZE_CLASS.md;
+      this.el.nativeElement.classList.add(sizeClass);
     });
   }
 
   private reset(): void {
-    const classes = CUSTOM_BUTTON_SIZES.map((size) =>
-      this.buildButtonClass(size),
-    );
+    const classes = Object.values(BUTTON_SIZE_CLASS);
     this.el.nativeElement.classList.remove(...classes);
-  }
-
-  private buildButtonClass(size: CustomButtonSize): string {
-    return `btn-${size}`;
   }
 }

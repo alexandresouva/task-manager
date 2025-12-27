@@ -4,7 +4,8 @@ import { TestBed } from '@angular/core/testing';
 import { TestHelper } from '@testing/helpers/test-helper';
 
 import { ButtonSizeDirective } from './button-size';
-import { CUSTOM_BUTTON_SIZES, CustomButtonSize } from './button-size.model';
+import { CustomButtonSize } from '../custom-button.model';
+import { BUTTON_SIZE_CLASS } from './button-size.config';
 
 function setup() {
   @Component({
@@ -53,19 +54,21 @@ describe('ButtonSize Directive', () => {
   });
 
   describe('when size is provided', () => {
-    CUSTOM_BUTTON_SIZES.filter((size) => size !== 'md').forEach((size) => {
-      it(`should apply ${size} size class`, () => {
-        const { testHelper, fixture } = setup();
+    Object.keys(BUTTON_SIZE_CLASS)
+      .filter((size) => size !== 'md')
+      .forEach((size) => {
+        it(`should apply ${size} size class`, () => {
+          const { testHelper, fixture } = setup();
 
-        const button =
-          testHelper.queryByTestId('custom-size-button').nativeElement;
+          const button =
+            testHelper.queryByTestId('custom-size-button').nativeElement;
 
-        fixture.componentRef.setInput('size', size);
-        fixture.detectChanges();
+          fixture.componentRef.setInput('size', size as any);
+          fixture.detectChanges();
 
-        expect(button.classList.contains('btn-md')).toBe(false);
-        expect(button.classList.contains(`btn-${size}`)).toBe(true);
+          expect(button.classList.contains('btn-md')).toBe(false);
+          expect(button.classList.contains(BUTTON_SIZE_CLASS[size])).toBe(true);
+        });
       });
-    });
   });
 });
