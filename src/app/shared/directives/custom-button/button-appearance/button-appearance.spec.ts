@@ -71,5 +71,17 @@ describe('ButtonAppearance Directive', () => {
           expect(button.classList.contains(expectedClass)).toBe(true);
         });
       });
+
+    it('should fallback to default appearance class for invalid appearance', () => {
+      const { testHelper, fixture } = setup();
+      const button = testHelper.queryByTestId(
+        'custom-appearance-button',
+      ).nativeElement;
+
+      fixture.componentRef.setInput('appearance', 'invalid-appearance');
+      fixture.detectChanges();
+
+      expect(button.classList.contains('btn-primary')).toBe(true);
+    });
   });
 });

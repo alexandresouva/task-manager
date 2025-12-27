@@ -70,5 +70,16 @@ describe('ButtonSize Directive', () => {
           expect(button.classList.contains(BUTTON_SIZE_CLASS[size])).toBe(true);
         });
       });
+
+    it('should fallback to default size class for invalid size', () => {
+      const { testHelper, fixture } = setup();
+      const button =
+        testHelper.queryByTestId('custom-size-button').nativeElement;
+
+      fixture.componentRef.setInput('size', 'invalid-size');
+      fixture.detectChanges();
+
+      expect(button.classList.contains('btn-md')).toBe(true);
+    });
   });
 });
