@@ -5,6 +5,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CustomButton } from '@shared/directives/custom-button/custom-button';
 
 import type { Task, TaskForm } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
@@ -12,7 +13,7 @@ import { ToastService } from '@shared/services/toast-service';
 
 @Component({
   selector: 'app-edit',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CustomButton],
   templateUrl: './edit.html',
 })
 export class Edit {

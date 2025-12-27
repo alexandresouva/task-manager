@@ -21,7 +21,9 @@
 
     <div class="flex gap-2">
       <button
-        class="btn btn-primary btn-xs"
+        appCustomButton
+        appearance="primary"
+        size="xs"
         data-testid="edit-task-button"
         type="button"
         (click)="emitTaskEdited(task)"
@@ -29,7 +31,9 @@
         Edit
       </button>
       <button
-        class="btn btn-error btn-xs"
+        appCustomButton
+        appearance="error"
+        size="xs"
         data-testid="delete-task-button"
         type="button"
         (click)="emitTaskDeleted(task)"

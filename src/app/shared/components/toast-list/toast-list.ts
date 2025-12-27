@@ -6,10 +6,11 @@ import { ToastService } from '@shared/services/toast-service';
 
 import { ToastWithClass } from './models/toast-class.model';
 import { TOAST_TYPE_CLASS } from './tokens/toast-class.token';
+import { CustomButton } from '@shared/directives/custom-button/custom-button';
 
 @Component({
   selector: 'app-toast-list',
-  imports: [CommonModule],
+  imports: [CommonModule, CustomButton],
   templateUrl: './toast-list.html',
 })
 export class ToastList {

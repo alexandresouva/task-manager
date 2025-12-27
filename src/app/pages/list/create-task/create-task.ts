@@ -1,9 +1,10 @@
 import { Component, inject, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CustomButton } from '@shared/directives/custom-button/custom-button';
 
 @Component({
   selector: 'app-create-task',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CustomButton],
   templateUrl: './create-task.html',
 })
 export class CreateTask {

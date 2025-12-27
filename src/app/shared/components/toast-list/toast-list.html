@@ -10,7 +10,10 @@ justify-between min-w-[200px]';
     <span data-testid="toast-list-title">{{ toast.title }}</span>
     <button
       aria-label="Close"
-      class="ml-4 btn btn-sm btn-ghost text-white"
+      appCustomButton
+      appearance="ghost"
+      size="sm"
+      class="ml-4 text-white"
       data-testid="toast-list-close-button"
       type="button"
       (click)="removeToast(toast.id)"
