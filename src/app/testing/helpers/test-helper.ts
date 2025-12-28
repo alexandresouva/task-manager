@@ -73,8 +73,8 @@ export class TestHelper<T> {
     el.dispatchEvent(event);
   }
 
-  dispatchSubmitEvent(): void {
-    const form = this.fixture.debugElement.query(By.css('form')).nativeElement;
+  dispatchSubmitEventByTestId(testId: string): void {
+    const form = this.queryByTestId(testId).nativeElement;
     form.dispatchEvent(
       new Event('submit', { bubbles: true, cancelable: true }),
     );
