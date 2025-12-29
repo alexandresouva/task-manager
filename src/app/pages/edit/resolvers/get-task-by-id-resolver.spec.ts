@@ -10,7 +10,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 
 import { Task } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
-import { MockProvider, MockService } from 'ng-mocks';
+import { MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
 import { getTaskByIdResolver } from './get-task-by-id-resolver';
@@ -28,7 +28,7 @@ function setup() {
 
   TestBed.configureTestingModule({
     providers: [
-      MockProvider(TaskService, taskServiceMock),
+      { provide: TaskService, useValue: taskServiceMock },
       provideRouter(
         [
           {

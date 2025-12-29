@@ -8,7 +8,7 @@ import { TaskService } from '@shared/services/task-service';
 import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { TestHelper } from '@testing/helpers/test-helper';
-import { MockComponent, MockProvider, MockService } from 'ng-mocks';
+import { MockComponent, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
 import { Edit } from './edit';
@@ -22,8 +22,8 @@ function setup() {
   TestBed.configureTestingModule({
     imports: [Edit],
     providers: [
-      MockProvider(TaskService, taskServiceMock),
-      MockProvider(ToastService, toastServiceMock),
+      { provide: TaskService, useValue: taskServiceMock },
+      { provide: ToastService, useValue: toastServiceMock },
       provideRouter([{ path: 'tasks', component: MockComponent(List) }]),
     ],
   });
