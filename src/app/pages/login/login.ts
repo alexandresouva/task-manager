@@ -3,9 +3,8 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '@shared/services/auth-service';
+import { AuthFacade } from '@shared/services/auth-facade';
 import { ToastService } from '@shared/services/toast-service';
-import { AuthStore } from '@shared/stores/auth-store';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +12,9 @@ import { AuthStore } from '@shared/stores/auth-store';
   templateUrl: './login.html',
 })
 export class Login {
-  private readonly authService = inject(AuthService);
-  private readonly authStore = inject(AuthStore);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly authFacade = inject(AuthFacade);
   private readonly toastService = inject(ToastService);
 
   /* Initialize with correct credentials to easily test successful login */
@@ -33,21 +31,14 @@ export class Login {
 
     const { email, password } = this.loginForm.getRawValue();
 
-    this.authService.login(email, password).subscribe({
-      next: () => this.onLoginSuccess(),
+    this.authFacade.login(email, password).subscribe({
+      next: () => void this.router.navigateByUrl('tasks'),
       error: (e) => this.onLoginError(e),
     });
   }
 
-  private onLoginSuccess(): void {
-    this.authStore.isAuthenticated = true;
-    this.router.navigateByUrl('tasks');
-  }
-
   private onLoginError(error: HttpErrorResponse): void {
     const isUnauthorized = error.status === HttpStatusCode.Unauthorized;
-
-    this.authStore.isAuthenticated = false;
 
     this.toastService.show({
       type: 'error',
