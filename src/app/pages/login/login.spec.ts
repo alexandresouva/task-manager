@@ -1,23 +1,30 @@
 import { Location } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { List } from '@pages/list/list';
+import { ToastConfig } from '@shared/models/toast-config.model';
 import { AuthService } from '@shared/services/auth-service';
+import { ToastService } from '@shared/services/toast-service';
 import { TestHelper } from '@testing/helpers/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { Login } from './login';
 
 function setup() {
   const authServiceMock = MockService(AuthService) as jest.Mocked<AuthService>;
+  const toastServiceMock = MockService(
+    ToastService,
+  ) as jest.Mocked<ToastService>;
 
   TestBed.configureTestingModule({
     imports: [Login],
     providers: [
-      { provide: AuthService, useValue: authServiceMock },
       provideRouter([{ path: 'tasks', component: MockComponent(List) }]),
+      { provide: AuthService, useValue: authServiceMock },
+      { provide: ToastService, useValue: toastServiceMock },
     ],
   });
 
@@ -27,7 +34,7 @@ function setup() {
 
   fixture.detectChanges();
 
-  return { fixture, component, testHelper, authServiceMock };
+  return { fixture, component, testHelper, authServiceMock, toastServiceMock };
 }
 
 function fillAndSubmitForm(
@@ -68,8 +75,8 @@ describe('Login', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('when submit valid login credentials', () => {
-    it('should login and navigate to tasks page', fakeAsync(() => {
+  describe('when submit form with valid fields', () => {
+    it('should login and navigate to tasks page if success', fakeAsync(() => {
       const { testHelper, authServiceMock } = setup();
       const location = TestBed.inject(Location);
 
@@ -86,6 +93,35 @@ describe('Login', () => {
       expect(location.path()).toBe('/tasks');
     }));
 
+    it('should display toast error if login fails and keep on login page', fakeAsync(() => {
+      const { testHelper, authServiceMock, toastServiceMock } = setup();
+      const location = TestBed.inject(Location);
+      const unauthorizedFakeError = new HttpErrorResponse({
+        status: 401,
+        statusText: 'Unauthorized',
+        error: { message: 'Invalid credentials' },
+      });
+
+      authServiceMock.login.mockReturnValue(
+        throwError(() => unauthorizedFakeError),
+      );
+      fillAndSubmitForm(testHelper, validEmail, validPassword);
+
+      expect(authServiceMock.login).toHaveBeenCalledWith(
+        validEmail,
+        validPassword,
+      );
+
+      tick();
+
+      expect(location.path()).toBe('');
+      expect(toastServiceMock.show).toHaveBeenCalledWith({
+        type: 'error',
+        title: 'Error',
+        message: 'Invalid email or password.',
+      });
+    }));
+
     it('should NOT display error messages', () => {
       const { testHelper, fixture, authServiceMock } = setup();
 
@@ -100,7 +136,13 @@ describe('Login', () => {
     });
   });
 
-  describe('when submit invalid login credentials', () => {
+  describe('when submit invalid login fields', () => {
+    const invalidFormToastMessage: ToastConfig = {
+      type: 'error',
+      title: 'Error',
+      message: 'Please fill in all required fields correctly.',
+    };
+
     it('should interrupt login', () => {
       const { testHelper, fixture, authServiceMock } = setup();
       const location = TestBed.inject(Location);
@@ -113,7 +155,7 @@ describe('Login', () => {
     });
 
     it('should display error if both fields are invalid', () => {
-      const { testHelper, fixture } = setup();
+      const { testHelper, fixture, toastServiceMock } = setup();
 
       fillAndSubmitForm(testHelper, '', '');
       fixture.detectChanges();
@@ -122,10 +164,13 @@ describe('Login', () => {
 
       expect(emailError).toBeTruthy();
       expect(passwordError).toBeTruthy();
+      expect(toastServiceMock.show).toHaveBeenCalledWith(
+        invalidFormToastMessage,
+      );
     });
 
     it('should display error only for invalid field', () => {
-      const { testHelper, fixture } = setup();
+      const { testHelper, fixture, toastServiceMock } = setup();
 
       fillAndSubmitForm(testHelper, validEmail, '');
       fixture.detectChanges();
@@ -134,6 +179,9 @@ describe('Login', () => {
 
       expect(emailError).toBeFalsy();
       expect(passwordError).toBeTruthy();
+      expect(toastServiceMock.show).toHaveBeenCalledWith(
+        invalidFormToastMessage,
+      );
 
       fillAndSubmitForm(testHelper, 'invalidEmailFormat', validPassword);
       fixture.detectChanges();
@@ -142,6 +190,9 @@ describe('Login', () => {
 
       expect(emailError).toBeTruthy();
       expect(passwordError).toBeFalsy();
+      expect(toastServiceMock.show).toHaveBeenCalledWith(
+        invalidFormToastMessage,
+      );
     });
   });
 });
