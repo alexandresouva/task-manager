@@ -15,7 +15,7 @@
   "private": true,
   "lint-staged": {
     "*.{js,ts,html}": [
-      "eslint"
+      "eslint --max-warnings 0"
     ],
     "*.{scss,json,md}": [
       "prettier --write"
