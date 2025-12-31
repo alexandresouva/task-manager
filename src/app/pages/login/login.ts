@@ -20,17 +20,12 @@ export class Login {
   /* Initialize with correct credentials to easily test successful login */
   readonly loginForm = this.fb.nonNullable.group({
     email: ['fake@email.com', [Validators.required, Validators.email]],
-    password: ['fakePassword', Validators.required],
+    password: ['fakePassword', [Validators.required, Validators.minLength(4)]],
   });
 
   protected login(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
-      this.toastService.show({
-        type: 'error',
-        title: 'Error',
-        message: 'Please fill in all required fields correctly.',
-      });
       return;
     }
 

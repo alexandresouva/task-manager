@@ -41,19 +41,13 @@
         placeholder="Enter your password"
         type="password"
       />
-
-      @if ( loginForm.controls.password.invalid &&
-      loginForm.controls.password.touched ) {
-      <span class="text-error text-sm mt-1" data-testid="login-password-error">
-        Password is required
-      </span>
-      }
     </div>
 
     <button
-      class="btn btn-primary w-full"
+      class="btn btn-primary w-full disabled:opacity-70 disabled:text-white/100 disabled:bg-primary/70 disabled:border-primary/70"
       data-testid="login-button"
       type="submit"
+      [disabled]="loginForm.invalid"
     >
       Login
     </button>
