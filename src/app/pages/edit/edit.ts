@@ -1,4 +1,11 @@
-import { Component, effect, inject, input as routeInput } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  input as routeInput,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -21,6 +28,7 @@ export class Edit {
   private readonly router = inject(Router);
   private readonly toastService = inject(ToastService);
   private readonly taskService = inject(TaskService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly task = routeInput.required<Task>();
 
@@ -37,14 +45,17 @@ export class Edit {
     if (this.taskForm.invalid) return;
 
     const task: TaskForm = this.taskForm.getRawValue();
-    this.taskService.update(this.task().id, task).subscribe(() => {
-      this.navigateToTaskList();
+    this.taskService
+      .update(this.task().id, task)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.navigateToTaskList();
 
-      this.toastService.show({
-        type: 'success',
-        title: 'Task has been updated.',
+        this.toastService.show({
+          type: 'success',
+          title: 'Task has been updated.',
+        });
       });
-    });
   }
 
   protected navigateToTaskList(): void {

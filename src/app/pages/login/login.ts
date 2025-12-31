@@ -1,5 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -16,6 +17,7 @@ export class Login {
   private readonly router = inject(Router);
   private readonly authFacade = inject(AuthFacade);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /* Initialize with correct credentials to easily test successful login */
   readonly loginForm = this.fb.nonNullable.group({
@@ -31,10 +33,13 @@ export class Login {
 
     const { email, password } = this.loginForm.getRawValue();
 
-    this.authFacade.login(email, password).subscribe({
-      next: () => void this.router.navigateByUrl('tasks'),
-      error: (e) => this.onLoginError(e),
-    });
+    this.authFacade
+      .login(email, password)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => void this.router.navigateByUrl('tasks'),
+        error: (e) => this.onLoginError(e),
+      });
   }
 
   private onLoginError(error: HttpErrorResponse): void {

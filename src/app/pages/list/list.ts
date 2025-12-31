@@ -1,4 +1,12 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
 import { Task } from '@shared/models/task.model';
@@ -16,6 +24,7 @@ import { TaskList } from './task-list/task-list';
 export class List implements OnInit {
   private readonly taskService = inject(TaskService);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly router = inject(Router);
 
   protected readonly tasks = signal<Task[]>([]);
@@ -31,38 +40,52 @@ export class List implements OnInit {
   }
 
   protected loadTasks(): void {
-    this.taskService.getAll().subscribe((tasks) => this.tasks.set(tasks));
+    this.taskService
+      .getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((tasks) => this.tasks.set(tasks));
   }
 
   protected updateTask(task: Task): void {
     const updatedTask = { ...task, completed: !task.completed };
-    this.taskService.update(task.id, updatedTask).subscribe((updatedTask) => {
-      this.tasks.update((tasks) =>
-        tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
-      );
-    });
+    this.taskService
+      .update(task.id, updatedTask)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((updatedTask) => {
+        this.tasks.update((tasks) =>
+          tasks.map((task) =>
+            task.id === updatedTask.id ? updatedTask : task,
+          ),
+        );
+      });
   }
 
   protected deleteTask(task: Task): void {
-    this.taskService.delete(task.id).subscribe(() => {
-      this.tasks.update((tasks) => tasks.filter((t) => t.id !== task.id));
+    this.taskService
+      .delete(task.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.tasks.update((tasks) => tasks.filter((t) => t.id !== task.id));
 
-      this.toastService.show({
-        type: 'success',
-        title: 'Task has been deleted.',
+        this.toastService.show({
+          type: 'success',
+          title: 'Task has been deleted.',
+        });
       });
-    });
   }
 
   protected createTask(taskName: string): void {
-    this.taskService.create(taskName).subscribe((newTask) => {
-      this.tasks.update((tasks) => [...tasks, newTask]);
+    this.taskService
+      .create(taskName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((newTask) => {
+        this.tasks.update((tasks) => [...tasks, newTask]);
 
-      this.toastService.show({
-        type: 'success',
-        title: 'Task has been added.',
+        this.toastService.show({
+          type: 'success',
+          title: 'Task has been added.',
+        });
       });
-    });
   }
 
   protected navigateToEditPage(task: Task): void {
