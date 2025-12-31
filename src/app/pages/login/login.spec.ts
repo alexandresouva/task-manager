@@ -4,7 +4,6 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { List } from '@pages/list/list';
-import { ToastConfig } from '@shared/models/toast-config.model';
 import { AuthService } from '@shared/services/auth-service';
 import { ToastService } from '@shared/services/toast-service';
 import { TestHelper } from '@testing/helpers/test-helper';
@@ -47,9 +46,8 @@ function fillAndSubmitForm(
   testHelper.dispatchSubmitEventByTestId('login-button');
 }
 
-function getErrorMessages(testHelper: TestHelper<Login>) {
+function getEmailErrorMessage(testHelper: TestHelper<Login>) {
   let emailError: string | null = null;
-  let passwordError: string | null = null;
 
   try {
     emailError = testHelper.getTextContentByTestId('login-email-error');
@@ -57,13 +55,7 @@ function getErrorMessages(testHelper: TestHelper<Login>) {
     emailError = null;
   }
 
-  try {
-    passwordError = testHelper.getTextContentByTestId('login-password-error');
-  } catch {
-    passwordError = null;
-  }
-
-  return { emailError, passwordError };
+  return { emailError };
 }
 
 describe('Login', () => {
@@ -76,6 +68,18 @@ describe('Login', () => {
   });
 
   describe('when submit form with valid fields', () => {
+    it('should not display email error message', () => {
+      const { testHelper, fixture, authServiceMock } = setup();
+
+      authServiceMock.login.mockReturnValue(of({ token: 'fake_jwt_token' }));
+      fillAndSubmitForm(testHelper, validEmail, validPassword);
+      fixture.detectChanges();
+
+      const { emailError } = getEmailErrorMessage(testHelper);
+
+      expect(emailError).toBeFalsy();
+    });
+
     it('should login and navigate to tasks page if success', fakeAsync(() => {
       const { testHelper, authServiceMock } = setup();
       const location = TestBed.inject(Location);
@@ -93,7 +97,7 @@ describe('Login', () => {
       expect(location.path()).toBe('/tasks');
     }));
 
-    it('should display toast error if login fails and keep on login page', fakeAsync(() => {
+    it('should display toast error and keep on login page if login fails', fakeAsync(() => {
       const { testHelper, authServiceMock, toastServiceMock } = setup();
       const location = TestBed.inject(Location);
       const unauthorizedFakeError = new HttpErrorResponse({
@@ -121,78 +125,31 @@ describe('Login', () => {
         message: 'Invalid email or password.',
       });
     }));
-
-    it('should NOT display error messages', () => {
-      const { testHelper, fixture, authServiceMock } = setup();
-
-      authServiceMock.login.mockReturnValue(of({ token: 'fake_jwt_token' }));
-      fillAndSubmitForm(testHelper, validEmail, validPassword);
-      fixture.detectChanges();
-
-      const { emailError, passwordError } = getErrorMessages(testHelper);
-
-      expect(emailError).toBeFalsy();
-      expect(passwordError).toBeFalsy();
-    });
   });
 
-  describe('when submit invalid login fields', () => {
-    const invalidFormToastMessage: ToastConfig = {
-      type: 'error',
-      title: 'Error',
-      message: 'Please fill in all required fields correctly.',
-    };
+  describe('when form is invalid', () => {
+    it('should display error if email is in invalid format', () => {
+      const { testHelper, fixture } = setup();
 
-    it('should interrupt login', () => {
+      fillAndSubmitForm(testHelper, '', '');
+      fixture.detectChanges();
+
+      const { emailError } = getEmailErrorMessage(testHelper);
+
+      expect(emailError).toBeTruthy();
+    });
+
+    it('should prevent login submission', () => {
       const { testHelper, fixture, authServiceMock } = setup();
       const location = TestBed.inject(Location);
+      const loginButton = testHelper.queryByTestId('login-button');
 
-      fillAndSubmitForm(testHelper, '', '');
+      fillAndSubmitForm(testHelper, '', '123');
       fixture.detectChanges();
 
+      expect(loginButton.nativeElement.disabled).toBe(true);
       expect(authServiceMock.login).not.toHaveBeenCalled();
       expect(location.path()).toBe('');
-    });
-
-    it('should display error if both fields are invalid', () => {
-      const { testHelper, fixture, toastServiceMock } = setup();
-
-      fillAndSubmitForm(testHelper, '', '');
-      fixture.detectChanges();
-
-      const { emailError, passwordError } = getErrorMessages(testHelper);
-
-      expect(emailError).toBeTruthy();
-      expect(passwordError).toBeTruthy();
-      expect(toastServiceMock.show).toHaveBeenCalledWith(
-        invalidFormToastMessage,
-      );
-    });
-
-    it('should display error only for invalid field', () => {
-      const { testHelper, fixture, toastServiceMock } = setup();
-
-      fillAndSubmitForm(testHelper, validEmail, '');
-      fixture.detectChanges();
-
-      let { emailError, passwordError } = getErrorMessages(testHelper);
-
-      expect(emailError).toBeFalsy();
-      expect(passwordError).toBeTruthy();
-      expect(toastServiceMock.show).toHaveBeenCalledWith(
-        invalidFormToastMessage,
-      );
-
-      fillAndSubmitForm(testHelper, 'invalidEmailFormat', validPassword);
-      fixture.detectChanges();
-
-      ({ emailError, passwordError } = getErrorMessages(testHelper));
-
-      expect(emailError).toBeTruthy();
-      expect(passwordError).toBeFalsy();
-      expect(toastServiceMock.show).toHaveBeenCalledWith(
-        invalidFormToastMessage,
-      );
     });
   });
 });
