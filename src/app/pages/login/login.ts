@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '@shared/services/auth-service';
 import { ToastService } from '@shared/services/toast-service';
+import { AuthStore } from '@shared/stores/auth-store';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { ToastService } from '@shared/services/toast-service';
 })
 export class Login {
   private readonly authService = inject(AuthService);
+  private readonly authStore = inject(AuthStore);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly toastService = inject(ToastService);
@@ -32,20 +34,27 @@ export class Login {
     const { email, password } = this.loginForm.getRawValue();
 
     this.authService.login(email, password).subscribe({
-      next: () => void this.router.navigateByUrl('tasks'),
+      next: () => this.onLoginSuccess(),
       error: (e) => this.onLoginError(e),
     });
   }
 
+  private onLoginSuccess(): void {
+    this.authStore.isAuthenticated = true;
+    this.router.navigateByUrl('tasks');
+  }
+
   private onLoginError(error: HttpErrorResponse): void {
     const isUnauthorized = error.status === HttpStatusCode.Unauthorized;
+
+    this.authStore.isAuthenticated = false;
 
     this.toastService.show({
       type: 'error',
       title: 'Error',
       message: isUnauthorized
         ? 'Invalid email or password.'
-        : 'An error occurred during login.',
+        : 'An error occurred during login. Please try again later.',
     });
   }
 }
