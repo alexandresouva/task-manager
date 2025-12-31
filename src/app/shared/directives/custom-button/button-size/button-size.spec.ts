@@ -63,7 +63,7 @@ describe('ButtonSize Directive', () => {
           const button =
             testHelper.queryByTestId('custom-size-button').nativeElement;
 
-          fixture.componentRef.setInput('size', size as any);
+          fixture.componentRef.setInput('size', size);
           fixture.detectChanges();
 
           expect(button.classList.contains('btn-md')).toBe(false);

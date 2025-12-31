@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 
-import { Task } from '@shared/models/task.model';
 import { CustomButton } from '@shared/directives/custom-button/custom-button';
+import { Task } from '@shared/models/task.model';
 
 @Component({
   selector: 'app-task-list',

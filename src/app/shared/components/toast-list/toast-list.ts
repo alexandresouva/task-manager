@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 
+import { CustomButton } from '@shared/directives/custom-button/custom-button';
 import { Toast } from '@shared/models/toast-config.model';
 import { ToastService } from '@shared/services/toast-service';
 
 import { ToastWithClass } from './models/toast-class.model';
 import { TOAST_TYPE_CLASS } from './tokens/toast-class.token';
-import { CustomButton } from '@shared/directives/custom-button/custom-button';
 
 @Component({
   selector: 'app-toast-list',
