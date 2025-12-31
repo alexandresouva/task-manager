@@ -7,14 +7,23 @@ justify-between min-w-[200px]';
     data-testid="toast-list-item"
     [class]="`${baseToastClass} ${toast.class}`"
   >
-    <span data-testid="toast-list-title">{{ toast.title }}</span>
+    <div class="flex flex-col gap-2">
+      <span data-testid="toast-list-title">{{ toast.title }}</span>
+
+      @if (toast.message) {
+      <span class="text-sm" data-testid="toast-list-message">
+        {{ toast.message }}
+      </span>
+      }
+    </div>
+
     <button
-      aria-label="Close"
       appCustomButton
       appearance="ghost"
-      size="sm"
+      aria-label="Close"
       class="ml-4 text-white"
       data-testid="toast-list-close-button"
+      size="sm"
       type="button"
       (click)="removeToast(toast.id)"
     >

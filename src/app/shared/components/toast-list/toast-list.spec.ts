@@ -71,6 +71,24 @@ describe('ToastList', () => {
       }
     });
 
+    it('should render the toast message when provided', async () => {
+      const toastSignal = signal<Toast[]>([]);
+      const { fixture, testHelper } = await setup(toastSignal);
+      const fakeToast: Toast = {
+        type: 'success',
+        title: 'Success message',
+        message: 'This is a success toast message.',
+        id: '1',
+      };
+
+      toastSignal.set([fakeToast]);
+      fixture.detectChanges();
+
+      const toastMessage =
+        testHelper.getTextContentByTestId('toast-list-message');
+      expect(toastMessage.trim()).toBe(fakeToast.message);
+    });
+
     it('should remove the toast item when the close button is clicked', async () => {
       const toastSignal = signal<Toast[]>([]);
       const { fixture, testHelper } = await setup(toastSignal);
