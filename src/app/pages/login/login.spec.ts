@@ -1,8 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
+import { List } from '@pages/list/list';
 import { AuthService } from '@shared/services/auth-service';
 import { TestHelper } from '@testing/helpers/test-helper';
-import { MockService } from 'ng-mocks';
+import { MockComponent, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
 import { Login } from './login';
@@ -12,7 +15,10 @@ function setup() {
 
   TestBed.configureTestingModule({
     imports: [Login],
-    providers: [{ provide: AuthService, useValue: authServiceMock }],
+    providers: [
+      { provide: AuthService, useValue: authServiceMock },
+      provideRouter([{ path: 'tasks', component: MockComponent(List) }]),
+    ],
   });
 
   const fixture = TestBed.createComponent(Login);
@@ -63,8 +69,9 @@ describe('Login', () => {
   });
 
   describe('when submit valid login credentials', () => {
-    it('should call service with credentials', () => {
+    it('should login and navigate to tasks page', fakeAsync(() => {
       const { testHelper, authServiceMock } = setup();
+      const location = TestBed.inject(Location);
 
       authServiceMock.login.mockReturnValue(of({ token: 'fake_jwt_token' }));
       fillAndSubmitForm(testHelper, validEmail, validPassword);
@@ -73,7 +80,11 @@ describe('Login', () => {
         validEmail,
         validPassword,
       );
-    });
+
+      tick();
+
+      expect(location.path()).toBe('/tasks');
+    }));
 
     it('should NOT display error messages', () => {
       const { testHelper, fixture, authServiceMock } = setup();
@@ -90,8 +101,19 @@ describe('Login', () => {
   });
 
   describe('when submit invalid login credentials', () => {
-    it('should display error if both fields are invalid', () => {
+    it('should interrupt login', () => {
       const { testHelper, fixture, authServiceMock } = setup();
+      const location = TestBed.inject(Location);
+
+      fillAndSubmitForm(testHelper, '', '');
+      fixture.detectChanges();
+
+      expect(authServiceMock.login).not.toHaveBeenCalled();
+      expect(location.path()).toBe('');
+    });
+
+    it('should display error if both fields are invalid', () => {
+      const { testHelper, fixture } = setup();
 
       fillAndSubmitForm(testHelper, '', '');
       fixture.detectChanges();
@@ -100,11 +122,10 @@ describe('Login', () => {
 
       expect(emailError).toBeTruthy();
       expect(passwordError).toBeTruthy();
-      expect(authServiceMock.login).not.toHaveBeenCalled();
     });
 
     it('should display error only for invalid field', () => {
-      const { testHelper, fixture, authServiceMock } = setup();
+      const { testHelper, fixture } = setup();
 
       fillAndSubmitForm(testHelper, validEmail, '');
       fixture.detectChanges();
@@ -121,7 +142,6 @@ describe('Login', () => {
 
       expect(emailError).toBeTruthy();
       expect(passwordError).toBeFalsy();
-      expect(authServiceMock.login).not.toHaveBeenCalled();
     });
   });
 });
