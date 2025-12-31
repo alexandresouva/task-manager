@@ -4,7 +4,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { List } from '@pages/list/list';
-import { AuthService } from '@shared/services/auth-service';
+import { AuthFacade } from '@shared/services/auth-facade';
 import { ToastService } from '@shared/services/toast-service';
 import { TestHelper } from '@testing/helpers/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';
@@ -13,7 +13,7 @@ import { of, throwError } from 'rxjs';
 import { Login } from './login';
 
 function setup() {
-  const authServiceMock = MockService(AuthService) as jest.Mocked<AuthService>;
+  const authFacadeMock = MockService(AuthFacade) as jest.Mocked<AuthFacade>;
   const toastServiceMock = MockService(
     ToastService,
   ) as jest.Mocked<ToastService>;
@@ -22,7 +22,7 @@ function setup() {
     imports: [Login],
     providers: [
       provideRouter([{ path: 'tasks', component: MockComponent(List) }]),
-      { provide: AuthService, useValue: authServiceMock },
+      { provide: AuthFacade, useValue: authFacadeMock },
       { provide: ToastService, useValue: toastServiceMock },
     ],
   });
@@ -37,7 +37,7 @@ function setup() {
     fixture,
     component,
     testHelper,
-    authServiceMock,
+    authFacadeMock,
     toastServiceMock,
   };
 }
@@ -75,9 +75,9 @@ describe('Login', () => {
 
   describe('when form is valid and submitted', () => {
     it('should not display email error message', () => {
-      const { testHelper, fixture, authServiceMock } = setup();
+      const { testHelper, fixture, authFacadeMock } = setup();
 
-      authServiceMock.login.mockReturnValue(of({ token: 'fake_jwt_token' }));
+      authFacadeMock.login.mockReturnValue(of(void 0));
       fillAndSubmitForm(testHelper, validEmail, validPassword);
       fixture.detectChanges();
 
@@ -87,13 +87,13 @@ describe('Login', () => {
     });
 
     it('should login and navigate to tasks page if success', fakeAsync(() => {
-      const { testHelper, authServiceMock } = setup();
+      const { testHelper, authFacadeMock } = setup();
       const location = TestBed.inject(Location);
 
-      authServiceMock.login.mockReturnValue(of({ token: 'fake_jwt_token' }));
+      authFacadeMock.login.mockReturnValue(of(void 0));
       fillAndSubmitForm(testHelper, validEmail, validPassword);
 
-      expect(authServiceMock.login).toHaveBeenCalledWith(
+      expect(authFacadeMock.login).toHaveBeenCalledWith(
         validEmail,
         validPassword,
       );
@@ -104,7 +104,7 @@ describe('Login', () => {
     }));
 
     it('should display toast error and keep on login page if login fails', fakeAsync(() => {
-      const { testHelper, authServiceMock, toastServiceMock } = setup();
+      const { testHelper, authFacadeMock, toastServiceMock } = setup();
       const location = TestBed.inject(Location);
       const unauthorizedFakeError = new HttpErrorResponse({
         status: 401,
@@ -112,12 +112,12 @@ describe('Login', () => {
         error: { message: 'Invalid credentials' },
       });
 
-      authServiceMock.login.mockReturnValue(
+      authFacadeMock.login.mockReturnValue(
         throwError(() => unauthorizedFakeError),
       );
       fillAndSubmitForm(testHelper, validEmail, validPassword);
 
-      expect(authServiceMock.login).toHaveBeenCalledWith(
+      expect(authFacadeMock.login).toHaveBeenCalledWith(
         validEmail,
         validPassword,
       );
@@ -133,17 +133,17 @@ describe('Login', () => {
     }));
 
     it('should display generic toast error if a different error occurs', fakeAsync(() => {
-      const { testHelper, authServiceMock, toastServiceMock } = setup();
+      const { testHelper, authFacadeMock, toastServiceMock } = setup();
       const location = TestBed.inject(Location);
       const serverFakeError = new HttpErrorResponse({
         status: 500,
         statusText: 'Server Error',
       });
 
-      authServiceMock.login.mockReturnValue(throwError(() => serverFakeError));
+      authFacadeMock.login.mockReturnValue(throwError(() => serverFakeError));
       fillAndSubmitForm(testHelper, validEmail, validPassword);
 
-      expect(authServiceMock.login).toHaveBeenCalledWith(
+      expect(authFacadeMock.login).toHaveBeenCalledWith(
         validEmail,
         validPassword,
       );
@@ -172,7 +172,7 @@ describe('Login', () => {
     });
 
     it('should prevent login submission', () => {
-      const { testHelper, fixture, authServiceMock } = setup();
+      const { testHelper, fixture, authFacadeMock } = setup();
       const location = TestBed.inject(Location);
       const loginButton = testHelper.queryByTestId('login-button');
 
@@ -180,7 +180,7 @@ describe('Login', () => {
       fixture.detectChanges();
 
       expect(loginButton.nativeElement.disabled).toBe(true);
-      expect(authServiceMock.login).not.toHaveBeenCalled();
+      expect(authFacadeMock.login).not.toHaveBeenCalled();
       expect(location.path()).toBe('');
     });
   });
