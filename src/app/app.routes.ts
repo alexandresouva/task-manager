@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { getTaskByIdResolver } from '@pages/edit/resolvers/get-task-by-id-resolver';
 
 export const appRoutes: Route[] = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
   {
     path: 'login',
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
