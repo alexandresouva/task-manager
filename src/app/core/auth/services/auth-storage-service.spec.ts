@@ -36,8 +36,13 @@ describe('AuthStorageService', () => {
 
   it('should get token from localStorage', () => {
     const { service, storage } = setup();
-    service.getToken();
+    const fakeToken = 'fakeToken';
+
+    (storage.getItem as jest.Mock).mockReturnValue(fakeToken);
+    const result = service.getToken();
+
     expect(storage.getItem).toHaveBeenCalledWith('auth_token');
+    expect(result).toBe(fakeToken);
   });
 
   it('should remove token from localStorage', () => {
