@@ -1,25 +1,31 @@
 import { TestBed } from '@angular/core/testing';
 
+import { AuthResponse } from '@shared/models/auth.model';
 import { AuthStore } from '@shared/stores/auth-store';
 import { MockService } from 'ng-mocks';
 import { of, throwError } from 'rxjs';
 
 import { AuthFacade } from './auth-facade';
 import { AuthService } from './auth-service';
+import { AuthStorageService } from './auth-storage-service';
 
 function setup() {
   const authServiceMock = MockService(AuthService) as jest.Mocked<AuthService>;
   const authStoreMock = MockService(AuthStore) as jest.Mocked<AuthStore>;
+  const authStorageMock = MockService(
+    AuthStorageService,
+  ) as jest.Mocked<AuthStorageService>;
 
   TestBed.configureTestingModule({
     providers: [
       { provide: AuthService, useValue: authServiceMock },
       { provide: AuthStore, useValue: authStoreMock },
+      { provide: AuthStorageService, useValue: authStorageMock },
     ],
   });
   const service = TestBed.inject(AuthFacade);
 
-  return { service, authServiceMock, authStoreMock };
+  return { service, authServiceMock, authStoreMock, authStorageMock };
 }
 
 describe('AuthFacade', () => {
@@ -29,12 +35,16 @@ describe('AuthFacade', () => {
   });
 
   describe('when login is successful', () => {
-    it('should set isAuthenticated to true ', (done) => {
-      const { service, authServiceMock, authStoreMock } = setup();
+    it('should set isAuthenticated to true and save auth token', (done) => {
+      const { service, authServiceMock, authStoreMock, authStorageMock } =
+        setup();
       const fakeEmail = 'fake@email.com';
       const fakePassword = 'fakePassword';
+      const fakeAuthResponse: AuthResponse = {
+        token: 'fake_jwt_token',
+      };
 
-      authServiceMock.login.mockReturnValue(of(void 0));
+      authServiceMock.login.mockReturnValue(of(fakeAuthResponse));
       service.login(fakeEmail, fakePassword).subscribe(() => {
         done();
       });
@@ -44,12 +54,14 @@ describe('AuthFacade', () => {
         fakePassword,
       );
       expect(authStoreMock.isAuthenticated).toBe(true);
+      expect(authStorageMock.setToken).toHaveBeenCalledWith('fake_jwt_token');
     });
   });
 
   describe('when login fails', () => {
-    it('should set isAuthenticated to false and throw an error', (done) => {
-      const { service, authServiceMock, authStoreMock } = setup();
+    it('should set isAuthenticated to false, clear auth token and throw an error', (done) => {
+      const { service, authServiceMock, authStoreMock, authStorageMock } =
+        setup();
       const fakeEmail = 'fake@email.com';
       const fakePassword = 'fakePassword';
 
@@ -68,6 +80,7 @@ describe('AuthFacade', () => {
       expect(result).toBeTruthy();
       expect(result?.message).toBe('Login failed');
       expect(authStoreMock.isAuthenticated).toBe(false);
+      expect(authStorageMock.clearToken).toHaveBeenCalled();
     });
   });
 });
