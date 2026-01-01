@@ -3,8 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { AuthFacade } from '@core/auth/services/auth-facade';
 import { List } from '@pages/list/list';
-import { AuthFacade } from '@shared/services/auth-facade';
 import { ToastService } from '@shared/services/toast-service';
 import { TestHelper } from '@testing/helpers/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';

@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthFacade } from '@shared/services/auth-facade';
+import { AuthFacade } from '@core/auth/services/auth-facade';
 import { ToastService } from '@shared/services/toast-service';
 
 @Component({
