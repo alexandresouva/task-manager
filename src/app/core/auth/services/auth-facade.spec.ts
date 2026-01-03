@@ -35,7 +35,7 @@ describe('AuthFacade', () => {
   });
 
   describe('when login is successful', () => {
-    it('should set isAuthenticated to true and save auth token', (done) => {
+    it('should authenticate and save auth token', (done) => {
       const { service, authServiceMock, authStoreMock, authStorageMock } =
         setup();
       const fakeEmail = 'fake@email.com';
@@ -53,13 +53,13 @@ describe('AuthFacade', () => {
         fakeEmail,
         fakePassword,
       );
-      expect(authStoreMock.isAuthenticated).toBe(true);
+      expect(authStoreMock.authenticate).toHaveBeenCalled();
       expect(authStorageMock.setToken).toHaveBeenCalledWith('fake_jwt_token');
     });
   });
 
   describe('when login fails', () => {
-    it('should set isAuthenticated to false, clear auth token and throw an error', (done) => {
+    it('should logout, clear auth token and throw an error', (done) => {
       const { service, authServiceMock, authStoreMock, authStorageMock } =
         setup();
       const fakeEmail = 'fake@email.com';
@@ -69,40 +69,40 @@ describe('AuthFacade', () => {
         throwError(() => new Error('Login failed')),
       );
 
-      let result: Error | null = null;
+      let expectedError: Error | null = null;
       service.login(fakeEmail, fakePassword).subscribe({
         error: (error) => {
-          result = error;
+          expectedError = error;
           done();
         },
       });
 
-      expect(result).toBeTruthy();
-      expect(result?.message).toBe('Login failed');
-      expect(authStoreMock.isAuthenticated).toBe(false);
+      expect(expectedError).toBeTruthy();
+      expect(expectedError?.message).toBe('Login failed');
+      expect(authStoreMock.logout).toHaveBeenCalled();
       expect(authStorageMock.clearToken).toHaveBeenCalled();
     });
   });
 
   describe('when restoring auth state', () => {
-    it('should set isAuthenticated to true if auth token is present', () => {
+    it('should authenticate if auth token is present', () => {
       const { service, authStoreMock, authStorageMock } = setup();
 
       authStorageMock.hasToken.mockReturnValue(true);
       service.restoreAuthState();
 
       expect(authStorageMock.hasToken).toHaveBeenCalled();
-      expect(authStoreMock.isAuthenticated).toBe(true);
+      expect(authStoreMock.authenticate).toHaveBeenCalled();
     });
 
-    it('should set isAuthenticated to false if auth token is absent', () => {
+    it('should logout if auth token is absent', () => {
       const { service, authStoreMock, authStorageMock } = setup();
 
       authStorageMock.hasToken.mockReturnValue(false);
       service.restoreAuthState();
 
       expect(authStorageMock.hasToken).toHaveBeenCalled();
-      expect(authStoreMock.isAuthenticated).toBe(false);
+      expect(authStoreMock.logout).toHaveBeenCalled();
     });
   });
 });

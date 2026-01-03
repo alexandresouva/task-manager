@@ -7,7 +7,7 @@ export const isLoggedInGuard: CanActivateFn = () => {
   const authStore = inject(AuthStore);
   const router = inject(Router);
 
-  if (!authStore.isAuthenticated) {
+  if (!authStore.isAuthenticated()) {
     const loginTreeUrl = router.parseUrl('/login');
     return new RedirectCommand(loginTreeUrl);
   }

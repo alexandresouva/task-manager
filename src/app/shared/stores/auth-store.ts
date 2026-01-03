@@ -1,16 +1,16 @@
 import { Injectable, signal } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthStore {
   private readonly _isAuthenticated = signal(false);
 
-  get isAuthenticated(): boolean {
-    return this._isAuthenticated();
+  readonly isAuthenticated = this._isAuthenticated.asReadonly();
+
+  authenticate(): void {
+    this._isAuthenticated.set(true);
   }
 
-  set isAuthenticated(value: boolean) {
-    this._isAuthenticated.set(value);
+  logout(): void {
+    this._isAuthenticated.set(false);
   }
 }

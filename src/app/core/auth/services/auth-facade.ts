@@ -16,11 +16,11 @@ export class AuthFacade {
 
   login(email: string, password: string): Observable<void> {
     return this.authService.login(email, password).pipe(
-      tap(() => (this.authStore.isAuthenticated = true)),
+      tap(() => this.authStore.authenticate()),
       tap(({ token }) => this.authStorage.setToken(token)),
       map(() => void 0),
       catchError((error) => {
-        this.authStore.isAuthenticated = false;
+        this.authStore.logout();
         this.authStorage.clearToken();
         return throwError(() => error);
       }),
@@ -29,6 +29,11 @@ export class AuthFacade {
 
   restoreAuthState(): void {
     /* Please, don't repeat it! Only for example*/
-    this.authStore.isAuthenticated = this.authStorage.hasToken();
+    if (this.authStorage.hasToken()) {
+      this.authStore.authenticate();
+      return;
+    }
+
+    this.authStore.logout();
   }
 }

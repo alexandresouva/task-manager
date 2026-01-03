@@ -18,12 +18,21 @@ describe('AuthStore', () => {
 
   it('should return "false" for isAuthenticated by default', () => {
     const { service } = setup();
-    expect(service.isAuthenticated).toBeFalsy();
+    expect(service.isAuthenticated()).toBeFalsy();
   });
 
-  it('should set and get isAuthenticated correctly', () => {
+  it('should set isAuthenticated when authenticate is called', () => {
     const { service } = setup();
-    service.isAuthenticated = true;
-    expect(service.isAuthenticated).toBeTruthy();
+    service.authenticate();
+    expect(service.isAuthenticated()).toBeTruthy();
+  });
+
+  it('should set isAuthenticated to false when logout is called', () => {
+    const { service } = setup();
+
+    service.authenticate();
+    service.logout();
+
+    expect(service.isAuthenticated()).toBeFalsy();
   });
 });
