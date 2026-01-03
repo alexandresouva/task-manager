@@ -45,6 +45,29 @@ describe('AuthStorageService', () => {
     expect(result).toBe(fakeToken);
   });
 
+  describe('when checking if token exists', () => {
+    it('should return true if token is found', () => {
+      const { service, storage } = setup();
+      const fakeToken = 'fakeToken';
+
+      (storage.getItem as jest.Mock).mockReturnValue(fakeToken);
+      const result = service.hasToken();
+
+      expect(storage.getItem).toHaveBeenCalledWith('auth_token');
+      expect(result).toBe(true);
+    });
+
+    it('should return false if token is not found', () => {
+      const { service, storage } = setup();
+
+      (storage.getItem as jest.Mock).mockReturnValue(null);
+      const result = service.hasToken();
+
+      expect(storage.getItem).toHaveBeenCalledWith('auth_token');
+      expect(result).toBe(false);
+    });
+  });
+
   it('should remove token from localStorage', () => {
     const { service, storage } = setup();
     service.clearToken();

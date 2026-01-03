@@ -83,4 +83,26 @@ describe('AuthFacade', () => {
       expect(authStorageMock.clearToken).toHaveBeenCalled();
     });
   });
+
+  describe('when restoring auth state', () => {
+    it('should set isAuthenticated to true if auth token is present', () => {
+      const { service, authStoreMock, authStorageMock } = setup();
+
+      authStorageMock.hasToken.mockReturnValue(true);
+      service.restoreAuthState();
+
+      expect(authStorageMock.hasToken).toHaveBeenCalled();
+      expect(authStoreMock.isAuthenticated).toBe(true);
+    });
+
+    it('should set isAuthenticated to false if auth token is absent', () => {
+      const { service, authStoreMock, authStorageMock } = setup();
+
+      authStorageMock.hasToken.mockReturnValue(false);
+      service.restoreAuthState();
+
+      expect(authStorageMock.hasToken).toHaveBeenCalled();
+      expect(authStoreMock.isAuthenticated).toBe(false);
+    });
+  });
 });
