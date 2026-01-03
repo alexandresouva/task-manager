@@ -26,4 +26,9 @@ export class AuthFacade {
       }),
     );
   }
+
+  restoreAuthState(): void {
+    /* Please, don't repeat it! Only for example*/
+    this.authStore.isAuthenticated = this.authStorage.hasToken();
+  }
 }

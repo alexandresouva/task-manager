@@ -18,6 +18,10 @@ export class AuthStorageService {
     return this.localStorage.getItem(this.#tokenKey);
   }
 
+  hasToken(): boolean {
+    return Boolean(this.getToken());
+  }
+
   clearToken(): void {
     this.localStorage.removeItem(this.#tokenKey);
   }
