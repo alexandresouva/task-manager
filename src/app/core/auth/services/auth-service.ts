@@ -31,4 +31,8 @@ export class AuthService {
 
     return of({ token: 'fake_jwt_token' });
   }
+
+  logout(): Observable<void> {
+    return of(void 0);
+  }
 }

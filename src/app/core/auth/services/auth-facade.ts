@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 
 import { AuthStore } from '@shared/stores/auth-store';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize, map, Observable, tap, throwError } from 'rxjs';
 
 import { AuthService } from './auth-service';
 import { AuthStorageService } from './auth-storage-service';
@@ -23,6 +23,15 @@ export class AuthFacade {
         this.authStore.logout();
         this.authStorage.clearToken();
         return throwError(() => error);
+      }),
+    );
+  }
+
+  logout(): Observable<void> {
+    return this.authService.logout().pipe(
+      finalize(() => {
+        this.authStore.logout();
+        this.authStorage.clearToken();
       }),
     );
   }
