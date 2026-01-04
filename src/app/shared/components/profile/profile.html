@@ -1,0 +1,33 @@
+<div class="dropdown dropdown-end">
+  <button
+    class="btn btn-ghost btn-circle group"
+    data-testid="profile-menu-button"
+    type="button"
+    (click)="toggleMenu()"
+  >
+    <div class="avatar">
+      <img
+        alt="Obi-Wan Kenobi in Star Wars: Episode III – Revenge of the Sith"
+        class="rounded-full focus:border-2 border-base-300 group-hover:border-primary"
+        height="80"
+        ngSrc="https://preview.redd.it/4mnif6fkv6m51.jpg?auto=webp&s=045620c84bfa34df79e3955eb84fb026ae40c702"
+        width="80"
+      />
+    </div>
+  </button>
+  @if (isMenuOpen()) {
+  <ul
+    class="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 w-32 p-2 shadow"
+    data-testid="profile-menu"
+    tabindex="-1"
+    (click)="closeMenu()"
+    (keypress)="closeMenu()"
+  >
+    <li>
+      <button data-testid="logout-option" type="button" (click)="onLogout()">
+        Logout
+      </button>
+    </li>
+  </ul>
+  }
+</div>
