@@ -105,4 +105,38 @@ describe('AuthFacade', () => {
       expect(authStoreMock.logout).toHaveBeenCalled();
     });
   });
+
+  describe('when logging out', () => {
+    it('should finish logout process in success', () => {
+      const { service, authServiceMock, authStoreMock, authStorageMock } =
+        setup();
+
+      authServiceMock.logout.mockReturnValue(of(void 0));
+
+      service.logout().subscribe(() => {
+        expect(authServiceMock.logout).toHaveBeenCalled();
+        expect(authStoreMock.logout).toHaveBeenCalled();
+        expect(authStorageMock.clearToken).toHaveBeenCalled();
+      });
+    });
+
+    it('should finish logout process in error', () => {
+      const { service, authServiceMock, authStoreMock, authStorageMock } =
+        setup();
+
+      authServiceMock.logout.mockReturnValue(
+        throwError(() => new Error('Logout failed')),
+      );
+
+      service.logout().subscribe({
+        error: (error) => {
+          expect(error).toBeTruthy();
+          expect(error.message).toBe('Logout failed');
+          expect(authServiceMock.logout).toHaveBeenCalled();
+          expect(authStoreMock.logout).toHaveBeenCalled();
+          expect(authStorageMock.clearToken).toHaveBeenCalled();
+        },
+      });
+    });
+  });
 });

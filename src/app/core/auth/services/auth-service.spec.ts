@@ -46,4 +46,14 @@ describe('AuthService', () => {
     expect(result.statusText).toEqual(expectedError.statusText);
     expect(result.error.message).toEqual(expectedError.error.message);
   });
+
+  it('should logout successfully', (done) => {
+    let result: void | null = null;
+    service.logout().subscribe(() => {
+      result = void 0;
+      done();
+    });
+
+    expect(result).toBeUndefined();
+  });
 });
