@@ -57,6 +57,16 @@ export class TestHelper<T> {
     el.dispatchEvent(event);
   }
 
+  dispatchClickEventAtCoordinates(x: number, y: number): void {
+    const event = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      clientX: x,
+      clientY: y,
+    });
+    document.dispatchEvent(event);
+  }
+
   dispatchInputEventByTestId(testId: string, value: string): void {
     const el = this.queryByTestId(testId).nativeElement;
     el.value = value;
@@ -79,4 +89,6 @@ export class TestHelper<T> {
       new Event('submit', { bubbles: true, cancelable: true }),
     );
   }
+
+  dispatchClick;
 }
