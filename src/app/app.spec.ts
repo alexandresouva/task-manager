@@ -22,11 +22,11 @@ describe('App', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have app-header in the template', async () => {
+  it('should have app-layout in the template', async () => {
     const { fixture } = await setup();
-    const appHeaderEl = fixture.debugElement.query(By.css('app-header'));
+    const appLayoutEl = fixture.debugElement.query(By.css('app-layout'));
 
-    expect(appHeaderEl).toBeTruthy();
+    expect(appLayoutEl).toBeTruthy();
   });
 
   it('should have router-outlet in the template', async () => {
