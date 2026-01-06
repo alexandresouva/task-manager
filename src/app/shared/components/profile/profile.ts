@@ -9,7 +9,7 @@ import { AuthFacade } from '@core/auth/services/auth-facade';
   imports: [NgOptimizedImage],
   templateUrl: './profile.html',
   host: {
-    '(document:pointerdown)': 'closeMenuOnClickOutside($event)',
+    '(document:click)': 'closeMenuOnClickOutside($event)',
   },
 })
 export class Profile {
@@ -20,7 +20,6 @@ export class Profile {
   protected readonly isMenuOpen = signal(false);
 
   protected onLogout(): void {
-    this.closeMenu();
     this.authFacade.logout().subscribe(() => {
       this.router.navigateByUrl('/login');
     });

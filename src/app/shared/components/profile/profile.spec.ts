@@ -69,14 +69,7 @@ describe('Profile', () => {
       let menu = testHelper.queryByTestId('profile-menu');
       expect(menu).toBeTruthy();
 
-      const event = new MouseEvent('pointerdown', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-        clientX: 0,
-        clientY: 0,
-      });
-      document.dispatchEvent(event);
+      testHelper.dispatchClickEventAtCoordinates(0, 0);
       fixture.detectChanges();
 
       menu = testHelper.queryByTestId('profile-menu');
@@ -95,7 +88,7 @@ describe('Profile', () => {
       let menu = testHelper.queryByTestId('profile-menu');
       expect(menu).toBeTruthy();
 
-      testHelper.triggerClickByTestId('logout-option');
+      testHelper.dispatchClickEventByTestId('logout-option');
       fixture.detectChanges();
       tick();
 
