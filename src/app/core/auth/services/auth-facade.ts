@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import { AuthStore } from '@shared/stores/auth-store';
+import { AuthStore } from '@core/auth/stores/auth-store';
 import { catchError, finalize, map, Observable, tap, throwError } from 'rxjs';
 
 import { AuthService } from './auth-service';

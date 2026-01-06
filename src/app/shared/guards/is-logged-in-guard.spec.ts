@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn, provideRouter, Router } from '@angular/router';
 
-import { AuthStore } from '@shared/stores/auth-store';
+import { AuthStore } from '@core/auth/stores/auth-store';
 import { MockService } from 'ng-mocks';
 
 import { isLoggedInGuard } from './is-logged-in-guard';

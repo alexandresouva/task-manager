@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AuthResponse } from '@shared/models/auth.model';
-import { AuthStore } from '@shared/stores/auth-store';
 import { MockService } from 'ng-mocks';
 import { of, throwError } from 'rxjs';
 
 import { AuthFacade } from './auth-facade';
 import { AuthService } from './auth-service';
 import { AuthStorageService } from './auth-storage-service';
+import { AuthStore } from '../stores/auth-store';
 
 function setup() {
   const authServiceMock = MockService(AuthService) as jest.Mocked<AuthService>;

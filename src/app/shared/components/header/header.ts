@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 
-import { AuthStore } from '@shared/stores/auth-store';
+import { AuthStore } from '@core/auth/stores/auth-store';
 
 import { Profile } from '../profile/profile';
 
