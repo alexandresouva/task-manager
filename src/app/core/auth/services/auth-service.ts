@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { AuthResponse } from '@shared/models/auth.model';
+import { AuthResponse } from '@core/auth/models/auth.model';
 import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({

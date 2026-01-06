@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
+import { isLoggedInGuard } from '@core/auth/guards/is-logged-in-guard';
 import { getTaskByIdResolver } from '@pages/edit/resolvers/get-task-by-id-resolver';
-import { isLoggedInGuard } from '@shared/guards/is-logged-in-guard';
 
 export const appRoutes: Route[] = [
   {
