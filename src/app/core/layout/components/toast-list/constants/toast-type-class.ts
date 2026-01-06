@@ -1,4 +1,4 @@
-import { ToastType } from '@shared/models/toast-config.model';
+import { ToastType } from '@shared/models/toast.model';
 
 export const TOAST_TYPE_CLASS_MAP: Record<ToastType, string> = {
   success: 'bg-green-500',

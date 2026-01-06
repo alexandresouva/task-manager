@@ -1,6 +1,6 @@
 import { WritableSignal, signal } from '@angular/core';
 
-import { Toast } from '@shared/models/toast-config.model';
+import { Toast } from '@shared/models/toast.model';
 import { ToastService } from '@shared/services/toast-service';
 
 export const createToastServiceMock = (
@@ -8,5 +8,5 @@ export const createToastServiceMock = (
 ): Partial<ToastService> => ({
   show: jest.fn(),
   toasts: toastsSignal.asReadonly(),
-  removeToast: jest.fn(),
+  remove: jest.fn(),
 });

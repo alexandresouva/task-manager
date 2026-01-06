@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { ToastType } from '@shared/models/toast-config.model';
+import { ToastType } from '@shared/models/toast.model';
 
 import { TOAST_TYPE_CLASS_MAP } from '../constants/toast-type-class';
 

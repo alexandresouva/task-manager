@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 
 import { CustomButton } from '@shared/directives/custom-button/custom-button';
-import { Toast } from '@shared/models/toast-config.model';
+import { Toast } from '@shared/models/toast.model';
 import { ToastService } from '@shared/services/toast-service';
 
-import { ToastWithClass } from './models/toast-class.model';
+import { ToastView } from './models/toast-ui.model';
 import { TOAST_TYPE_CLASS } from './tokens/toast-class.token';
 
 @Component({
@@ -22,7 +22,7 @@ export class ToastList {
     return toasts.map((toast) => this.addClassIntoToastConfig(toast));
   });
 
-  private addClassIntoToastConfig(toast: Toast): ToastWithClass {
+  private addClassIntoToastConfig(toast: Toast): ToastView {
     return {
       ...toast,
       class: this.toastTypeClass[toast.type],
@@ -30,6 +30,6 @@ export class ToastList {
   }
 
   removeToast(toastId: string): void {
-    this.toastService.removeToast(toastId);
+    this.toastService.remove(toastId);
   }
 }

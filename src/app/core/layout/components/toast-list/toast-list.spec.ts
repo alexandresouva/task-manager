@@ -1,14 +1,20 @@
 import { WritableSignal, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { Toast } from '@shared/models/toast-config.model';
+import { Toast, ToastType } from '@shared/models/toast.model';
 import { ToastService } from '@shared/services/toast-service';
 import { TestHelper } from '@testing/helpers/test-helper';
-import { FAKE_TOAST_TYPE_CLASS } from '@testing/mocks/tokens/toast-class.token.mock';
 import { MockService } from 'ng-mocks';
 
 import { ToastList } from './toast-list';
 import { TOAST_TYPE_CLASS } from './tokens/toast-class.token';
+
+export const FAKE_TOAST_TYPE_CLASS: Record<ToastType, string> = {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+  warning: 'warning',
+};
 
 async function setup(
   toastsSignal: WritableSignal<Toast[]> = signal<Toast[]>([]),
@@ -62,11 +68,12 @@ describe('ToastList', () => {
 
       for (const [index, toastItem] of newToastsItems.entries()) {
         const expectedToast = fakeToasts[index];
+        const expectedClass = FAKE_TOAST_TYPE_CLASS[expectedToast.type];
         const toastTitle =
           newToastItemsTitles[index].nativeElement.textContent.trim();
         const classes = toastItem.nativeElement.classList;
 
-        expect(classes).toContain(expectedToast.type);
+        expect(classes).toContain(expectedClass);
         expect(toastTitle).toBe(expectedToast.title);
       }
     });

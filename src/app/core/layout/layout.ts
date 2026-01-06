@@ -1,9 +1,9 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
+import { ToastList } from '@core/layout/components/toast-list/toast-list';
 import { Header } from '@shared/components/header/header';
 import { LoadingBars } from '@shared/components/loading-bars/loading-bars';
-import { ToastList } from '@shared/components/toast-list/toast-list';
 
 @Component({
   selector: 'app-layout',

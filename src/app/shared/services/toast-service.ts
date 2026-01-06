@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-import { Toast, ToastConfig } from '@shared/models/toast-config.model';
+import { Toast, ToastConfig } from '@shared/models/toast.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,32 +10,31 @@ export class ToastService {
   readonly toasts = this._toasts.asReadonly();
 
   private readonly defaultDuration = 3000;
-  private readonly timeoutMap = new Map<string, number>();
+  private readonly autoDismissTimeouts = new Map<string, number>();
 
   show(config: ToastConfig): void {
-    const toast = this.generateToastWithId(config);
-
-    this._toasts.update((toasts) => [...toasts, toast]);
-    this.addToastInTimeoutQueue(toast);
+    const toast = this.createToast(config);
+    this.enqueueToastForDisplay(toast);
   }
 
-  removeToast(id: string): void {
-    const timeoutId = this.timeoutMap.get(id);
+  remove(id: string): void {
+    const timeoutId = this.autoDismissTimeouts.get(id);
     if (timeoutId) {
       clearTimeout(timeoutId);
-      this.timeoutMap.delete(id);
+      this.autoDismissTimeouts.delete(id);
     }
-
     this._toasts.update((toasts) => toasts.filter((t) => t.id !== id));
   }
 
-  private addToastInTimeoutQueue(toast: Toast): void {
+  private enqueueToastForDisplay(toast: Toast): void {
+    this._toasts.update((toasts) => [...toasts, toast]);
+
     const duration = toast.duration ?? this.defaultDuration;
-    const timeoutId = setTimeout(() => this.removeToast(toast.id), duration);
-    this.timeoutMap.set(toast.id, timeoutId);
+    const timeoutId = setTimeout(() => this.remove(toast.id), duration);
+    this.autoDismissTimeouts.set(toast.id, timeoutId);
   }
 
-  private generateToastWithId(toast: ToastConfig): Toast {
+  private createToast(toast: ToastConfig): Toast {
     return { ...toast, id: crypto.randomUUID() };
   }
 }

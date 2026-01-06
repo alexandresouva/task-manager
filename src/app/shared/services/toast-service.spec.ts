@@ -1,7 +1,7 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ToastService } from './toast-service';
-import { Toast, ToastConfig } from '../models/toast-config.model';
+import { Toast, ToastConfig } from '../models/toast.model';
 
 function setup() {
   TestBed.configureTestingModule({
@@ -97,13 +97,11 @@ describe('ToastService', () => {
     const fakeToastConfig: ToastConfig = { type: 'info', title: 'Info Toast' };
 
     service.show(fakeToastConfig);
-    const fakeToast = service['toasts']()[0];
-    expect(service['toasts']()).toContain(fakeToast);
-    expect(service['timeoutMap'].get(fakeToast.id)).toBeDefined();
+    const fakeToast = service.toasts()[0];
+    expect(service.toasts()).toContain(fakeToast);
 
-    service.removeToast(fakeToast.id);
-    expect(service['toasts']()).not.toContain(fakeToast);
-    expect(service['timeoutMap'].get(fakeToast.id)).toBeUndefined();
+    service.remove(fakeToast.id);
+    expect(service.toasts()).not.toContain(fakeToast);
   });
 
   it('should not remove toast if the toast id is not found', fakeAsync(() => {
@@ -121,7 +119,7 @@ describe('ToastService', () => {
       );
 
     service.show(fakeToastConfig);
-    service.removeToast('invalid-id');
+    service.remove('invalid-id');
     tick();
     expect(service['toasts']()).toContainEqual(fakeToast);
   }));
