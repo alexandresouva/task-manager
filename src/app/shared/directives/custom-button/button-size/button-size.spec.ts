@@ -5,7 +5,7 @@ import { TestHelper } from '@testing/helpers/test-helper';
 
 import { ButtonSizeDirective } from './button-size';
 import { CustomButtonSize } from '../custom-button.model';
-import { BUTTON_SIZE_CLASS } from './button-size.config';
+import { BUTTON_SIZE_CLASS_MAP } from './button-size.config';
 
 function setup() {
   @Component({
@@ -54,7 +54,7 @@ describe('ButtonSize Directive', () => {
   });
 
   describe('when size is provided', () => {
-    Object.keys(BUTTON_SIZE_CLASS)
+    Object.keys(BUTTON_SIZE_CLASS_MAP)
       .filter((size) => size !== 'md')
       .forEach((size) => {
         it(`should apply ${size} size class`, () => {
@@ -67,7 +67,9 @@ describe('ButtonSize Directive', () => {
           fixture.detectChanges();
 
           expect(button.classList.contains('btn-md')).toBe(false);
-          expect(button.classList.contains(BUTTON_SIZE_CLASS[size])).toBe(true);
+          expect(button.classList.contains(BUTTON_SIZE_CLASS_MAP[size])).toBe(
+            true,
+          );
         });
       });
 

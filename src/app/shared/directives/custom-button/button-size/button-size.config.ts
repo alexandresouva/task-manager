@@ -1,6 +1,6 @@
 import { CustomButtonSize } from '../custom-button.model';
 
-export const BUTTON_SIZE_CLASS: Record<CustomButtonSize, string> = {
+export const BUTTON_SIZE_CLASS_MAP: Record<CustomButtonSize, string> = {
   xs: 'btn-xs',
   sm: 'btn-sm',
   md: 'btn-md',

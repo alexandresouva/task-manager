@@ -1,6 +1,6 @@
 import { Directive, inject, ElementRef, input, effect } from '@angular/core';
 
-import { BUTTON_APPEARANCE_CLASS } from './button-appearance.config';
+import { BUTTON_APPEARANCE_CLASS_MAP } from './button-appearance.config';
 import { CustomButtonAppearance } from '../custom-button.model';
 
 @Directive({
@@ -21,15 +21,15 @@ export class ButtonAppearanceDirective {
       this.reset();
 
       const appearanceClass =
-        BUTTON_APPEARANCE_CLASS[appearance] ??
-        BUTTON_APPEARANCE_CLASS[this.defaultAppearance];
+        BUTTON_APPEARANCE_CLASS_MAP[appearance] ??
+        BUTTON_APPEARANCE_CLASS_MAP[this.defaultAppearance];
 
       this.el.nativeElement.classList.add(appearanceClass);
     });
   }
 
   private reset(): void {
-    const classes = Object.values(BUTTON_APPEARANCE_CLASS);
+    const classes = Object.values(BUTTON_APPEARANCE_CLASS_MAP);
     this.el.nativeElement.classList.remove(...classes);
   }
 }

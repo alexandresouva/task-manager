@@ -5,7 +5,7 @@ import { TestHelper } from '@testing/helpers/test-helper';
 
 import { ButtonAppearanceDirective } from './button-appearance';
 import { CustomButtonAppearance } from '../custom-button.model';
-import { BUTTON_APPEARANCE_CLASS } from './button-appearance.config';
+import { BUTTON_APPEARANCE_CLASS_MAP } from './button-appearance.config';
 
 function setup() {
   @Component({
@@ -54,7 +54,7 @@ describe('ButtonAppearance Directive', () => {
   });
 
   describe('when appearance is provided', () => {
-    Object.keys(BUTTON_APPEARANCE_CLASS)
+    Object.keys(BUTTON_APPEARANCE_CLASS_MAP)
       .filter((appearance) => appearance !== 'primary')
       .forEach((appearance) => {
         it(`should apply ${appearance} appearance class`, () => {
@@ -62,7 +62,7 @@ describe('ButtonAppearance Directive', () => {
           const button = testHelper.queryByTestId(
             'custom-appearance-button',
           ).nativeElement;
-          const expectedClass = BUTTON_APPEARANCE_CLASS[appearance];
+          const expectedClass = BUTTON_APPEARANCE_CLASS_MAP[appearance];
 
           fixture.componentRef.setInput('appearance', appearance);
           fixture.detectChanges();

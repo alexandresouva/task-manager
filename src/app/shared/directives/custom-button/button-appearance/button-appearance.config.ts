@@ -1,6 +1,9 @@
 import { CustomButtonAppearance } from '../custom-button.model';
 
-export const BUTTON_APPEARANCE_CLASS: Record<CustomButtonAppearance, string> = {
+export const BUTTON_APPEARANCE_CLASS_MAP: Record<
+  CustomButtonAppearance,
+  string
+> = {
   primary: 'btn-primary',
   secondary: 'btn-secondary',
   tertiary: 'btn-tertiary',
