@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { submitLoginForm } from '@app/testing/helpers/login.helper';
 import { AuthFacade } from '@core/auth/services/auth-facade';
 import { List } from '@pages/list/list';
 import { ToastService } from '@shared/services/toast-service';
@@ -42,16 +43,6 @@ function setup() {
   };
 }
 
-function fillAndSubmitForm(
-  testHelper: TestHelper<Login>,
-  email: string,
-  password: string,
-) {
-  testHelper.triggerInputByTestId('login-email', email);
-  testHelper.triggerInputByTestId('login-password', password);
-  testHelper.dispatchSubmitEventByTestId('login-button');
-}
-
 function getEmailErrorMessage(testHelper: TestHelper<Login>) {
   let emailError: string | null = null;
 
@@ -78,7 +69,10 @@ describe('Login', () => {
       const { testHelper, fixture, authFacadeMock } = setup();
 
       authFacadeMock.login.mockReturnValue(of(void 0));
-      fillAndSubmitForm(testHelper, validEmail, validPassword);
+      submitLoginForm(testHelper, {
+        email: validEmail,
+        password: validPassword,
+      });
       fixture.detectChanges();
 
       const { emailError } = getEmailErrorMessage(testHelper);
@@ -91,7 +85,10 @@ describe('Login', () => {
       const location = TestBed.inject(Location);
 
       authFacadeMock.login.mockReturnValue(of(void 0));
-      fillAndSubmitForm(testHelper, validEmail, validPassword);
+      submitLoginForm(testHelper, {
+        email: validEmail,
+        password: validPassword,
+      });
 
       expect(authFacadeMock.login).toHaveBeenCalledWith(
         validEmail,
@@ -115,7 +112,10 @@ describe('Login', () => {
       authFacadeMock.login.mockReturnValue(
         throwError(() => unauthorizedFakeError),
       );
-      fillAndSubmitForm(testHelper, validEmail, validPassword);
+      submitLoginForm(testHelper, {
+        email: validEmail,
+        password: validPassword,
+      });
 
       expect(authFacadeMock.login).toHaveBeenCalledWith(
         validEmail,
@@ -141,7 +141,10 @@ describe('Login', () => {
       });
 
       authFacadeMock.login.mockReturnValue(throwError(() => serverFakeError));
-      fillAndSubmitForm(testHelper, validEmail, validPassword);
+      submitLoginForm(testHelper, {
+        email: validEmail,
+        password: validPassword,
+      });
 
       expect(authFacadeMock.login).toHaveBeenCalledWith(
         validEmail,
@@ -163,7 +166,7 @@ describe('Login', () => {
     it('should display error if email is in invalid format', () => {
       const { testHelper, fixture } = setup();
 
-      fillAndSubmitForm(testHelper, '', '');
+      submitLoginForm(testHelper, { email: '', password: '' });
       fixture.detectChanges();
 
       const { emailError } = getEmailErrorMessage(testHelper);
@@ -176,7 +179,7 @@ describe('Login', () => {
       const location = TestBed.inject(Location);
       const loginButton = testHelper.queryByTestId('login-button');
 
-      fillAndSubmitForm(testHelper, '', '123');
+      submitLoginForm(testHelper, { email: '', password: '123' });
       fixture.detectChanges();
 
       expect(loginButton.nativeElement.disabled).toBe(true);
