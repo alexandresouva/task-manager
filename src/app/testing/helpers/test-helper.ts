@@ -53,32 +53,32 @@ export class TestHelper<T> {
    * Fast, but does not bubble or trigger document listeners
    */
   triggerClickByTestId(testId: string): void {
-    const element = this.queryByTestId(testId);
-    element.triggerEventHandler('click', null);
+    this.queryByTestId(testId).triggerEventHandler('click', null);
   }
 
   /**
    * Triggers an input event via Angular DebugElement.
    */
   triggerInputByTestId(testId: string, value: unknown): void {
-    const element = this.queryByTestId(testId);
-    element.triggerEventHandler('input', { target: { value } });
+    this.queryByTestId(testId).triggerEventHandler('input', {
+      target: { value },
+    });
   }
 
   /**
    * Triggers a checkbox change via Angular DebugElement.
    */
   triggerCheckboxChangeByTestId(testId: string, checked: boolean): void {
-    const element = this.queryByTestId(testId);
-    element.triggerEventHandler('change', { target: { checked } });
+    this.queryByTestId(testId).triggerEventHandler('change', {
+      target: { checked },
+    });
   }
 
   /**
    * Triggers a form submit via Angular DebugElement.
    */
-  triggerFormSubmitByTestId(testId: string, value: unknown): void {
-    const element = this.queryByTestId(testId);
-    element.triggerEventHandler('ngSubmit', value);
+  triggerFormSubmitByTestId(testId: string): void {
+    this.queryByTestId(testId).triggerEventHandler('submit', null);
   }
 
   /**
@@ -86,9 +86,9 @@ export class TestHelper<T> {
    * Trigger bubbling  and document/window listeners, required for HostListeners.
    */
   dispatchClickEventByTestId(testId: string): void {
-    const el = this.queryByTestId(testId).nativeElement;
+    const element = this.queryByTestId(testId).nativeElement;
     const event = new MouseEvent('click', { bubbles: true, cancelable: true });
-    el.dispatchEvent(event);
+    element.dispatchEvent(event);
   }
 
   /**

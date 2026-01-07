@@ -112,7 +112,7 @@ describe('EditTask', () => {
         updatedTask.completed,
       );
       fixture.detectChanges();
-      testHelper.triggerFormSubmitByTestId('edit-task-form', null);
+      testHelper.triggerFormSubmitByTestId('edit-task-form');
 
       expect(taskServiceMock.update).toHaveBeenCalledWith(
         originalTask.id,
@@ -136,7 +136,7 @@ describe('EditTask', () => {
       taskServiceMock.update.mockReturnValue(of(tasksMock[0]));
       component['taskForm'].patchValue(updatedTask);
       fixture.detectChanges();
-      testHelper.triggerFormSubmitByTestId('edit-task-form', null);
+      testHelper.triggerFormSubmitByTestId('edit-task-form');
 
       expect(toastServiceMock.show).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'success' }),
