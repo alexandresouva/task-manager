@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 
 import { Edit } from '@pages/edit/edit';
 import { Task } from '@shared/models/task.model';
-import { ToastConfig } from '@shared/models/toast-config.model';
+import { ToastConfig } from '@shared/models/toast.model';
 import { TaskService } from '@shared/services/task-service';
 import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
