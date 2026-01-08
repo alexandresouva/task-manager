@@ -58,4 +58,21 @@ describe('Login', () => {
       expect(location.path()).toBe('/login');
     }));
   });
+
+  describe('when user is already authenticated', () => {
+    beforeEach(() => {
+      localStorage.setItem('auth_token', 'fake-jwt-token');
+    });
+
+    it('should redirect to tasks on app load', async () => {
+      setup();
+
+      const location = TestBed.inject(Location);
+      expect(location.path()).toBe('');
+
+      await RouterTestingHarness.create('');
+
+      expect(location.path()).toBe('/tasks');
+    });
+  });
 });
