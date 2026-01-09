@@ -102,4 +102,35 @@ describe('List', () => {
       expect(completedTasks.length).toBe(2);
     });
   });
+
+  describe('when a new task is added', () => {
+    it('should display the new task in the pending list', async () => {
+      const { harness, testHelper, httpTestingController } = await setup();
+
+      const listReq = httpTestingController.expectOne({
+        url: environment.endpoints.tasks,
+        method: 'GET',
+      });
+      listReq.flush([]);
+
+      harness.detectChanges();
+
+      testHelper.triggerInputByTestId('create-task-input', 'New Task');
+      testHelper.dispatchClickEventByTestId('create-task-button');
+
+      harness.detectChanges();
+
+      const createReq = httpTestingController.expectOne({
+        url: environment.endpoints.tasks,
+        method: 'POST',
+      });
+      createReq.flush(tasksMock.slice(0, 1));
+
+      harness.detectChanges();
+      await harness.fixture.whenStable();
+
+      const { pendingTasks } = getTasks(testHelper);
+      expect(pendingTasks.length).toBe(1);
+    });
+  });
 });

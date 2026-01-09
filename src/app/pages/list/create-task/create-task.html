@@ -6,9 +6,17 @@
 >
   <input
     class="input input-bordered w-full"
+    data-testid="create-task-input"
     placeholder="Add a new task..."
     type="text"
     [formControl]="form.controls.title"
   />
-  <button appCustomButton appearance="primary" type="submit">Add</button>
+  <button
+    appCustomButton
+    appearance="primary"
+    data-testid="create-task-button"
+    type="submit"
+  >
+    Add
+  </button>
 </form>
