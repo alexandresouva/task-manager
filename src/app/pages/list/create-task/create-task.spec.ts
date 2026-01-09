@@ -32,10 +32,7 @@ describe('CreateTask', () => {
       jest.spyOn(component.created, 'emit');
 
       component.form.controls.title.setValue(emptyDescription);
-      testHelper.triggerFormSubmitByTestId(
-        'create-task-form',
-        emptyDescription,
-      );
+      testHelper.triggerFormSubmitByTestId('create-task-form');
 
       expect(component.created.emit).not.toHaveBeenCalled();
     });
@@ -45,7 +42,7 @@ describe('CreateTask', () => {
       jest.spyOn(component.created, 'emit');
 
       component.form.setValue({ title: fakeTaskTitle });
-      testHelper.triggerFormSubmitByTestId('create-task-form', fakeTaskTitle);
+      testHelper.triggerFormSubmitByTestId('create-task-form');
 
       expect(component.created.emit).toHaveBeenCalledWith(fakeTaskTitle);
       expect(component.form.value).toEqual({ title: '' });
