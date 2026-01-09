@@ -7,10 +7,13 @@ import { RouterTestingHarness } from '@angular/router/testing';
 
 import { appConfig } from '@app/app.config';
 import { tasksMock } from '@app/testing/data/tasks.mock';
+import { setAuthToken } from '@app/testing/helpers/set-auth-token.helper';
 import { TestHelper } from '@app/testing/helpers/test-helper';
 import { environment } from 'src/environments/environment';
 
 async function setup() {
+  setAuthToken();
+
   TestBed.configureTestingModule({
     providers: [appConfig.providers, provideHttpClientTesting()],
   });
@@ -49,8 +52,9 @@ function getEmptyStateForTasksLists(testHelper: TestHelper<unknown>) {
 }
 
 describe('List', () => {
-  beforeEach(() => {
-    localStorage.setItem('auth_token', 'fake-jwt-token');
+  afterEach(() => {
+    TestBed.inject(HttpTestingController).verify();
+    localStorage.clear();
   });
 
   describe('when there are no tasks', () => {

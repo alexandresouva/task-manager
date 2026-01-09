@@ -4,6 +4,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 
 import { appConfig } from '@app/app.config';
 import { submitLoginForm } from '@testing/helpers/login.helper';
+import { setAuthToken } from '@testing/helpers/set-auth-token.helper';
 import { TestHelper } from '@testing/helpers/test-helper';
 
 function setup() {
@@ -60,9 +61,7 @@ describe('Login', () => {
   });
 
   describe('when user is already authenticated', () => {
-    beforeEach(() => {
-      localStorage.setItem('auth_token', 'fake-jwt-token');
-    });
+    beforeEach(() => setAuthToken());
 
     it('should redirect to tasks on app load', async () => {
       setup();
