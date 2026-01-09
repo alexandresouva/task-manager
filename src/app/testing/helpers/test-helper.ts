@@ -28,6 +28,34 @@ export class TestHelper<T> {
     );
   }
 
+  /**
+   * Queries a child element within a host element
+   * also identified by data-testid.
+   */
+  queryByTestIdWithin(
+    hostTestId: string,
+    childTestId: string,
+  ): DebugElement | null {
+    const host = this.queryByTestId(hostTestId);
+    if (!host) return null;
+
+    return host.query(By.css(`[data-testid="${childTestId}"]`));
+  }
+
+  /**
+   * Queries all children elements within a host element
+   * also identified by data-testid.
+   */
+  queryAllByTestIdWithin(
+    hostTestId: string,
+    childTestId: string,
+  ): DebugElement[] | null {
+    const host = this.queryByTestId(hostTestId);
+    if (!host) return null;
+
+    return host.queryAll(By.css(`[data-testid="${childTestId}"]`));
+  }
+
   /** Returns trimmed textContent of an element */
   getTextContentByTestId(testId: string): string | null {
     return this.queryByTestId(testId).nativeElement.textContent.trim();
