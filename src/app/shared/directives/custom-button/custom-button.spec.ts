@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 import { CustomButton } from './custom-button';
 import {
@@ -45,7 +45,7 @@ describe('CustomButton Directive', () => {
   it('should render with default appearance and size', () => {
     const { testHelper } = setup();
 
-    const button = testHelper.queryByTestId('button').nativeElement;
+    const button = testHelper.queries.query('button').nativeElement;
 
     expect(button.classList.contains('btn')).toBe(true);
     expect(button.classList.contains('btn-primary')).toBe(true);
@@ -55,7 +55,7 @@ describe('CustomButton Directive', () => {
   it('should update classes when appearance and size change', () => {
     const { fixture, testHelper } = setup();
 
-    const button = testHelper.queryByTestId('button').nativeElement;
+    const button = testHelper.queries.query('button').nativeElement;
     const hostComponent = fixture.componentInstance;
 
     hostComponent.appearance = 'secondary';

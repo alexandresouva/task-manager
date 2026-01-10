@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { tasksMock } from '@testing/data/tasks.mock';
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 import { TaskList } from './task-list';
 
@@ -35,7 +35,7 @@ describe('TaskList', () => {
     fixture.componentRef.setInput('listTitle', fakeTitle);
     fixture.detectChanges();
 
-    const title = testHelper.getTextContentByTestId('tasks-list-title');
+    const title = testHelper.queries.getTextContent('tasks-list-title');
     expect(title).toBe(fakeTitle);
   });
 
@@ -47,7 +47,7 @@ describe('TaskList', () => {
     fixture.componentRef.setInput('tasks', [fakeTask]);
     fixture.detectChanges();
 
-    const checkbox = testHelper.queryByTestId('task-checkbox');
+    const checkbox = testHelper.queries.query('task-checkbox');
     checkbox.triggerEventHandler('change', null);
 
     expect(emitSpy).toHaveBeenCalledWith(fakeTask);
@@ -60,7 +60,7 @@ describe('TaskList', () => {
 
     fixture.componentRef.setInput('tasks', [fakeTask]);
     fixture.detectChanges();
-    testHelper.triggerClickByTestId('delete-task-button');
+    testHelper.trigger.click('delete-task-button');
 
     expect(deleteSpy).toHaveBeenCalledWith(fakeTask);
   });
@@ -72,7 +72,7 @@ describe('TaskList', () => {
 
     fixture.componentRef.setInput('tasks', [fakeTask]);
     fixture.detectChanges();
-    testHelper.triggerClickByTestId('edit-task-button');
+    testHelper.trigger.click('edit-task-button');
 
     expect(editSpy).toHaveBeenCalledWith(fakeTask);
   });
@@ -85,9 +85,9 @@ describe('TaskList', () => {
       fixture.componentRef.setInput('tasks', fakeTasks);
       fixture.detectChanges();
 
-      const emptyTasksDebug = testHelper.queryByTestId('empty-tasks');
+      const emptyTasksDebug = testHelper.queries.query('empty-tasks');
       const tasks = component['tasks']();
-      const tasksDebug = testHelper.queryAllByTestId('task-description');
+      const tasksDebug = testHelper.queries.queryAll('task-description');
 
       expect(emptyTasksDebug).toBeNull();
       expect(tasks.length).toBe(fakeTasks.length);
@@ -100,9 +100,9 @@ describe('TaskList', () => {
       fixture.detectChanges();
 
       const emptyTasksContent =
-        testHelper.getTextContentByTestId('empty-tasks');
+        testHelper.queries.getTextContent('empty-tasks');
       const tasks = component['tasks']();
-      const tasksDebug = testHelper.queryAllByTestId('task-description');
+      const tasksDebug = testHelper.queries.queryAll('task-description');
 
       expect(emptyTasksContent).toBe('No tasks found.');
       expect(tasks.length).toBe(0);
@@ -118,7 +118,7 @@ describe('TaskList', () => {
       fixture.detectChanges();
 
       const emptyTasksContent =
-        testHelper.getTextContentByTestId('empty-tasks');
+        testHelper.queries.getTextContent('empty-tasks');
       expect(emptyTasksContent).toBe(fakeCustomMessage);
     });
   });

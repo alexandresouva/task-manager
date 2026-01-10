@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 import { ButtonBaseDirective } from './button-base';
 
@@ -32,7 +32,7 @@ describe('ButtonSize Directive', () => {
   it('should add base class to the host element', () => {
     const { testHelper } = setup();
 
-    const buttonDebugElement = testHelper.queryByTestId('default-button');
+    const buttonDebugElement = testHelper.queries.query('default-button');
     const button: HTMLButtonElement = buttonDebugElement.nativeElement;
 
     expect(button.classList.contains('btn')).toBe(true);

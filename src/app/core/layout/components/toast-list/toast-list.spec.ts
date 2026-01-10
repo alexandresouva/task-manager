@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { Toast, ToastType } from '@shared/models/toast.model';
 import { ToastService } from '@shared/services/toast-service';
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 import { MockService } from 'ng-mocks';
 
 import { ToastList } from './toast-list';
@@ -55,15 +55,15 @@ describe('ToastList', () => {
       ];
 
       fixture.detectChanges();
-      const initialToastsItems = testHelper.queryAllByTestId('toast-list-item');
+      const initialToastsItems = testHelper.queries.queryAll('toast-list-item');
       expect(initialToastsItems.length).toBe(0);
 
       toastSignal.set(fakeToasts);
       fixture.detectChanges();
 
-      const newToastsItems = testHelper.queryAllByTestId('toast-list-item');
+      const newToastsItems = testHelper.queries.queryAll('toast-list-item');
       const newToastItemsTitles =
-        testHelper.queryAllByTestId('toast-list-title');
+        testHelper.queries.queryAll('toast-list-title');
       expect(newToastsItems.length).toBe(fakeToasts.length);
 
       for (const [index, toastItem] of newToastsItems.entries()) {
@@ -92,7 +92,7 @@ describe('ToastList', () => {
       fixture.detectChanges();
 
       const toastMessage =
-        testHelper.getTextContentByTestId('toast-list-message');
+        testHelper.queries.getTextContent('toast-list-message');
       expect(toastMessage.trim()).toBe(fakeToast.message);
     });
 
@@ -108,10 +108,10 @@ describe('ToastList', () => {
       toastSignal.set([fakeToast]);
       fixture.detectChanges();
 
-      testHelper.triggerClickByTestId('toast-list-close-button');
+      testHelper.trigger.click('toast-list-close-button');
       toastSignal.set([]);
       fixture.detectChanges();
-      const toastItems = testHelper.queryAllByTestId('toast-list-item');
+      const toastItems = testHelper.queries.queryAll('toast-list-item');
 
       expect(toastItems.length).toBe(0);
     });

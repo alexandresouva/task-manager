@@ -5,7 +5,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { appConfig } from '@app/app.config';
 import { submitLoginForm } from '@testing/helpers/login.helper';
 import { setAuthToken } from '@testing/helpers/set-auth-token.helper';
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 function setup() {
   TestBed.configureTestingModule({

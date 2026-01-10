@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 import { ButtonSizeDirective } from './button-size';
 import { CustomButtonSize } from '../custom-button.model';
@@ -46,7 +46,7 @@ describe('ButtonSize Directive', () => {
     it('should add default classes to the host element', () => {
       const { testHelper } = setup();
 
-      const buttonDebugElement = testHelper.queryByTestId('default-button');
+      const buttonDebugElement = testHelper.queries.query('default-button');
       const button: HTMLButtonElement = buttonDebugElement.nativeElement;
 
       expect(button.classList.contains('btn-md')).toBe(true);
@@ -61,7 +61,7 @@ describe('ButtonSize Directive', () => {
           const { testHelper, fixture } = setup();
 
           const button =
-            testHelper.queryByTestId('custom-size-button').nativeElement;
+            testHelper.queries.query('custom-size-button').nativeElement;
 
           fixture.componentRef.setInput('size', size);
           fixture.detectChanges();
@@ -76,7 +76,7 @@ describe('ButtonSize Directive', () => {
     it('should fallback to default size class for invalid size', () => {
       const { testHelper, fixture } = setup();
       const button =
-        testHelper.queryByTestId('custom-size-button').nativeElement;
+        testHelper.queries.query('custom-size-button').nativeElement;
 
       fixture.componentRef.setInput('size', 'invalid-size');
       fixture.detectChanges();

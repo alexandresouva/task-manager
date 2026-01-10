@@ -7,7 +7,7 @@ import { submitLoginForm } from '@app/testing/helpers/login.helper';
 import { AuthFacade } from '@core/auth/services/auth-facade';
 import { List } from '@pages/list/list';
 import { ToastService } from '@shared/services/toast-service';
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';
 import { of, throwError } from 'rxjs';
 
@@ -47,7 +47,7 @@ function getEmailErrorMessage(testHelper: TestHelper<Login>) {
   let emailError: string | null = null;
 
   try {
-    emailError = testHelper.getTextContentByTestId('login-email-error');
+    emailError = testHelper.queries.getTextContent('login-email-error');
   } catch {
     emailError = null;
   }
@@ -177,7 +177,7 @@ describe('Login', () => {
     it('should prevent login submission', () => {
       const { testHelper, fixture, authFacadeMock } = setup();
       const location = TestBed.inject(Location);
-      const loginButton = testHelper.queryByTestId('login-button');
+      const loginButton = testHelper.queries.query('login-button');
 
       submitLoginForm(testHelper, { email: '', password: '123' });
       fixture.detectChanges();

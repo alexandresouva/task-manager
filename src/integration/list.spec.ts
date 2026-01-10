@@ -8,7 +8,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { appConfig } from '@app/app.config';
 import { tasksMock } from '@app/testing/data/tasks.mock';
 import { setAuthToken } from '@app/testing/helpers/set-auth-token.helper';
-import { TestHelper } from '@app/testing/helpers/test-helper';
+import { TestHelper } from '@app/testing/test-helper/test-helper';
 import { environment } from 'src/environments/environment';
 
 async function setup() {
@@ -26,26 +26,30 @@ async function setup() {
 }
 
 function getTasks(testHelper: TestHelper<unknown>) {
-  const pendingTasks = testHelper.queryAllByTestIdWithin(
-    'pending-tasks',
+  const pendingTasks = testHelper.queries.queryAll(
     'task-item',
+    testHelper.queries.query('pending-tasks'),
   );
-  const completedTasks = testHelper.queryAllByTestIdWithin(
-    'completed-tasks',
+  const completedTasks = testHelper.queries.queryAll(
     'task-item',
+    testHelper.queries.query('completed-tasks'),
   );
 
   return { pendingTasks, completedTasks };
 }
 
 function getEmptyStateForTasksLists(testHelper: TestHelper<unknown>) {
-  const pendingEmptyState = testHelper.queryByTestIdWithin(
-    'pending-tasks',
+  const pendingHost = testHelper.queries.query('pending-tasks');
+  const completedHost = testHelper.queries.query('completed-tasks');
+
+  const pendingEmptyState = testHelper.queries.query(
     'empty-tasks',
+    pendingHost,
   );
-  const completedEmptyState = testHelper.queryByTestIdWithin(
-    'completed-tasks',
+
+  const completedEmptyState = testHelper.queries.query(
     'empty-tasks',
+    completedHost,
   );
 
   return { pendingEmptyState, completedEmptyState };
@@ -115,8 +119,8 @@ describe('List', () => {
 
       harness.detectChanges();
 
-      testHelper.triggerInputByTestId('create-task-input', 'New Task');
-      testHelper.dispatchClickEventByTestId('create-task-button');
+      testHelper.trigger.input('create-task-input', 'New Task');
+      testHelper.dispatch.click('create-task-button');
 
       harness.detectChanges();
 

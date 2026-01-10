@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 import { ButtonAppearanceDirective } from './button-appearance';
 import { CustomButtonAppearance } from '../custom-button.model';
@@ -46,7 +46,7 @@ describe('ButtonAppearance Directive', () => {
     it('should add default classes to the host element', () => {
       const { testHelper } = setup();
 
-      const buttonDebugElement = testHelper.queryByTestId('default-button');
+      const buttonDebugElement = testHelper.queries.query('default-button');
       const button: HTMLButtonElement = buttonDebugElement.nativeElement;
 
       expect(button.classList.contains('btn-primary')).toBe(true);
@@ -59,7 +59,7 @@ describe('ButtonAppearance Directive', () => {
       .forEach((appearance) => {
         it(`should apply ${appearance} appearance class`, () => {
           const { testHelper, fixture } = setup();
-          const button = testHelper.queryByTestId(
+          const button = testHelper.queries.query(
             'custom-appearance-button',
           ).nativeElement;
           const expectedClass = BUTTON_APPEARANCE_CLASS_MAP[appearance];
@@ -74,7 +74,7 @@ describe('ButtonAppearance Directive', () => {
 
     it('should fallback to default appearance class for invalid appearance', () => {
       const { testHelper, fixture } = setup();
-      const button = testHelper.queryByTestId(
+      const button = testHelper.queries.query(
         'custom-appearance-button',
       ).nativeElement;
 

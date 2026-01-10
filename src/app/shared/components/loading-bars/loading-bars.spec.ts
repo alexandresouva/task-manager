@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 import { LoadingBars } from './loading-bars';
 
@@ -34,7 +34,7 @@ describe('LoadingBars', () => {
     });
 
     it('should show loading bars', () => {
-      const loadingBars = testHelper.queryByTestId('loading-bars');
+      const loadingBars = testHelper.queries.query('loading-bars');
       expect(loadingBars).toBeTruthy();
     });
 
@@ -45,7 +45,7 @@ describe('LoadingBars', () => {
       });
 
       it('should show default message if no message is provided', () => {
-        const message = testHelper.getTextContentByTestId('loading-message');
+        const message = testHelper.queries.getTextContent('loading-message');
         expect(message).toBe('Loading...');
       });
 
@@ -54,7 +54,7 @@ describe('LoadingBars', () => {
         fixture.componentRef.setInput('message', customMessage);
         fixture.detectChanges();
 
-        const message = testHelper.getTextContentByTestId('loading-message');
+        const message = testHelper.queries.getTextContent('loading-message');
         expect(message).toBe(customMessage);
       });
     });
@@ -71,7 +71,7 @@ describe('LoadingBars', () => {
     });
 
     it('should not show loading bars', () => {
-      const loadingBars = testHelper.queryByTestId('loading-bars');
+      const loadingBars = testHelper.queries.getTextContent('loading-bars');
       expect(loadingBars).toBeNull();
     });
 
@@ -79,7 +79,7 @@ describe('LoadingBars', () => {
       fixture.componentRef.setInput('showMessage', true);
       fixture.detectChanges();
 
-      const message = testHelper.queryByTestId('loading-message');
+      const message = testHelper.queries.query('loading-message');
 
       expect(message).toBeNull();
     });

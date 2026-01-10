@@ -7,7 +7,7 @@ import { Task, TaskForm } from '@shared/models/task.model';
 import { TaskService } from '@shared/services/task-service';
 import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
@@ -58,8 +58,8 @@ describe('EditTask', () => {
       fixture.componentRef.setInput('task', fakeTask);
       fixture.detectChanges();
 
-      const inputTitle = testHelper.getValueByTestId('task-title-input');
-      const checkboxCompleted = testHelper.getCheckedByTestId(
+      const inputTitle = testHelper.queries.getValue('task-title-input');
+      const checkboxCompleted = testHelper.queries.getChecked(
         'task-completed-checkbox',
       );
 
@@ -70,16 +70,16 @@ describe('EditTask', () => {
     it('should NOT load task data when taskId is invalid', () => {
       const { fixture, testHelper } = setup();
 
-      const initialTitle = testHelper.getValueByTestId('task-title-input');
-      const initialCompleted = testHelper.getCheckedByTestId(
+      const initialTitle = testHelper.queries.getValue('task-title-input');
+      const initialCompleted = testHelper.queries.getChecked(
         'task-completed-checkbox',
       );
 
       fixture.componentRef.setInput('task', undefined);
       fixture.detectChanges();
 
-      const finalTitle = testHelper.getValueByTestId('task-title-input');
-      const finalCheckboxCompleted = testHelper.getCheckedByTestId(
+      const finalTitle = testHelper.queries.getValue('task-title-input');
+      const finalCheckboxCompleted = testHelper.queries.getChecked(
         'task-completed-checkbox',
       );
 
@@ -106,13 +106,13 @@ describe('EditTask', () => {
       fixture.detectChanges();
 
       taskServiceMock.update.mockReturnValue(of(null));
-      testHelper.triggerInputByTestId('task-title-input', updatedTask.title);
-      testHelper.triggerCheckboxChangeByTestId(
+      testHelper.trigger.input('task-title-input', updatedTask.title);
+      testHelper.trigger.checkboxChange(
         'task-completed-checkbox',
         updatedTask.completed,
       );
       fixture.detectChanges();
-      testHelper.triggerFormSubmitByTestId('edit-task-form');
+      testHelper.trigger.submit('edit-task-form');
 
       expect(taskServiceMock.update).toHaveBeenCalledWith(
         originalTask.id,
@@ -136,7 +136,7 @@ describe('EditTask', () => {
       taskServiceMock.update.mockReturnValue(of(tasksMock[0]));
       component['taskForm'].patchValue(updatedTask);
       fixture.detectChanges();
-      testHelper.triggerFormSubmitByTestId('edit-task-form');
+      testHelper.trigger.submit('edit-task-form');
 
       expect(toastServiceMock.show).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'success' }),
@@ -153,12 +153,9 @@ describe('EditTask', () => {
       taskServiceMock.getById.mockReturnValue(of(originalTask));
       fixture.detectChanges();
 
-      testHelper.dispatchInputEventByTestId(
-        'task-title-input',
-        invalidTask.title,
-      );
+      testHelper.dispatch.input('task-title-input', invalidTask.title);
       fixture.detectChanges();
-      testHelper.dispatchClickEventByTestId('submit-task-button');
+      testHelper.dispatch.click('submit-task-button');
 
       expect(taskServiceMock.update).not.toHaveBeenCalled();
     });
@@ -169,7 +166,7 @@ describe('EditTask', () => {
       const { testHelper } = setup();
       const location = TestBed.inject(Location);
 
-      testHelper.dispatchClickEventByTestId('back-button');
+      testHelper.dispatch.click('back-button');
       tick();
 
       expect(location.path()).toBe('/tasks');

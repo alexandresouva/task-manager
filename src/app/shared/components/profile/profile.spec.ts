@@ -4,7 +4,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { AuthFacade } from '@core/auth/services/auth-facade';
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
@@ -48,13 +48,13 @@ describe('Profile', () => {
     it('should toggle menu visibility', () => {
       const { fixture, testHelper } = setup();
 
-      let menu = testHelper.queryByTestId('profile-menu');
+      let menu = testHelper.queries.query('profile-menu');
       expect(menu).toBeNull();
 
-      testHelper.triggerClickByTestId('profile-menu-button');
+      testHelper.trigger.click('profile-menu-button');
       fixture.detectChanges();
 
-      menu = testHelper.queryByTestId('profile-menu');
+      menu = testHelper.queries.query('profile-menu');
       expect(menu).toBeTruthy();
     });
   });
@@ -63,16 +63,16 @@ describe('Profile', () => {
     it('should close the menu', () => {
       const { fixture, testHelper } = setup();
 
-      testHelper.triggerClickByTestId('profile-menu-button');
+      testHelper.trigger.click('profile-menu-button');
       fixture.detectChanges();
 
-      let menu = testHelper.queryByTestId('profile-menu');
+      let menu = testHelper.queries.query('profile-menu');
       expect(menu).toBeTruthy();
 
-      testHelper.dispatchClickEventAtCoordinates(0, 0);
+      testHelper.dispatch.clickAtViewportPoint(0, 0);
       fixture.detectChanges();
 
-      menu = testHelper.queryByTestId('profile-menu');
+      menu = testHelper.queries.query('profile-menu');
       expect(menu).toBeNull();
     });
   });
@@ -82,17 +82,17 @@ describe('Profile', () => {
       const { fixture, testHelper, authFacadeMock, location } = setup();
       authFacadeMock.logout.mockReturnValue(of(void 0));
 
-      testHelper.triggerClickByTestId('profile-menu-button');
+      testHelper.trigger.click('profile-menu-button');
       fixture.detectChanges();
 
-      let menu = testHelper.queryByTestId('profile-menu');
+      let menu = testHelper.queries.query('profile-menu');
       expect(menu).toBeTruthy();
 
-      testHelper.dispatchClickEventByTestId('logout-option');
+      testHelper.dispatch.click('logout-option');
       fixture.detectChanges();
       tick();
 
-      menu = testHelper.queryByTestId('profile-menu');
+      menu = testHelper.queries.query('profile-menu');
 
       expect(menu).toBeNull();
       expect(authFacadeMock.logout).toHaveBeenCalled();

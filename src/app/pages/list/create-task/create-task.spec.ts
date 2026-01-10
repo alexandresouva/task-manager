@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 
 import { CreateTask } from './create-task';
 
@@ -32,7 +32,7 @@ describe('CreateTask', () => {
       jest.spyOn(component.created, 'emit');
 
       component.form.controls.title.setValue(emptyDescription);
-      testHelper.triggerFormSubmitByTestId('create-task-form');
+      testHelper.trigger.submit('create-task-form');
 
       expect(component.created.emit).not.toHaveBeenCalled();
     });
@@ -42,7 +42,7 @@ describe('CreateTask', () => {
       jest.spyOn(component.created, 'emit');
 
       component.form.setValue({ title: fakeTaskTitle });
-      testHelper.triggerFormSubmitByTestId('create-task-form');
+      testHelper.trigger.submit('create-task-form');
 
       expect(component.created.emit).toHaveBeenCalledWith(fakeTaskTitle);
       expect(component.form.value).toEqual({ title: '' });

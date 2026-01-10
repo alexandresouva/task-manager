@@ -8,7 +8,7 @@ import { ToastConfig } from '@shared/models/toast.model';
 import { TaskService } from '@shared/services/task-service';
 import { ToastService } from '@shared/services/toast-service';
 import { tasksMock } from '@testing/data/tasks.mock';
-import { TestHelper } from '@testing/helpers/test-helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
@@ -56,7 +56,7 @@ describe('List', () => {
 
       fixture.detectChanges();
       const completedTaskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('completed-tasks');
 
       expect(component['completedTasks']()).toEqual(expectedCompletedTasks);
       expect(completedTaskList.tasks()).toEqual(expectedCompletedTasks);
@@ -68,7 +68,7 @@ describe('List', () => {
 
       fixture.detectChanges();
       const pendingTaskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('pending-tasks');
 
       expect(component['pendingTasks']()).toEqual(
         tasksMock.filter((task) => !task.completed),
@@ -83,7 +83,7 @@ describe('List', () => {
         setup(tasksMock);
 
       const pendingTaskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('pending-tasks');
       const fakeEmittedTask: Task = pendingTaskList.tasks()[0];
       const expectedUpdatedTask = { ...fakeEmittedTask, completed: true };
 
@@ -106,7 +106,7 @@ describe('List', () => {
         setup(tasksMock);
 
       const completedTaskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('completed-tasks');
       const fakeEmittedTask: Task = completedTaskList.tasks()[0];
       const expectedUpdatedTask = { ...fakeEmittedTask, completed: false };
 
@@ -131,7 +131,7 @@ describe('List', () => {
         setup(tasksMock);
 
       const pendingTaskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('pending-tasks');
       const fakeEmittedTask: Task = pendingTaskList.tasks()[0];
 
       taskServiceMock.delete.mockReturnValue(of(null));
@@ -151,7 +151,7 @@ describe('List', () => {
         setup(tasksMock);
 
       const completedTaskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('completed-tasks');
       const fakeEmittedTask: Task = completedTaskList.tasks()[0];
 
       taskServiceMock.delete.mockReturnValue(of(null));
@@ -174,7 +174,7 @@ describe('List', () => {
         title: 'Task has been deleted.',
       };
       const completedTaskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('completed-tasks');
       const taskToBeDeleted: Task = completedTaskList.tasks()[0];
 
       taskServiceMock.delete.mockReturnValue(of(null));
@@ -199,7 +199,7 @@ describe('List', () => {
       taskServiceMock.create.mockReturnValue(of(fakeTask));
 
       const createTaskForm =
-        testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
+        testHelper.queries.getComponentInstance<CreateTask>('create-task-form');
       createTaskForm.form.controls.title.setValue(fakeTask.title);
       createTaskForm['emitTaskCreated']();
       fixture.detectChanges();
@@ -217,7 +217,7 @@ describe('List', () => {
       taskServiceMock.create.mockReturnValue(of(fakeTask));
 
       const createTaskForm =
-        testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
+        testHelper.queries.getComponentInstance<CreateTask>('create-task-form');
       createTaskForm.form.controls.title.setValue(fakeTask.title);
       createTaskForm['emitTaskCreated']();
       fixture.detectChanges();
@@ -239,7 +239,7 @@ describe('List', () => {
       taskServiceMock.create.mockReturnValue(of(fakeTask));
 
       const createTaskForm =
-        testHelper.getComponentInstanceByTestId<CreateTask>('create-task-form');
+        testHelper.queries.getComponentInstance<CreateTask>('create-task-form');
       createTaskForm.form.controls.title.setValue(fakeTask.title);
       createTaskForm['emitTaskCreated']();
       fixture.detectChanges();
@@ -252,7 +252,7 @@ describe('List', () => {
     it('should redirect pending task to edit page', fakeAsync(() => {
       const { testHelper } = setup(tasksMock);
       const taskList =
-        testHelper.getComponentInstanceByTestId<TaskList>('pending-tasks');
+        testHelper.queries.getComponentInstance<TaskList>('pending-tasks');
       const fakeEmittedTask: Task = taskList.tasks()[0];
 
       const location = TestBed.inject(Location);
@@ -268,7 +268,7 @@ describe('List', () => {
   it('should redirect completed task to edit page', fakeAsync(() => {
     const { testHelper } = setup(tasksMock);
     const taskList =
-      testHelper.getComponentInstanceByTestId<TaskList>('completed-tasks');
+      testHelper.queries.getComponentInstance<TaskList>('completed-tasks');
     const fakeEmittedTask: Task = taskList.tasks()[0];
     const location = TestBed.inject(Location);
 
