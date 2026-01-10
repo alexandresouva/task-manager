@@ -17,25 +17,25 @@ export class QueryHelper<T> {
     return host.queryAll(By.css(`[data-testid="${testId}"]`));
   }
 
-  getComponentInstance(
+  getComponentInstance<C>(
     testId: string,
     host: DebugElement = this.root,
-  ): T | null {
-    return this.query(testId, host).componentInstance;
+  ): C | null {
+    return this.query(testId, host)?.componentInstance ?? null;
   }
 
   getTextContent(
     testId: string,
     host: DebugElement = this.root,
   ): string | null {
-    return this.query(testId, host).nativeElement.textContent.trim();
+    return this.query(testId, host)?.nativeElement?.textContent?.trim() ?? null;
   }
 
   getValue(testId: string, host: DebugElement = this.root): string | null {
-    return this.query(testId, host).nativeElement.value;
+    return this.query(testId, host)?.nativeElement?.value ?? null;
   }
 
   getChecked(testId: string, host: DebugElement = this.root): boolean | null {
-    return this.query(testId, host).nativeElement.checked;
+    return this.query(testId, host)?.nativeElement?.checked ?? null;
   }
 }
