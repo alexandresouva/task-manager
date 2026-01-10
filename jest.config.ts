@@ -23,5 +23,9 @@ export default {
     '<rootDir>/src/**/*(*.)@(spec|test).[jt]s?(x)',
   ],
   coverageReporters: ['text-summary', 'html'],
-  coveragePathIgnorePatterns: ['/node_modules/', '/src/app/testing/'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/src/app/testing/',
+    '\\.routes\\.ts$',
+  ],
 };
