@@ -1,11 +1,13 @@
+import { Location } from '@angular/common';
 import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
 
 import { appConfig } from '@app/app.config';
+import { Task } from '@app/shared/models/task.model';
 import { tasksMock } from '@app/testing/data/tasks.mock';
 import { setAuthToken } from '@app/testing/helpers/set-auth-token.helper';
 import { TestHelper } from '@app/testing/test-helper/test-helper';
@@ -21,8 +23,9 @@ async function setup() {
   const harness = await RouterTestingHarness.create('');
   const testHelper = new TestHelper(harness.fixture);
   const httpTestingController = TestBed.inject(HttpTestingController);
+  const location = TestBed.inject(Location);
 
-  return { harness, testHelper, httpTestingController };
+  return { harness, testHelper, httpTestingController, location };
 }
 
 function getTasks(testHelper: TestHelper<unknown>) {
@@ -107,8 +110,8 @@ describe('List', () => {
     });
   });
 
-  describe('when a new task is added', () => {
-    it('should display the new task in the pending list', async () => {
+  describe('when adding a new task', () => {
+    it('should display the new task in the pending list', fakeAsync(async () => {
       const { harness, testHelper, httpTestingController } = await setup();
 
       const listReq = httpTestingController.expectOne({
@@ -131,10 +134,79 @@ describe('List', () => {
       createReq.flush(tasksMock.slice(0, 1));
 
       harness.detectChanges();
-      await harness.fixture.whenStable();
+      tick();
 
       const { pendingTasks } = getTasks(testHelper);
       expect(pendingTasks.length).toBe(1);
-    });
+    }));
+  });
+
+  describe('when editing a task', () => {
+    const initialTask: Task = tasksMock[0];
+    const updatedTask: Task = {
+      ...initialTask,
+      title: 'Updated Task',
+      completed: false,
+    };
+
+    it('should navigate to edit page, update the task, and return to the list', fakeAsync(async () => {
+      const { harness, testHelper, httpTestingController, location } =
+        await setup();
+
+      const listReq = httpTestingController.expectOne({
+        url: environment.endpoints.tasks,
+        method: 'GET',
+      });
+      listReq.flush([initialTask]);
+
+      harness.detectChanges();
+
+      let { pendingTasks, completedTasks } = getTasks(testHelper);
+      expect(pendingTasks.length).toBe(0);
+      expect(completedTasks.length).toBe(1);
+
+      testHelper.dispatch.click('edit-task-button', completedTasks[0]);
+
+      tick();
+
+      const editReq = httpTestingController.expectOne({
+        url: `${environment.endpoints.tasks}/${initialTask.id}`,
+        method: 'GET',
+      });
+      editReq.flush(updatedTask);
+
+      tick(500);
+
+      expect(location.path()).toBe(`/tasks/${initialTask.id}/edit`);
+
+      harness.detectChanges();
+
+      testHelper.trigger.input('task-title-input', updatedTask.title);
+      testHelper.trigger.checkboxChange('task-completed-checkbox', false);
+      testHelper.dispatch.click('submit-task-button');
+
+      const updateReq = httpTestingController.expectOne({
+        url: `${environment.endpoints.tasks}/${initialTask.id}`,
+        method: 'PUT',
+      });
+      updateReq.flush(updatedTask);
+
+      tick();
+      harness.detectChanges();
+
+      const updatedListReq = httpTestingController.expectOne({
+        url: environment.endpoints.tasks,
+        method: 'GET',
+      });
+      updatedListReq.flush([updatedTask]);
+
+      harness.detectChanges();
+
+      ({ pendingTasks, completedTasks } = getTasks(testHelper));
+
+      expect(location.path()).toBe('/tasks');
+      expect(pendingTasks.length).toBe(1);
+      expect(completedTasks.length).toBe(0);
+    }));
   });
 });
