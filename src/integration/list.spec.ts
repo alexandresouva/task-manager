@@ -209,4 +209,41 @@ describe('List', () => {
       expect(completedTasks.length).toBe(0);
     }));
   });
+
+  describe('when removing a task', () => {
+    it('should remove the task from the list', async () => {
+      const { harness, testHelper, httpTestingController } = await setup();
+      const taskToRemove = tasksMock[0];
+
+      const req = httpTestingController.expectOne({
+        url: environment.endpoints.tasks,
+        method: 'GET',
+      });
+      req.flush([taskToRemove]);
+
+      harness.detectChanges();
+
+      let { pendingTasks, completedTasks } = getTasks(testHelper);
+
+      expect(pendingTasks.length).toBe(0);
+      expect(completedTasks.length).toBe(1);
+
+      testHelper.dispatch.click('delete-task-button', completedTasks[0]);
+
+      harness.detectChanges();
+
+      const deleteReq = httpTestingController.expectOne({
+        url: `${environment.endpoints.tasks}/${taskToRemove.id}`,
+        method: 'DELETE',
+      });
+      deleteReq.flush(null);
+
+      harness.detectChanges();
+
+      ({ pendingTasks, completedTasks } = getTasks(testHelper));
+
+      expect(pendingTasks.length).toBe(0);
+      expect(completedTasks.length).toBe(0);
+    });
+  });
 });
