@@ -11,27 +11,19 @@
 // ***********************************************
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
-      login(email: string, password: string): void;
+      getByTestId(dataTestId: string): Chainable<JQuery<HTMLElement>>;
     }
   }
 }
 
-// -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
+Cypress.Commands.add('getByTestId', (dataTestId) => {
+  return cy.get(`[data-testid="${dataTestId}"]`);
 });
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+// Temporary workaround for a known Nx + Cypress type-definition issue.
+// The empty export ensures this file is treated as a module by TypeScript,
+// preventing global type conflicts until the issue is resolved upstream.
+// See: https://github.com/nrwl/nx/pull/33906
+export {};
