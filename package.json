@@ -8,6 +8,7 @@
     "build": "nx build",
     "test": "nx test --code-coverage --skip-nx-cache",
     "test:e2e": "npx cypress open --project e2e",
+    "test:e2e:ci": "npx cypress run --project e2e",
     "lint": "nx lint --max-warnings 0",
     "lint:fix": "nx lint --fix",
     "prepare": "husky",
