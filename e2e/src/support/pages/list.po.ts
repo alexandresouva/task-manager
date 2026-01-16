@@ -14,6 +14,18 @@ export class TaskListPage {
     });
   }
 
+  toggleFirstPendingTask() {
+    this.withinPendingTasks(() => {
+      cy.getByTestId('task-checkbox').first().click();
+    });
+  }
+
+  toggleFirstCompletedTask() {
+    this.withinCompletedTasks(() => {
+      cy.getByTestId('task-checkbox').first().click();
+    });
+  }
+
   assertPendingListIsEmpty() {
     this.withinPendingTasks(() => {
       this.assertEmptyStateVisible(PENDING_EMPTY_MESSAGE);

@@ -1,5 +1,8 @@
 import { setUserAsAuthenticated } from '../support/helpers/auth.helper';
-import { mockTasksWithCounts } from '../support/interceptors/tasks.interceptors';
+import {
+  mockTasksWithCounts,
+  mockToggleTask,
+} from '../support/interceptors/tasks.interceptors';
 import { TaskListPage } from '../support/pages/list.po';
 
 describe('list', () => {
@@ -51,6 +54,40 @@ describe('list', () => {
 
     it('should show the correct task count for each status', () => {
       listPage.assertTasksByStatus({ pending: 3, completed: 2 });
+    });
+
+    it('should move a task from completed back to pending when it is unmarked', () => {
+      const toggleRequest = mockToggleTask({
+        id: 4,
+        title: 'Completed 1',
+        completed: false,
+      });
+
+      listPage.toggleFirstCompletedTask();
+
+      cy.wait(`@${toggleRequest}`);
+
+      listPage.assertTasksByStatus({
+        pending: 4,
+        completed: 1,
+      });
+    });
+
+    it('should move a task from pending to completed when it is marked', () => {
+      const toggleRequest = mockToggleTask({
+        id: 2,
+        title: 'Pending 2',
+        completed: true,
+      });
+
+      listPage.toggleFirstPendingTask();
+
+      cy.wait(`@${toggleRequest}`);
+
+      listPage.assertTasksByStatus({
+        pending: 2,
+        completed: 3,
+      });
     });
   });
 });
