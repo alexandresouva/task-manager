@@ -93,6 +93,7 @@ export class TaskListPage {
       this.assertEmptyStateVisible(COMPLETED_EMPTY_MESSAGE);
     });
   }
+
   // ===== Helpers =====
   private withinPendingTasks(fn: () => void) {
     cy.getByTestId('pending-tasks').within(fn);

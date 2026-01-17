@@ -135,11 +135,11 @@ describe('list', () => {
     });
 
     it('should remove pending task when it is deleted', () => {
-      const toggleRequest = mockDeletedTask();
+      const deleteRequest = mockDeletedTask();
 
       listPage.deleteFirstPendingTask();
 
-      cy.wait(`@${toggleRequest}`);
+      cy.wait(`@${deleteRequest}`);
 
       listPage.assertTasksByStatus({
         pending: 1,
@@ -149,11 +149,11 @@ describe('list', () => {
     });
 
     it('should remove completed task when it is deleted', () => {
-      const toggleRequest = mockDeletedTask();
+      const deleteRequest = mockDeletedTask();
 
       listPage.deleteFirstCompletedTask();
 
-      cy.wait(`@${toggleRequest}`);
+      cy.wait(`@${deleteRequest}`);
 
       listPage.assertTasksByStatus({
         pending: 2,
