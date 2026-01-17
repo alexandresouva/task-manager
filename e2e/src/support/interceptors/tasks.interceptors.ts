@@ -26,16 +26,14 @@ export const mockTasksWithCounts = ({
   return alias;
 };
 
-export const mockToggleTask = (updatedTask: {
-  id: number;
-  title: string;
-  completed: boolean;
-}): string => {
+export const mockToggleTask = (): string => {
   const alias = 'toggleTask';
 
-  cy.intercept('PUT', '**/tasks/*', {
-    statusCode: 200,
-    body: updatedTask,
+  cy.intercept('PUT', '**/tasks/*', (req) => {
+    req.reply({
+      statusCode: 200,
+      body: req.body,
+    });
   }).as(alias);
 
   return alias;

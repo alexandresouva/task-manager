@@ -57,11 +57,7 @@ describe('list', () => {
     });
 
     it('should move a task from completed back to pending when it is unmarked', () => {
-      const toggleRequest = mockToggleTask({
-        id: 4,
-        title: 'Completed 1',
-        completed: false,
-      });
+      const toggleRequest = mockToggleTask();
 
       listPage.toggleFirstCompletedTask();
 
@@ -74,11 +70,7 @@ describe('list', () => {
     });
 
     it('should move a task from pending to completed when it is marked', () => {
-      const toggleRequest = mockToggleTask({
-        id: 2,
-        title: 'Pending 2',
-        completed: true,
-      });
+      const toggleRequest = mockToggleTask();
 
       listPage.toggleFirstPendingTask();
 
