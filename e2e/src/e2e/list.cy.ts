@@ -1,6 +1,6 @@
 import { setUserAsAuthenticated } from '../support/helpers/auth.helper';
 import {
-  mockTasksWithCounts,
+  mockTasks,
   mockToggleTask,
   mockDeletedTask,
   mockCreateTask,
@@ -10,8 +10,9 @@ import { TaskListPage } from '../support/pages/list.po';
 import { ToastUI } from '../support/ui/toast.ui';
 
 function setup(tasks: TasksCounts) {
-  const tasksRequest = mockTasksWithCounts(tasks);
+  setUserAsAuthenticated();
 
+  const tasksRequest = mockTasks(tasks);
   cy.visit('/');
   cy.wait(`@${tasksRequest}`);
 }
@@ -21,7 +22,6 @@ describe('list', () => {
 
   beforeEach(() => {
     listPage = new TaskListPage();
-    setUserAsAuthenticated();
   });
 
   context('when there are no tasks', () => {

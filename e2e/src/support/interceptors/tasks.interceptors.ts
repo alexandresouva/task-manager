@@ -1,9 +1,6 @@
 import { TasksCounts } from '../models/list.model';
 
-export const mockTasksWithCounts = ({
-  pending,
-  completed,
-}: TasksCounts): string => {
+export const mockTasks = ({ pending, completed }: TasksCounts): string => {
   const alias = 'getTasks';
   const tasks = [
     ...Array.from({ length: pending }).map((_, i) => ({
