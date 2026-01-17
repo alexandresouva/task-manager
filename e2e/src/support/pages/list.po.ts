@@ -4,25 +4,51 @@ const PENDING_EMPTY_MESSAGE = 'Nice! No tasks pending.';
 const COMPLETED_EMPTY_MESSAGE = 'No tasks completed yet!';
 
 export class TaskListPage {
+  // ===== Elements =====
+  private taskItemEl() {
+    return cy.getByTestId('task-item');
+  }
+
+  private taskCheckboxEl() {
+    return cy.getByTestId('task-checkbox');
+  }
+
+  private emptyTasksEl() {
+    return cy.getByTestId('empty-tasks');
+  }
+
+  // ===== Assertions =====
   assertTasksByStatus({ pending, completed }: TasksCounts) {
     this.withinPendingTasks(() => {
-      this.assertTaskCount(pending);
+      this.taskItemEl().should('have.length', pending);
     });
 
     this.withinCompletedTasks(() => {
-      this.assertTaskCount(completed);
+      this.taskItemEl().should('have.length', completed);
     });
   }
 
   toggleFirstPendingTask() {
     this.withinPendingTasks(() => {
-      cy.getByTestId('task-checkbox').first().click();
+      this.taskCheckboxEl().first().click();
     });
   }
 
   toggleFirstCompletedTask() {
     this.withinCompletedTasks(() => {
-      cy.getByTestId('task-checkbox').first().click();
+      this.taskCheckboxEl().first().click();
+    });
+  }
+
+  assertPendingListIsNotEmpty() {
+    this.withinPendingTasks(() => {
+      this.emptyTasksEl().should('not.exist');
+    });
+  }
+
+  assertCompletedListIsNotEmpty() {
+    this.withinCompletedTasks(() => {
+      this.emptyTasksEl().should('not.exist');
     });
   }
 
@@ -37,21 +63,7 @@ export class TaskListPage {
       this.assertEmptyStateVisible(COMPLETED_EMPTY_MESSAGE);
     });
   }
-
-  assertPendingListIsNotEmpty() {
-    this.withinPendingTasks(() => {
-      this.assertEmptyStateNotVisible();
-    });
-  }
-
-  assertCompletedListIsNotEmpty() {
-    this.withinCompletedTasks(() => {
-      this.assertEmptyStateNotVisible();
-    });
-  }
-
-  // ===== Scopes =====
-
+  // ===== Helpers =====
   private withinPendingTasks(fn: () => void) {
     cy.getByTestId('pending-tasks').within(fn);
   }
@@ -60,19 +72,9 @@ export class TaskListPage {
     cy.getByTestId('completed-tasks').within(fn);
   }
 
-  // ===== Assertions =====
-
-  private assertTaskCount(expected: number) {
-    cy.getByTestId('task-item').should('have.length', expected);
-  }
-
   private assertEmptyStateVisible(message: string) {
     cy.getByTestId('empty-tasks')
       .should('be.visible')
       .and('contain.text', message);
-  }
-
-  private assertEmptyStateNotVisible() {
-    cy.getByTestId('empty-tasks').should('not.exist');
   }
 }
