@@ -3,6 +3,7 @@ import {
   mockTasksWithCounts,
   mockToggleTask,
   mockDeletedTask,
+  mockCreateTask,
 } from '../support/interceptors/tasks.interceptors';
 import { TasksCounts } from '../support/models/list.model';
 import { TaskListPage } from '../support/pages/list.po';
@@ -61,6 +62,32 @@ describe('list', () => {
     });
   });
 
+  context('when a task is added', () => {
+    let toast: ToastUI;
+
+    beforeEach(() => {
+      setup({
+        pending: 0,
+        completed: 0,
+      });
+      toast = new ToastUI();
+    });
+
+    it('should add the new task in the pending tasks list', () => {
+      const createRequest = mockCreateTask();
+
+      listPage.createTask('May the force be with you');
+
+      cy.wait(`@${createRequest}`);
+
+      listPage.assertTasksByStatus({
+        pending: 1,
+        completed: 0,
+      });
+      toast.assertToastVisible('Task has been added.');
+    });
+  });
+
   context('when a task is toggled', () => {
     beforeEach(() => {
       setup({
@@ -98,6 +125,7 @@ describe('list', () => {
 
   context('when a task is removed', () => {
     let toast: ToastUI;
+
     beforeEach(() => {
       setup({
         pending: 2,

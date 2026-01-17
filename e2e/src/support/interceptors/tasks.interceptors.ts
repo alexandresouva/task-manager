@@ -50,3 +50,19 @@ export const mockDeletedTask = (): string => {
 
   return alias;
 };
+
+export const mockCreateTask = (): string => {
+  const alias = 'toggleTask';
+
+  cy.intercept('POST', '**/tasks', (req) => {
+    req.reply({
+      statusCode: 201,
+      body: {
+        ...req.body,
+        id: 100,
+      },
+    });
+  }).as(alias);
+
+  return alias;
+};

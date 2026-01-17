@@ -21,15 +21,18 @@ export class TaskListPage {
     return cy.getByTestId('empty-tasks');
   }
 
-  // ===== Assertions =====
-  assertTasksByStatus({ pending, completed }: TasksCounts) {
-    this.withinPendingTasks(() => {
-      this.taskItemEl().should('have.length', pending);
-    });
+  private createTaskInputEl() {
+    return cy.getByTestId('create-task-input');
+  }
 
-    this.withinCompletedTasks(() => {
-      this.taskItemEl().should('have.length', completed);
-    });
+  private createTaskButtonEl() {
+    return cy.getByTestId('create-task-button');
+  }
+
+  // ===== Actions =====
+  createTask(taskName: string) {
+    this.createTaskInputEl().type(taskName);
+    this.createTaskButtonEl().click();
   }
 
   toggleFirstPendingTask() {
@@ -53,6 +56,17 @@ export class TaskListPage {
   deleteFirstCompletedTask() {
     this.withinCompletedTasks(() => {
       this.taskDeleteEl().first().click();
+    });
+  }
+
+  // ===== Assertions =====
+  assertTasksByStatus({ pending, completed }: TasksCounts) {
+    this.withinPendingTasks(() => {
+      this.taskItemEl().should('have.length', pending);
+    });
+
+    this.withinCompletedTasks(() => {
+      this.taskItemEl().should('have.length', completed);
     });
   }
 
