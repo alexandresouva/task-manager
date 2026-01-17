@@ -1,6 +1,10 @@
 import { HeaderUI } from '../support/ui/header.ui';
 import { LoginPage } from '../support/pages/login.po';
 import { setUserAsAuthenticated } from '../support/helpers/auth.helper';
+import {
+  assertOnLoginPage,
+  assertOnTasksPage,
+} from '../support/helpers/pages.helper';
 
 describe('authentication', () => {
   let loginPage: LoginPage;
@@ -18,7 +22,7 @@ describe('authentication', () => {
     });
 
     it('should navigate to tasks page', () => {
-      loginPage.assertOnTasksPage();
+      assertOnTasksPage();
     });
 
     it('should display menu options', () => {
@@ -27,7 +31,7 @@ describe('authentication', () => {
 
     it('should allow user to logout', () => {
       header.logout();
-      loginPage.assertOnLoginPage();
+      assertOnLoginPage();
     });
   });
 
@@ -38,7 +42,7 @@ describe('authentication', () => {
     });
 
     it('should remain on login page', () => {
-      loginPage.assertOnLoginPage();
+      assertOnLoginPage();
     });
 
     it('should display authentication error message', () => {
@@ -57,7 +61,7 @@ describe('authentication', () => {
     });
 
     it('should redirect to tasks page', () => {
-      loginPage.assertOnTasksPage();
+      assertOnTasksPage();
     });
 
     it('should display menu options', () => {

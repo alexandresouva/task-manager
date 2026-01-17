@@ -1,4 +1,4 @@
-import { TasksCounts } from '../models/list.model';
+import { Task, TasksCounts } from '../models/task.model';
 
 export const mockTasks = ({ pending, completed }: TasksCounts): string => {
   const alias = 'getTasks';
@@ -23,8 +23,21 @@ export const mockTasks = ({ pending, completed }: TasksCounts): string => {
   return alias;
 };
 
-export const mockToggleTask = (): string => {
-  const alias = 'toggleTask';
+export const mockTask = (task: Task): string => {
+  const alias = 'getTask';
+
+  cy.intercept('GET', '**/tasks/*', (req) => {
+    req.reply({
+      statusCode: 200,
+      body: task,
+    });
+  }).as(alias);
+
+  return alias;
+};
+
+export const mockUpdateTask = (): string => {
+  const alias = 'updateTask';
 
   cy.intercept('PUT', '**/tasks/*', (req) => {
     req.reply({
@@ -37,7 +50,7 @@ export const mockToggleTask = (): string => {
 };
 
 export const mockDeletedTask = (): string => {
-  const alias = 'toggleTask';
+  const alias = 'deleteTask';
 
   cy.intercept('DELETE', '**/tasks/*', (req) => {
     req.reply({
@@ -49,7 +62,7 @@ export const mockDeletedTask = (): string => {
 };
 
 export const mockCreateTask = (): string => {
-  const alias = 'toggleTask';
+  const alias = 'createTask';
 
   cy.intercept('POST', '**/tasks', (req) => {
     req.reply({

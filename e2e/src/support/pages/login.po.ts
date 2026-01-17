@@ -17,14 +17,6 @@ export class LoginPage {
     });
   }
 
-  assertOnLoginPage() {
-    cy.location('pathname').should('eq', '/login');
-  }
-
-  assertOnTasksPage() {
-    cy.location('pathname').should('eq', '/tasks');
-  }
-
   assertLoginErrorVisible() {
     cy.getByTestId('toast-list-item').should('be.visible');
     cy.getByTestId('toast-list-message').should(

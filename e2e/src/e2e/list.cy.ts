@@ -1,15 +1,15 @@
 import { setUserAsAuthenticated } from '../support/helpers/auth.helper';
 import {
   mockTasks,
-  mockToggleTask,
+  mockUpdateTask,
   mockDeletedTask,
   mockCreateTask,
 } from '../support/interceptors/tasks.interceptors';
-import { TasksCounts } from '../support/models/list.model';
+import { TasksCounts } from '../support/models/task.model';
 import { TaskListPage } from '../support/pages/list.po';
 import { ToastUI } from '../support/ui/toast.ui';
 
-function setup(tasks: TasksCounts) {
+export function listSetup(tasks: TasksCounts) {
   setUserAsAuthenticated();
 
   const tasksRequest = mockTasks(tasks);
@@ -17,7 +17,7 @@ function setup(tasks: TasksCounts) {
   cy.wait(`@${tasksRequest}`);
 }
 
-describe('list', () => {
+describe('list tasks', () => {
   let listPage: TaskListPage;
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('list', () => {
 
   context('when there are no tasks', () => {
     beforeEach(() => {
-      setup({
+      listSetup({
         pending: 0,
         completed: 0,
       });
@@ -43,7 +43,7 @@ describe('list', () => {
 
   context('when there are 3 pending and 2 completed tasks', () => {
     beforeEach(() => {
-      setup({
+      listSetup({
         pending: 3,
         completed: 2,
       });
@@ -66,7 +66,7 @@ describe('list', () => {
     let toast: ToastUI;
 
     beforeEach(() => {
-      setup({
+      listSetup({
         pending: 0,
         completed: 0,
       });
@@ -90,14 +90,14 @@ describe('list', () => {
 
   context('when a task is toggled', () => {
     beforeEach(() => {
-      setup({
+      listSetup({
         pending: 2,
         completed: 2,
       });
     });
 
     it('should move a task from completed back to pending when it is unmarked', () => {
-      const toggleRequest = mockToggleTask();
+      const toggleRequest = mockUpdateTask();
 
       listPage.toggleFirstCompletedTask();
 
@@ -110,7 +110,7 @@ describe('list', () => {
     });
 
     it('should move a task from pending to completed when it is marked', () => {
-      const toggleRequest = mockToggleTask();
+      const toggleRequest = mockUpdateTask();
 
       listPage.toggleFirstPendingTask();
 
@@ -127,7 +127,7 @@ describe('list', () => {
     let toast: ToastUI;
 
     beforeEach(() => {
-      setup({
+      listSetup({
         pending: 2,
         completed: 2,
       });

@@ -1,4 +1,4 @@
-import { TasksCounts } from '../models/list.model';
+import { TasksCounts } from '../models/task.model';
 
 const PENDING_EMPTY_MESSAGE = 'Nice! No tasks pending.';
 const COMPLETED_EMPTY_MESSAGE = 'No tasks completed yet!';
