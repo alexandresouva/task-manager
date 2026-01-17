@@ -29,6 +29,10 @@ export class TaskListPage {
     return cy.getByTestId('create-task-button');
   }
 
+  private editTaskButtonEl() {
+    return cy.getByTestId('edit-task-button');
+  }
+
   // ===== Actions =====
   createTask(taskName: string) {
     this.createTaskInputEl().type(taskName);
@@ -59,6 +63,17 @@ export class TaskListPage {
     });
   }
 
+  editFirstPendingTask() {
+    this.withinPendingTasks(() => {
+      this.editTaskButtonEl().first().click();
+    });
+  }
+
+  editFirstCompletedTask() {
+    this.withinCompletedTasks(() => {
+      this.editTaskButtonEl().first().click();
+    });
+  }
   // ===== Assertions =====
   assertTasksByStatus({ pending, completed }: TasksCounts) {
     this.withinPendingTasks(() => {
