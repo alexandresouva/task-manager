@@ -13,6 +13,10 @@ export class TaskListPage {
     return cy.getByTestId('task-checkbox');
   }
 
+  private taskDeleteEl() {
+    return cy.getByTestId('delete-task-button');
+  }
+
   private emptyTasksEl() {
     return cy.getByTestId('empty-tasks');
   }
@@ -37,6 +41,18 @@ export class TaskListPage {
   toggleFirstCompletedTask() {
     this.withinCompletedTasks(() => {
       this.taskCheckboxEl().first().click();
+    });
+  }
+
+  deleteFirstPendingTask() {
+    this.withinPendingTasks(() => {
+      this.taskDeleteEl().first().click();
+    });
+  }
+
+  deleteFirstCompletedTask() {
+    this.withinCompletedTasks(() => {
+      this.taskDeleteEl().first().click();
     });
   }
 

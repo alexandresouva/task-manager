@@ -2,9 +2,11 @@ import { setUserAsAuthenticated } from '../support/helpers/auth.helper';
 import {
   mockTasksWithCounts,
   mockToggleTask,
+  mockDeletedTask,
 } from '../support/interceptors/tasks.interceptors';
 import { TasksCounts } from '../support/models/list.model';
 import { TaskListPage } from '../support/pages/list.po';
+import { ToastUI } from '../support/ui/toast.ui';
 
 function setup(tasks: TasksCounts) {
   const tasksRequest = mockTasksWithCounts(tasks);
@@ -91,6 +93,45 @@ describe('list', () => {
         pending: 1,
         completed: 3,
       });
+    });
+  });
+
+  context('when a task is removed', () => {
+    let toast: ToastUI;
+    beforeEach(() => {
+      setup({
+        pending: 2,
+        completed: 2,
+      });
+      toast = new ToastUI();
+    });
+
+    it('should remove pending task when it is deleted', () => {
+      const toggleRequest = mockDeletedTask();
+
+      listPage.deleteFirstPendingTask();
+
+      cy.wait(`@${toggleRequest}`);
+
+      listPage.assertTasksByStatus({
+        pending: 1,
+        completed: 2,
+      });
+      toast.assertToastVisible('Task has been deleted.');
+    });
+
+    it('should remove completed task when it is deleted', () => {
+      const toggleRequest = mockDeletedTask();
+
+      listPage.deleteFirstCompletedTask();
+
+      cy.wait(`@${toggleRequest}`);
+
+      listPage.assertTasksByStatus({
+        pending: 2,
+        completed: 1,
+      });
+      toast.assertToastVisible('Task has been deleted.');
     });
   });
 });
