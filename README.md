@@ -1,82 +1,120 @@
-# TaskManager
+# Task Manager 📝
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+![Página inicial do Task Manager, exibindo tarefas pendentes e concluídas](/public/home.png)
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+Aplicação de **gerenciamento de tarefas** desenvolvida em **Angular**, com foco forte em **TDD (Test-Driven Development)** e **testes E2E com Cypress**.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Finish your remote caching setup
+## ✨ Visão Geral
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/rsdw2g1wLX)
+O **Task Manager** permite criar, listar, atualizar, concluir e remover tarefas, separando-as por status (pendentes e concluídas). Mais do que a funcionalidade em si, o principal objetivo do projeto é:
 
+- Praticar **TDD** e seus benefícios
+- Testes focados em **comportamento**, não em implementação
+- Uso de **helpers e abstrações** para reduzir duplicação
+- Estruturar testes de forma **legível e sustentável**
 
-## Run tasks
+---
 
-To run the dev server for your app, use:
+## 🚀 Testes E2E com Cypress
 
-```sh
-npx nx serve task-manager
+O projeto conta com testes _end-to-end_ cobrindo os principais fluxos da aplicação:
+
+- Listagem de tarefas
+- Criação de uma nova tarefa
+- Marcar tarefa como concluída
+- Remoção de tarefa
+- Estados vazios (empty states)
+
+Destaques:
+
+- Uso de **Page Objects**
+- Integração com **Cypress Cloud** para histórico e visibilidade
+
+---
+
+## 🛠️ Stack Utilizada
+
+### Front-end
+
+- **Angular**
+- **TypeScript**
+- **RxJS**
+- **DaisyUI**
+- **Tailwind CSS**
+
+### Testes
+
+- **Jest** (unitários)
+- **Cypress** (E2E)
+- **Cypress Cloud**
+
+### Ferramentas
+
+- **Nx** (monorepo e orquestração)
+- **ESLint**
+- **Prettier**
+- **dotenv** (variáveis de ambiente)
+
+---
+
+## ▶️ Como rodar o projeto
+
+### Instalação
+
+```bash
+npm install
 ```
 
-To create a production bundle:
+### Servir a aplicação
 
-```sh
-npx nx build task-manager
+```bash
+# Apenas front
+npm start
+
+# Front e JSON server
+npm run start:workspace
 ```
 
-To see all available targets to run for a project, run:
+A aplicação ficará disponível em:
 
-```sh
-npx nx show project task-manager
+```
+http://localhost:4200
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+---
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 🧪 Rodando os testes
 
-## Add new projects
+### Testes unitários
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
+```bash
+npx nx test task-manager
 ```
 
-To generate a new library, use:
+### Testes E2E (Cypress)
 
-```sh
-npx nx g @nx/angular:lib mylib
+```bash
+# Browser
+npm run test:e2e
+
+# Headless
+npm run test:e2e:ci
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+### Cypress com recording (Cloud)
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Crie um arquivo `.env` na raiz do projeto:
 
+```env
+CYPRESS_RECORD_KEY=your-record-key-here
+```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Depois execute:
 
-## Install Nx Console
+```bash
+npm run e2e:record
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+> ⚠️ O arquivo `.env` **não deve ser versionado**. Use `.env.example` como referência.
