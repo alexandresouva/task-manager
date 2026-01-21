@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  effect,
-  inject,
-  input as routeInput,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, input as routeInput } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -15,8 +8,8 @@ import { Router } from '@angular/router';
 
 import { CustomButton } from '@shared/directives/custom-button/custom-button';
 import type { Task, TaskForm } from '@shared/models/task.model';
-import { TaskService } from '@shared/services/task-service';
-import { ToastService } from '@shared/services/toast-service';
+
+import { EditFacade } from './edit-facade';
 
 @Component({
   selector: 'app-edit',
@@ -26,9 +19,7 @@ import { ToastService } from '@shared/services/toast-service';
 export class Edit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
-  private readonly toastService = inject(ToastService);
-  private readonly taskService = inject(TaskService);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly editFacade = inject(EditFacade);
 
   readonly task = routeInput.required<Task>();
 
@@ -45,17 +36,7 @@ export class Edit {
     if (this.taskForm.invalid) return;
 
     const task: TaskForm = this.taskForm.getRawValue();
-    this.taskService
-      .update(this.task().id, task)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.navigateToTaskList();
-
-        this.toastService.show({
-          type: 'success',
-          title: 'Task has been updated.',
-        });
-      });
+    this.editFacade.updateTask(this.task().id, task);
   }
 
   protected navigateToTaskList(): void {
