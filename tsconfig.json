@@ -8,9 +8,8 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["src/app/*"],
       "@core/*": ["src/app/core/*"],
-      "@pages/*": ["src/app/pages/*"],
+      "@features/*": ["src/app/features/*"],
       "@shared/*": ["src/app/shared/*"],
       "@testing/*": ["src/app/testing/*"]
     }

@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { Edit } from '@pages/edit/edit';
+import { Edit } from '@features/edit/edit';
 import { Task } from '@shared/models/task.model';
 import { ToastConfig } from '@shared/models/toast.model';
 import { TaskService } from '@shared/services/task-service';

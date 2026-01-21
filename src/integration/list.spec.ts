@@ -6,11 +6,11 @@ import {
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
 
-import { appConfig } from '@app/app.config';
-import { Task } from '@app/shared/models/task.model';
-import { tasksMock } from '@app/testing/data/tasks.mock';
-import { setAuthToken } from '@app/testing/helpers/set-auth-token.helper';
-import { TestHelper } from '@app/testing/test-helper/test-helper';
+import { Task } from '@shared/models/task.model';
+import { tasksMock } from '@testing/data/tasks.mock';
+import { setAuthToken } from '@testing/helpers/set-auth-token.helper';
+import { TestHelper } from '@testing/test-helper/test-helper';
+import { appConfig } from 'src/app/app.config';
 import { environment } from 'src/environments/environment';
 
 async function setup() {

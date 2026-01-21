@@ -3,10 +3,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { submitLoginForm } from '@app/testing/helpers/login.helper';
 import { AuthFacade } from '@core/auth/services/auth-facade';
-import { List } from '@pages/list/list';
+import { List } from '@features/list/list';
 import { ToastService } from '@shared/services/toast-service';
+import { submitLoginForm } from '@testing/helpers/login.helper';
 import { TestHelper } from '@testing/test-helper/test-helper';
 import { MockComponent, MockService } from 'ng-mocks';
 import { of, throwError } from 'rxjs';
