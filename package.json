@@ -33,6 +33,8 @@
     "@angular/platform-browser-dynamic": "20.3.2",
     "@angular/router": "20.3.2",
     "@jsverse/transloco": "^8.0.0",
+    "@ngrx/operators": "^20.1.0",
+    "@ngrx/signals": "^20.1.0",
     "rxjs": "~7.8.0",
     "zone.js": "~0.15.0"
   },
