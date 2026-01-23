@@ -7,3 +7,6 @@ export const tasksMock: Task[] = [
   { id: 4, title: 'Task 4', completed: false },
   { id: 5, title: 'Task 5', completed: false },
 ];
+
+export const completedTasksMock = tasksMock.filter((task) => task.completed);
+export const pendingTasksMock = tasksMock.filter((task) => !task.completed);

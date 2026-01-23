@@ -14,6 +14,7 @@ import { EditFacade } from './edit-facade';
 @Component({
   selector: 'app-edit',
   imports: [ReactiveFormsModule, CustomButton],
+  providers: [],
   templateUrl: './edit.html',
 })
 export class Edit {

@@ -2,6 +2,8 @@ import { Location } from '@angular/common';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
 
+import { ListFacade } from '@features/list/list-facade';
+import { ListStore } from '@features/list/list-store';
 import { submitLoginForm } from '@testing/helpers/login.helper';
 import { setAuthToken } from '@testing/helpers/set-auth-token.helper';
 import { TestHelper } from '@testing/test-helper/test-helper';
@@ -9,7 +11,7 @@ import { appConfig } from 'src/app/app.config';
 
 function setup() {
   TestBed.configureTestingModule({
-    providers: [appConfig.providers],
+    providers: [appConfig.providers, ListFacade, ListStore],
   });
 }
 

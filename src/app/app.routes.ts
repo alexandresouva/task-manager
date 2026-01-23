@@ -1,7 +1,10 @@
 import { Route } from '@angular/router';
 
 import { isLoggedInGuard } from '@core/auth/guards/is-logged-in-guard';
+import { EditFacade } from '@features/edit/edit-facade';
 import { getTaskByIdResolver } from '@features/edit/resolvers/get-task-by-id-resolver';
+import { ListFacade } from '@features/list/list-facade';
+import { ListStore } from '@features/list/list-store';
 
 export const appRoutes: Route[] = [
   {
@@ -16,6 +19,7 @@ export const appRoutes: Route[] = [
       {
         path: 'tasks',
         loadComponent: () => import('./features/list/list').then((m) => m.List),
+        providers: [ListFacade, ListStore],
       },
       {
         path: 'tasks/:id/edit',
@@ -23,6 +27,7 @@ export const appRoutes: Route[] = [
         resolve: {
           task: getTaskByIdResolver,
         },
+        providers: [EditFacade],
       },
     ],
   },

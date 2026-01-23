@@ -3,7 +3,7 @@
 
   <app-create-task
     data-testid="create-task-form"
-    (created)="createTask($event)"
+    (created)="facade.createTask($event)"
   />
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -11,20 +11,20 @@
       data-testid="pending-tasks"
       emptyListMessage="Nice! No tasks pending."
       listTitle="Pending"
-      [tasks]="pendingTasks()"
-      (deleted)="deleteTask($event)"
+      [tasks]="facade.pendingTasks()"
+      (deleted)="facade.deleteTask($event)"
       (edited)="navigateToEditPage($event)"
-      (toggled)="updateTask($event)"
+      (toggled)="facade.toggleTask($event)"
     />
 
     <app-task-list
       data-testid="completed-tasks"
       emptyListMessage="No tasks completed yet!"
       listTitle="Done"
-      [tasks]="completedTasks()"
-      (deleted)="deleteTask($event)"
+      [tasks]="facade.completedTasks()"
+      (deleted)="facade.deleteTask($event)"
       (edited)="navigateToEditPage($event)"
-      (toggled)="updateTask($event)"
+      (toggled)="facade.toggleTask($event)"
     />
   </div>
 </div>

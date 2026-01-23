@@ -6,7 +6,8 @@ import {
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
 
-import { EditFacade } from '@features/edit/edit-facade';
+import { ListFacade } from '@features/list/list-facade';
+import { ListStore } from '@features/list/list-store';
 import { Task } from '@shared/models/task.model';
 import { tasksMock } from '@testing/data/tasks.mock';
 import { setAuthToken } from '@testing/helpers/set-auth-token.helper';
@@ -18,7 +19,12 @@ async function setup() {
   setAuthToken();
 
   TestBed.configureTestingModule({
-    providers: [appConfig.providers, provideHttpClientTesting(), EditFacade],
+    providers: [
+      appConfig.providers,
+      provideHttpClientTesting(),
+      ListFacade,
+      ListStore,
+    ],
   });
 
   const harness = await RouterTestingHarness.create('');
